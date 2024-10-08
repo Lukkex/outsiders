@@ -5,3 +5,4 @@ Dev Team Members:
 - Hunter Brown
 - Connor Yep
 - Christian Young
+- Shawnee Porkat
