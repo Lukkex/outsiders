@@ -1,1 +1,10 @@
+# Use this to indicate which file types you want Git to ignore completely
 
+# Prerequisites
+*.d
+
+# Executables
+*.exe
+
+# Compiled Dynamic libraries
+*.dll
