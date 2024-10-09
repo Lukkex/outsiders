@@ -6,3 +6,4 @@ Dev Team Members:
 - Connor Yep
 - Christian Young
 - Shawnee Porkat
+- Wencai Ma
