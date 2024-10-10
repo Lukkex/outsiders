@@ -7,3 +7,4 @@ Dev Team Members:
 - Christian Young
 - Shawnee Porkat
 - Wencai Ma
+- Trenton Suddaby
