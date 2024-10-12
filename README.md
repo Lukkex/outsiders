@@ -8,3 +8,4 @@ Dev Team Members:
 - Shawnee Porkat
 - Wencai Ma
 - Trenton Suddaby
+- Qasim Ali
