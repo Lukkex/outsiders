@@ -10,13 +10,18 @@ Dev Team Members:
 - Trenton Suddaby
 - Qasim Ali
 
-# Getting Started with Create React App
+# Setting up the Outsiders App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+
+Installs dependencies in order to run the following commands.\
+Creates node_modules directory.
 
 ### `npm start`
 
