@@ -1,64 +1,86 @@
 h1 {
+  font-size: xx-large;
+  font-size: 2vw;
   text-align: center;
 }
 
-.horizontalcontainer {
-  text-align: center;
+/* Adjustable roundness for buttons */
+.rounded-button {
+  border-radius: 8px;
+}
+
+/** SITE HEADER **/
+.site-header {
   width: 100%;
-  overflow: auto;
-  
 }
 
-.horizontalcontainer div {
-  width: 200px;
-  height: 100px;
-  padding: 5px;
-  border: 4px solid gray;
-  margin: auto;
-  float: left;
-}
-
-.headerbuttoncontainer {
-  width: 100%;
-  text-align: center;
-}
-
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* For main buttons at the top of the site */
+.site-header button {
+  background-color:#4896ac;
   color: white;
+  border: 1px rgb(18, 67, 95);
+  padding: 10px 20px;
+  border: 1px solid gray;
+  width: 25vw;
+  height: 80px; /* Fallback in case browser support fails */
+  height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
+  font-size: x-large; /* Fallback in case browser support fails */
+  font-size: 1.5vw; /* Auto adjusts font-size based on browser-view width */
+  float: left; /* Aligns buttons to the left */
+  cursor: pointer; /* Pointer icon when hovered over */
 }
 
-.App-link {
-  color: #61dafb;
+/* For all buttons except the last, this removes the rightmost border (so it isn't doubled) */
+.site-header button:not(:last-child) {
+  border-right: none; 
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Different background color when hovering over the button */
+.site-header button:hover {
+  background-color: #305b61;
 }
 
+/** DROPDOWN MENU **/
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  background-color:#4896ac;
+}
+
+/* Content is hidden by default for dropdown */
+.dropdown-content {
+  z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: #e4e4e4;
+  min-width: 200px;
+  width: 100vh;
+  box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
+  top: 100%; /* Offsets the dropdown menu to be below the button when you hover over it */
+}
+
+/* The links <a></a> inside dropdown */
+.dropdown-content a {
+  text-decoration: none;
+  color: black;
+  padding: 14px 18px;
+  display: block;
+}
+
+/* Change color of dropdown content when hovered over */
+.dropdown-content a:hover {
+  background-color: #cecece;
+}
+
+/* Shows the dropdown menu when hovered over */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Changes background color when the dropdown content is shown */
+.dropdown:hover .dropdown-button {
+  background-color: #305b61;
+}
