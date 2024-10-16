@@ -8,13 +8,21 @@ function App() {
 
       <div class="horizontalcontainer"> 
 
-      <div class="headerbuttoncontainer">
-        <p text-align="center"><strong>HOME</strong></p>
-      </div>
+        <div class="headerbuttoncontainer">
+          <p text-align="center"><strong>HOME</strong></p>
+        </div>
 
-      <div class="headerbuttoncontainer">
-        <p text-align="center">Registration</p>
-      </div>
+        <div class="headerbuttoncontainer">
+          <p text-align="center">Registration</p>
+        </div>
+
+        <div class="headerbuttoncontainer">
+          <p text-align="center">Scheduling</p>
+        </div>
+
+        <div class="headerbuttoncontainer">
+          <p text-align="center">Login</p>
+        </div>
 
       </div>
     </div>
