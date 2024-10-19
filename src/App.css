@@ -1,7 +1,18 @@
+img {
+  padding-top: 1vh;
+  padding-left: 0.6vw;
+  width: 100%;
+  height: auto;
+  max-width: 24vw;
+  display: inline;
+}
+
 h1 {
   font-size: xx-large;
-  font-size: 2vw;
+  font-size: 1.5vw;
   text-align: center;
+  display: inline;
+  padding-left: 2vw;
 }
 
 /* Adjustable roundness for buttons */
@@ -12,6 +23,7 @@ h1 {
 /** SITE HEADER **/
 .site-header {
   width: 100%;
+  padding-top: 1vh;
 }
 
 /* For main buttons at the top of the site */
@@ -24,6 +36,7 @@ h1 {
   width: 25vw;
   height: 80px; /* Fallback in case browser support fails */
   height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
+  min-height: 80px;
   font-size: x-large; /* Fallback in case browser support fails */
   font-size: 1.5vw; /* Auto adjusts font-size based on browser-view width */
   float: left; /* Aligns buttons to the left */
