@@ -12,14 +12,18 @@ function SignUp() {
     };
     
     //Page content
+    //*** No CSS yet 
     return (
       <div>
-        <h1>Create an Account</h1>
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Username" />
-          <input type="password" placeholder="Password" />
-          <button type="submit">Sign Up</button>
-        </form>
+        <img src="../images/outsiders4.png" alt="Logo"></img>
+        <h1>Sign up page</h1>
+        <div>
+          <form onSubmit={handleSubmit}>
+            <input type="text" placeholder="Username" />
+            <input type="password" placeholder="Password" />
+            <button type="submit">Sign Up</button>
+          </form>
+        </div>
       </div>
     );
   }
