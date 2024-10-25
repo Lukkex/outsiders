@@ -2,9 +2,10 @@ import '../App.css'; //global styles
 
 function SignIn() {
     return (
-        <div>
-            <h1>Sign in page</h1>
-        </div>
+    <div>
+        <img src="../images/outsiders4.png" alt="Logo"></img>
+        <h1>Sign in page</h1>
+    </div>
     );
 }
 
