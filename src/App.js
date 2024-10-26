@@ -1,29 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
-import {View} from 'react-native';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './components/Home';
+import SignUp from './components/SignUp';
+import SignIn from './components/SignIn';
+
 
 function App() {
   return (
-    <div className="App">
-      <img src="../images/outsiders4.png" alt="Logo"></img>
-      <h1>Welcome to Outsiders Football Club for Folsom and San Quentin!</h1>
-      <div class="site-header">
-        <button class="rounded-button">HOME</button>
-        <button class="rounded-button">REGISTRATION</button>
-        <button class="rounded-button">SCHEDULING</button>
-        <div class="dropdown">
-          <button class="rounded-button dropdown-button">ACCOUNT</button>
-          <div class="dropdown-content">
-            <a href="">Login</a>
-            <a href="">Sign in</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+      </Routes>
+    </Router>
   );
 }
 
