@@ -15,9 +15,11 @@ function Home() {
                     <div class="dropdown-content">
                         <Link to="/signin">Sign In</Link>
                         <Link to="/signup">Sign up</Link>
+                        <Link to="/settings">Settings</Link>
                     </div>
                 </div>
             </div>
+            
         </div>
     );
   }
