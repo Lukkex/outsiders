@@ -1,10 +1,12 @@
 import '../App.css'; //global styles
+import SiteHeader from './SiteHeader';
+import TextBlackBG from './TextBlackBG';
 
 function Registration() {
     return (
     <div>
-        <img src="../images/outsiders4.png" alt="Logo"></img>
-        <h1>Registration</h1>
+        <SiteHeader></SiteHeader>
+        <TextBlackBG label="Registration Page"></TextBlackBG>
     </div>
     );
 }
