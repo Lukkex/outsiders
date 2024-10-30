@@ -1,4 +1,8 @@
-img {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.logoimage {
   padding-top: 1vh;
   padding-left: 0.6vw;
   width: 100%;
@@ -23,16 +27,16 @@ h1 {
 /** SITE HEADER **/
 .site-header {
   width: 100%;
-  padding-top: 1vh;
 }
 
 /* For main buttons at the top of the site */
 .site-header button {
-  background-color:#4896ac;
+  /*background-color:#4896ac;*/
+  
   color: white;
   border: 1px rgb(18, 67, 95);
   padding: 10px 20px;
-  border: 1px solid gray;
+  border: 1px solid rgb(116, 116, 116);
   width: 25vw;
   height: 80px; /* Fallback in case browser support fails */
   height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
@@ -41,6 +45,7 @@ h1 {
   font-size: 1.5vw; /* Auto adjusts font-size based on browser-view width */
   float: left; /* Aligns buttons to the left */
   cursor: pointer; /* Pointer icon when hovered over */
+  box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
 }
 
 /* For all buttons except the last, this removes the rightmost border (so it isn't doubled) */
@@ -97,3 +102,25 @@ h1 {
 .dropdown:hover .dropdown-button {
   background-color: #305b61;
 }
+
+/* Site main body container */
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 200px);    width: 100%;
+  flex-direction: column;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(207 250 254))
+}
+
+/* Team Photo 1 Background */
+.Home {
+  background-image: url(../public/images/teamphoto1.png);
+  background-position: center;
+}
+
+/* Cyan gradient for buttons and sections */
+.cyan-gradient {
+  background-image: linear-gradient(to bottom, rgba(95, 197, 211, 255), rgba(8, 145, 178, 255));
+}
+
