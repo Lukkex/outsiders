@@ -5,6 +5,7 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Settings from './components/Settings';
 import Registration from './components/Registration';
+import Scheduling from './components/Scheduling';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/registration" element={<Registration />} />
+        <Route path="/scheduling" element={<Scheduling />} />
       </Routes>
     </Router>
   );
