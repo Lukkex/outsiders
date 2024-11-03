@@ -26,7 +26,7 @@ h1 {
 
 /** SITE HEADER **/
 .site-header {
-  width: 100%;
+  width: 100vw;
 }
 
 /* For main buttons at the top of the site */
@@ -116,7 +116,10 @@ h1 {
 /* Team Photo 1 Background */
 .Home {
   background-image: url(../public/images/teamphoto1.png);
-  background-position: center;
+  background-repeat: no-repeat;
+  background-position: center; 
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 /* Cyan gradient for buttons and sections */
