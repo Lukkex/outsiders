@@ -12,7 +12,7 @@ function SiteHeader() {
             <div class="site-header font-semibold bg-cyan-700 bg-opacity-60">
                 <Link to="/"><button class="rounded-button cyan-gradient">HOME</button></Link>
                 <Link to="/registration"><button class="rounded-button cyan-gradient">REGISTRATION</button></Link>
-                <button class="rounded-button cyan-gradient">SCHEDULING</button>
+                <Link to="/scheduling"><button class="rounded-button cyan-gradient">SCHEDULING</button></Link>
                 <div class="dropdown">
                     <button class="rounded-button cyan-gradient dropdown-button">ACCOUNT</button>
                     <div class="dropdown-content">
