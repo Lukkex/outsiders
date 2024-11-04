@@ -7,6 +7,15 @@
     flex-direction: column;
 }
 
+.signin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(80vh - 200px);    width: 100%;
+    flex-direction: column;
+}
+
+
 h1 {
     font-size: 1.5em; 
     text-align: center;
@@ -54,5 +63,11 @@ h1 {
     text-align: center;
     margin-top: 10px;
 }
+
+.signin-container p {
+    text-align: center;
+    margin-top: 10px;
+}
+
 
 
