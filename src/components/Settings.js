@@ -15,9 +15,6 @@ function Settings() {
     return (
     <div>
         <SiteHeader></SiteHeader>
-        <br></br>
-            <br></br>
-            <br></br>
             <div className="signin-container">
                 <h1 class="font-semibold">Settings</h1>
                 <div className="form-container">
@@ -25,9 +22,8 @@ function Settings() {
                         <button type="submit" className="rounded-button">Reset Passowrd</button>
                         <button type="submit" className="rounded-button">Account Info</button>
                         <button type="submit" className="rounded-button">Help</button>
-                        <br></br>
+                        
                     </form>
-                    <br></br>
                 </div>
             </div>
         
