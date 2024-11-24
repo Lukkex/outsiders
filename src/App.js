@@ -6,6 +6,7 @@ import SignIn from './components/SignIn';
 import Settings from './components/Settings';
 import Registration from './components/Registration';
 import Scheduling from './components/Scheduling';
+import AdminDashboard from './components/AdminDashboard';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/scheduling" element={<Scheduling />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
