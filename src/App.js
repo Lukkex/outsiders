@@ -6,6 +6,7 @@ import SignIn from './components/SignIn';
 import Settings from './components/Settings';
 import Registration from './components/Registration';
 import Scheduling from './components/Scheduling';
+import SelectPrisonForm from './components/SelectPrisonForm';
 import AdminDashboard from './components/AdminDashboard';
 
 
