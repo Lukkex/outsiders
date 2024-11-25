@@ -1,14 +1,14 @@
 import { putObjToS3, getUserDataFromS3, checkS3Connection } from './awsServices/s3.js';
-import { checkUserExists, addUserToTable } from './awsServices/dynamoDB.js';
+import { checkUserExists, addUserToTable } from './awsServices/user.js';
+import { signUp, signIn } from './awsServices/cognito.js';
 
 async function main() {
+    /*
     const userID = "777";
     const firstName = "qwer";
     const lastName = "asdf";
     const email = "qwerasdf@exmaple.com";
     
-    
-
     try {
         const isBucketConnected = await checkS3Connection();
         if (isBucketConnected == false) {
@@ -37,6 +37,22 @@ async function main() {
     } catch (error) {
         console.error("Error in main function:", error);
     }
+    */
+
+    const payload_signup_data = {
+        first_name: "William",
+        last_name: "Lorence",
+        email: "williamlorence@csus.edu",
+        password: "eee",
+        confirm_password: "eee"
+    };
+
+    const payload_signup_string = JSON.stringify(payload_signup_data);
+    const payload_signup = JSON.parse(payload_signup_string);
+    console.log(payload_signup);
+    console.log(payload_signup.first_name);
+
+    signUp(payload_signup);
 }
 
 main();

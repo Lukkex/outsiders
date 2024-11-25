@@ -4,6 +4,7 @@ import { dynamoDB } from '../awsConfig.js';
 const tableName = process.env.DYNAMODB_USER_TABLE;
 
 async function checkUserExists(userID) {
+    
     const params = {
         TableName: tableName,
         Key: {
@@ -27,14 +28,15 @@ async function checkUserExists(userID) {
     }
 }
 
-async function addUserToTable(userID, firstName, lastname, email) {
+async function addUserToTable(userID, firstName, lastName, email, hashedPassword) {
     const params = {
         TableName: tableName,
         Item: {
             userID: { S: userID},
             firstName: { S: firstName},
-            lastname: { S: lastname},
-            email: { S: email}
+            lastName: { S: lastName},
+            email: { S: email},
+            password: { S: hashedPassword}
         }
     };
 
