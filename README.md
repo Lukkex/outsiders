@@ -1,14 +1,46 @@
 # Outsiders FC
+![alt text](https://github.com/Lukkex/outsiders/blob/main/public/images/outsiders4.png)
+---
+<p align="center">
+The Outsiders are a volunteer soccer program that competes against the inmate teams in various prisons across California. Soccer has been played on the yard for decades and the Outsiders are the most frequent opponent for the host team. With almost a hundred men across two rosters, we have players of varying ages, backgrounds and abilities. We bring in rotating line-ups of fifteen players on a fortnightly and monthly basis depending on which team is playing. We play 11-a-side games on the yard itself.
+</p>
 
-Dev Team Members:
-- William Lorence
-- Hunter Brown
-- Connor Yep
-- Christian Young
-- Shawnee Porkat
-- Wencai Ma
-- Trenton Suddaby
-- Qasim Ali
+# Team Tech Deck
+
+  <table align="center">
+    <tr>
+      <th>Devs</th>
+    </tr>
+    <tr>
+      <td>William Lorence</td>
+    </tr>
+    <tr>
+      <td>Hunter Brown</td>
+    </tr>
+    <tr>
+      <td>Connor Yep</td>
+    </tr>
+    <tr>
+      <td>Christian Young</td>
+    </tr>
+    <tr>
+      <td>Shawnee Porkat</td>
+    </tr>
+    <tr>
+      <td>Wencai Ma</td>
+    </tr>
+    <tr>
+      <td>Trenton Suddaby</td>
+    </tr>
+    <tr>
+      <td>Qasim Ali</td>
+    </tr>
+  </table>
+
+# Images
+
+# Timeline
+
 
 # Setting up the Outsiders App
 
