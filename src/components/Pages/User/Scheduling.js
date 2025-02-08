@@ -1,7 +1,7 @@
-import '../App.css'; //global styles
-import '../Scheduling.css';
+import '../../../App.css'; //global styles
+import '../../Stylesheets/Scheduling.css';
 import { useState } from 'react';
-import SiteHeader from './SiteHeader';
+import SiteHeader from '../../SiteHeader';
 
 //nothing is hooked up to backend for obvious reasons
 //Ill comment more/better tomorrow

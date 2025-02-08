@@ -22,7 +22,7 @@ function Settings() {
                 <h1 class="font-semibold">Settings</h1>
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
-                        <button type="submit" className="rounded-button">Reset Passowrd</button>
+                        <button type="submit" className="rounded-button">Reset Password</button>
                         <button type="submit" className="rounded-button">Account Info</button>
                         <button type="submit" className="rounded-button">Help</button>
                         <br></br>
