@@ -1,38 +1,38 @@
 import '../App.css'; //global styles
 import SiteHeader from './SiteHeader';
-import TextBlackBG from './TextBlackBG';
 import { useNavigate, Link } from "react-router-dom";
 
 function Settings() {
     const navigate = useNavigate();
 
-    //When users submit their sign up info, redirects to Landing page without rereshing
-    //*** No error checking atm: users can submit nothing, etc
     const handleSubmit = (e) => {
         e.preventDefault();
         navigate('/');
     };
+
     return (
-    <div>
-        <SiteHeader></SiteHeader>
-        <br></br>
-            <br></br>
-            <br></br>
+        <div>
+            <SiteHeader />
+            <br />
+            <br />
+            <br />
             <div className="signin-container">
-                <h1 class="font-semibold">Settings</h1>
+                <h1 className="font-semibold">Settings</h1>
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
-                        <button type="submit" className="rounded-button">Reset Passowrd</button>
+                        <button type="submit" className="rounded-button">Reset Password</button>
                         <button type="submit" className="rounded-button">Account Info</button>
                         <button type="submit" className="rounded-button">Help</button>
-                        <br></br>
+                        <Link to="/admindashboard" className="admin-link">
+                            <button type="button" className="rounded-button">Admin Dashboard</button>
+                        </Link>
+                        <br />
                     </form>
-                    <br></br>
+                    <br />
                 </div>
             </div>
-        
-    </div>
+        </div>
     );
 }
 
-export default Settings; //sends function when imported
+export default Settings;
