@@ -5,9 +5,10 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Settings from './components/Settings';
 import Registration from './components/Registration';
-import Scheduling from './components/Scheduling';
+import Scheduling from './components/Pages/User/Scheduling';
 import SelectPrisonForm from './components/SelectPrisonForm';
 import AdminDashboard from './components/AdminDashboard';
+import AdminScheduling from './components/Pages/Admin/AdminScheduling';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/scheduling" element={<Scheduling />} />
+        <Route path="/adminscheduling" element={<AdminScheduling />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>
