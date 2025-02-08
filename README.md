@@ -1,14 +1,117 @@
 # Outsiders FC
+![alt text](https://github.com/Lukkex/outsiders/blob/main/public/images/outsiders4.png)
+---
+<p align="center">
+The Outsiders are a volunteer soccer program that competes against the inmate teams in various prisons across California. The goal of this project is to create a secure and user-friendly web platform for managing the soccer volunteer program at Folsom Prison. The platform will allow administrators to upload and manage required forms for volunteers, schedule meeting times, and facilitate the exchange of sensitive player information securely with the state. Volunteers will be able to sign up, submit forms, and view their schedules with ease, while administrators will be able to manage users, teams, and events.
+</p>
 
-Dev Team Members:
-- William Lorence
-- Hunter Brown
-- Connor Yep
-- Christian Young
-- Shawnee Porkat
-- Wencai Ma
-- Trenton Suddaby
-- Qasim Ali
+# Team Tech Deck
+
+  <table align="center">
+    <tr>
+      <th>Devs</th>
+    </tr>
+    <tr>
+      <td>William Lorence</td>
+    </tr>
+    <tr>
+      <td>Hunter Brown</td>
+    </tr>
+    <tr>
+      <td>Connor Yep</td>
+    </tr>
+    <tr>
+      <td>Christian Young</td>
+    </tr>
+    <tr>
+      <td>Shawnee Porkat</td>
+    </tr>
+    <tr>
+      <td>Wencai Ma</td>
+    </tr>
+    <tr>
+      <td>Trenton Suddaby</td>
+    </tr>
+    <tr>
+      <td>Qasim Ali</td>
+    </tr>
+  </table>
+
+# User-Interface
+
+## Home Page
+
+![image](https://github.com/user-attachments/assets/86e113e3-558d-435a-a5d6-ee187af1d5be)
+
+## Registration
+
+![image](https://github.com/user-attachments/assets/b75159e8-fe68-4a9b-babc-d4717dfd27ee)
+
+
+Selecting Forms             |  Submission
+:-------------------------:|:-------------------------:
+![](https://github.com/user-attachments/assets/4a80d855-7976-4171-bc38-21aafd81c083) | ![](https://github.com/user-attachments/assets/20258ed9-94d0-41a6-aa46-b5de28ae5a82)
+
+
+## Log In
+
+![image](https://github.com/user-attachments/assets/62933b77-5fad-4b91-9dda-696739ff7b83)
+
+## Account Creation
+
+![image](https://github.com/user-attachments/assets/39b44282-d6e7-41f8-96a8-667edf78528a)
+
+## Settings
+
+![image](https://github.com/user-attachments/assets/a76d9d05-43c6-43b3-9ff6-b168f1a91526)
+
+# Database ERD
+![image](https://github.com/user-attachments/assets/25e154e2-7d1d-4569-a09c-66bb9f217b88)
+
+# Testing
+Placeholder...
+
+# Deployment
+Placeholder...
+
+# Developer Instructions
+Placeholder...
+
+# Timeline
+
+<table align="center">
+  <tr>
+    <th>Sprint #</th>
+    <th>Task</th>
+    <th>Date</th>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Finish back-end set up</td>
+    <td>21 Jan - 4 Feb 2025</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Implement admin-side functionality</td>
+    <td>5 Feb - 18 Feb 2025</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>Implement APIs</td>
+    <td>19 Feb - 5 Mar 2025</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>Flesh out the UI and backend</td>
+    <td>6 Mar - 19 Mar 2025</td>
+  </tr>
+    <tr>
+    <td>10</td>
+    <td>Thorough testing, add anything else necessary</td>
+    <td>20 Mar - 4 Apr 2025</td>
+  </tr>
+</table>
+
 
 # Setting up the Outsiders App
 
