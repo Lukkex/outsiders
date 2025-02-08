@@ -1,10 +1,10 @@
 //EventCreation.js
 /*
-* Notes: NOT LINKED TO BACKEND, USING DUMMY DATA OR NONE AT ALL.
-* TODO: -send eventData to DynamoDB
-*       -fetch locations, RSVPs, and user info from DynamoDB
-*       -events need to auto delete when the date is passed
-*       -delete created events functionality
+* Notes: - NOT LINKED TO BACKEND, USING DUMMY DATA OR NONE AT ALL.
+* TODO: - send eventData to DynamoDB
+*       - fetch locations, RSVPs, and user info from DynamoDB
+*       - events need to auto delete when the date is passed
+*       - delete created events functionality
 */
 import React, { useState } from 'react';
 
