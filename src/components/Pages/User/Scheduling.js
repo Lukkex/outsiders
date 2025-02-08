@@ -1,5 +1,5 @@
 import '../../../App.css'; //global styles
-import '../../Stylesheets/Scheduling.css';
+import styles from '../../Stylesheets/Scheduling.module.css';
 import { useState } from 'react';
 import SiteHeader from '../../SiteHeader';
 
@@ -20,8 +20,8 @@ function Scheduling() {
     
     function Schedule() {
         return (
-        <div className='form-container'>
-            <table className='schedule-table'>
+        <div className={styles.tableContainer}>
+            <table className={styles.scheduleTable}>
                 <caption>Schedule</caption>
                 <tr>
                     <th>Location</th>
@@ -44,9 +44,9 @@ function Scheduling() {
             <br></br>
             <br></br>
             <br></br>
-            <div className="alert-container">
+            <div className={styles.alertContainer}>
                 <h1>Please Complete Registration to Continue.</h1>
-                <button onClick={() => hideComponent("shScheduling")} className="toggle-button">[debug] Toggle Registration </button>
+                <button onClick={() => hideComponent("shScheduling")} className={styles.toggleButton}>[debug] Toggle Registration </button>
             </div>
             <br></br>
             <br></br>

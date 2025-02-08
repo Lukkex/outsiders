@@ -4,7 +4,7 @@ import SiteHeader from '../../SiteHeader';
 import EventCreation from './EventCreation';
 import UserSearch from './UserSearch';
 import '../../../App.css'; //global styles
-import '../../Stylesheets/Scheduling.css';
+import styles from '../../Stylesheets/Scheduling.module.css';
 
 const AdminScheduling = () => {
     const [activeSection, setActiveSection] = useState('event');

@@ -1,11 +1,4 @@
-h1 {
-    font-size: 150%; 
-    text-align: center;
-    margin-bottom: 20px;
-    margin-left: 0%;
-}
-
-.alert-container {
+.alertContainer, .formContainer {
     width: 70%;
     max-width: 480px;
     height: auto;
@@ -21,7 +14,14 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-container {
+.alertContainer h1 {
+    font-size: 150%; 
+    text-align: center;
+    margin-bottom: 20px;
+    margin-left: 0%;
+}
+
+.tableContainer {
     width: 90%;
     height: 640px;
     margin: 0 auto;
@@ -33,23 +33,23 @@ h1 {
 }
 
 /*Table stuff*/
-    caption,
-    td,
-    th {
+    .tableContainer caption,
+    .tableContainer td,
+    .tableContainer th {
         padding:1rem;
     }
 
-    caption,
-    th {
+    .tableContainer caption,
+    .tableContainer th {
         text-align: left;
     }
 
-    caption {
+    .tableContainer caption {
         font-size: 1.5rem;
         font-weight: 700;
     }
 
-    .schedule-table {
+    .scheduleTable {
         width: 90%;
         margin: auto;
         border-collapse: collapse;
@@ -59,7 +59,7 @@ h1 {
 /**/
 
 /*Buttons*/
-    .toggle-button {
+    .toggleButton {
         width: auto;
         height: auto;
         margin-left: auto;
@@ -73,13 +73,13 @@ h1 {
         cursor: pointer;
     }
 
-    .toggle-button:hover {
+    .toggleButton:hover {
         background-color: #3f6c77;
         color:white;
         transition-duration: 0.3s;
     }
 
-    .toggle-button:active {
+    .toggleButton:active {
         background-color: #4896ac;
         color:white;
         transition-duration: 0.01s;
