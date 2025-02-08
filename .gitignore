@@ -28,3 +28,8 @@ amplify/
 serverless.yml
 .env
 awsConfig.js
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
