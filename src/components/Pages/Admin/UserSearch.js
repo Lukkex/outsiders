@@ -16,6 +16,7 @@ import {
     Row,
     Cell,
 } from '@table-library/react-table-library/table';
+import styles from '../../Stylesheets/Scheduling.module.css';
 
 //## temp data struture, use to identify what info we want to retrieve/display instead of all user data
 const dummyUsers = [
@@ -54,7 +55,7 @@ const UserSearch = () => {
     return (
     <div>
     <h2>User Search & RSVP Management</h2>
-        <div>
+        <div className={styles.tableContainer}>
             <label htmlFor="search">Search User by Name: </label>
             <input //searchbar. Queries first/last/both
             type="text"
@@ -63,41 +64,40 @@ const UserSearch = () => {
             value={searchQuery}
             onChange={handleChange}
             />
-        </div>
-      
-        <Table data={data}>
-            {(tableList) => (
-                <>
-                <Header>
-                    <HeaderRow>
-                        <HeaderCell>First Name</HeaderCell>
-                        <HeaderCell>Last Name</HeaderCell>
-                        <HeaderCell>Location</HeaderCell>
-                        <HeaderCell>RSVP</HeaderCell>
-                    </HeaderRow>
-                </Header>
+            <Table data={data}>
+                {(tableList) => (
+                    <>
+                    <Header className="header">
+                        <HeaderRow className="header-row">
+                            <HeaderCell className="header-cell">First Name</HeaderCell>
+                            <HeaderCell className="header-cell">Last Name</HeaderCell>
+                            <HeaderCell className="header-cell">Location</HeaderCell>
+                            <HeaderCell className="header-cell">RSVP</HeaderCell>
+                        </HeaderRow>
+                    </Header>
 
-                <Body>
-                    {tableList.map((item) => (
-                        <Row key={item.id} item={item}>
-                            <Cell>{item.firstName}</Cell>
-                            <Cell>{item.lastName}</Cell>
-                            <Cell>{item.location}</Cell>
-                            <Cell>
-                                <input
-                                type="checkbox"
-                                checked={item.canAttend}
-                                />
-                                <button onClick={() => handleRSVPChange(item.id)}>
-                                    {item.canAttend ? "-Cancel RSVP" : "-RSVP"}
-                                </button>
-                            </Cell>
-                        </Row>
-                    ))}
-                </Body>
-                </>
-            )}
-        </Table>
+                    <Body>
+                        {tableList.map((item) => (
+                            <Row key={item.id} item={item}>
+                                <Cell>{item.firstName}</Cell>
+                                <Cell>{item.lastName}</Cell>
+                                <Cell>{item.location}</Cell>
+                                <Cell>
+                                    <input
+                                    type="checkbox"
+                                    checked={item.canAttend}
+                                    />
+                                    <button onClick={() => handleRSVPChange(item.id)}>
+                                        {item.canAttend ? "-Cancel RSVP" : "-RSVP"}
+                                    </button>
+                                </Cell>
+                            </Row>
+                        ))}
+                    </Body>
+                    </>
+                )}
+            </Table>
+        </div>
     </div>
     );
 };
