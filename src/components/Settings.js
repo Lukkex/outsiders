@@ -26,6 +26,7 @@ function Settings() {
                         <Link to="/admindashboard" className="admin-link">
                             <button type="button" className="rounded-button">Admin Dashboard</button>
                         </Link>
+                        <button type="submit" className="rounded-button">Delete Account</button>
                         <br />
                     </form>
                     <br />
