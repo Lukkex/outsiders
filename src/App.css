@@ -162,6 +162,19 @@ h1 {
   transition: 0.3s ease-in-out;
 }
 
+.Deletion {
+  width: 100%;
+  padding: 10px;
+  background-color: #ee0f0f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: 0.3s ease-in-out;
+}
+
 .settings-container .rounded-button:hover {
   background-color: #305b61;
   transform: scale(1.05);
