@@ -23,7 +23,7 @@ h1 {
 
 .form-container {
     width: 90%;
-    height: 640px;
+    height: 500px;
     margin: 0 auto;
     background-color: white;
     border: 2px solid#4896ac;
@@ -45,16 +45,63 @@ h1 {
     }
 
     caption {
-        font-size: 1.5rem;
+        
+        font-size: 1.75rem;
         font-weight: 700;
+        color:#2c3e50;
+        text-align: center
     }
 
     .schedule-table {
-        width: 90%;
-        margin: auto;
-        border-collapse: collapse;
-        background: lightblue;
-        border: black;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 1rem 0;
+    }
+
+    .schedule-table-header {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        padding: 0.5rem;
+    }
+
+    .schedule-table th {
+        background-color:#4896ac;
+        color: white;
+        padding: 1rem;
+        text-align: left;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+
+    }
+
+    .schedule-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #ecf0f1;
+        background: white;
+
+    }
+
+    .schedule-table tr:hover td {
+        background-color: #f8f9fa;
+    }
+
+
+    .schedule-table th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .schedule-table th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .schedule-table input[type="checkbox"] {
+        margin-left: 40px;
+        transform: scale(1.5);
+        accent-color: #3498db;
+        cursor: pointer;
     }
 /**/
 
@@ -64,7 +111,7 @@ h1 {
         height: auto;
         margin-left: auto;
         margin-right: auto;
-        padding: 10px;
+        padding: px;
         background-color:#4896ac;
         font-size: 80%;
         color: white;
@@ -84,6 +131,40 @@ h1 {
         color:white;
         transition-duration: 0.01s;
     }
+
+    .save-button {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px;
+        background-color:#4896ac;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .saved-message {
+        display: flex;
+        left: 50%;
+        justify-content: center;
+        color: rgb(0, 0, 0);
+        margin-top: 20px
+    }
+
+    .error-message {
+        display: flex;
+        left: 50%;
+        justify-content: center;
+        color: rgb(160, 56, 56);
+        margin-top: 20px
+    }
+
+  
+
+
 /**/
 
 /* Responsiveness */
