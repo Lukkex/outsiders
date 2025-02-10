@@ -45,7 +45,6 @@ function SignUp() {
     return (
         <div>
             <SiteHeader></SiteHeader>
-            
             <br></br>
             <br></br>
             <br></br>
@@ -69,9 +68,6 @@ function SignUp() {
             </div>
         </div>
     );
-
 }
-
-
 
 export default SignUp;
