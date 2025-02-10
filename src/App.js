@@ -9,7 +9,7 @@ import Scheduling from './components/Pages/User/Scheduling';
 import SelectPrisonForm from './components/SelectPrisonForm';
 import AdminDashboard from './components/AdminDashboard';
 import AdminScheduling from './components/Pages/Admin/AdminScheduling';
-
+import FillForm from './components/Pages/User/FillForm';
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
         <Route path="/scheduling" element={<Scheduling />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/adminscheduling" element={<AdminScheduling />} />
+        <Route path="/fillform" element={<FillForm />} />
       </Routes>
     </Router>
   );

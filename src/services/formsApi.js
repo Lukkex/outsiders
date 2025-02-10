@@ -11,6 +11,21 @@ export async function getSubmittedForms() {
     }
 }
 
+export async function submitForm(selectedPrison, formData) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/submitForm`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ selectedPrison, ...formData }),
+        });
+
+        return response.ok;
+    } catch (error) {
+        console.error("Error submitting form:", error);
+        return false;
+    }
+}
+
 export async function filterSubmittedForms(prison, player) {
     try {
         const allForms = await getSubmittedForms();

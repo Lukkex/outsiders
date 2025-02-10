@@ -185,3 +185,34 @@ h1 {
   text-decoration: none;
   display: block;
 }
+
+.fill-form {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: white;
+}
+
+.fill-form input, .fill-form textarea, .fill-form select {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.fill-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #305b61;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.fill-form button:hover {
+  background-color: #4896ac;
+}

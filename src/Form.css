@@ -1,0 +1,67 @@
+.form-container {
+    background-color: white;
+    border: 2px solid #4896ac;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 420px;
+    text-align: center;
+    margin-top: 5vh; 
+}
+
+.form-title {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.rounded-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4896ac;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.rounded-button:hover {
+    background-color: #305b61;
+}
+
+.status-message {
+    margin-top: 15px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.site-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: calc(100vh - 150px); 
+    width: 100%;
+    padding-top: 10vh; 
+}
