@@ -18,33 +18,49 @@ import {
     Cell,
 } from '@table-library/react-table-library/table';
 import { usePagination } from "@table-library/react-table-library/pagination";
-import { useTree } from '@table-library/react-table-library/tree';
+import { useTree, TreeExpandClickTypes, CellTree} from '@table-library/react-table-library/tree';
 import styles from '../../Stylesheets/Scheduling.module.css';
 
-//## temp data struture, use to identify what info we want to retrieve/display instead of all user data
-const dummyUsers = [
-    { id: 1, firstName: 'Alice', lastName: 'Smith', nodes: [
-        {title: 'test1', location: 'Folsom', date: '2/14/2025', time: '10:00 AM', canAttend: true },
-        {title: 'test2', location: 'San Quentin', date: '2/24/2025', time: '11:00 AM', canAttend: true }
-    ],},
-    { id: 2, firstName: 'Bob', lastName: 'Jones', nodes: [
-        {title: 'test1', location: 'Folsom', date: '', time: '', canAttend: true },
-        {title: 'test2', location: 'Folsom', date: '', time: '', canAttend: true }
-    ],},
-    { id: 3, firstName: 'Smith', lastName: 'Jones', nodes: [
-        {title: 'test1', location: 'Folsom', date: '', time: '', canAttend: true },
-        {title: 'test2', location: 'Folsom', date: '', time: '', canAttend: true }
-    ],},
-    { id: 4, firstName: 'Jane', lastName: 'Smith', nodes: [
-        {title: 'test1', location: 'Folsom', date: '', time: '', canAttend: true },
-        {title: 'test2', location: 'Folsom', date: '', time: '', canAttend: true }
-    ],},
-  ];
+//## dummy user info
+const userInfo = [
+    { id: 1, firstName: "Alice", lastName: "Smith" },
+    { id: 2, firstName: "Bob", lastName: "Jones" },
+    { id: 3, firstName: "Jane", lastName: "Doe" },
+];
+
+//## dummy event info
+const events = [
+    { id: 101, title: "Event A", location: "Folsom", date: "2/14/2025", time: "10:00 AM" },
+    { id: 102, title: "Event B", location: "San Quentin", date: "2/24/2025", time: "11:00 AM" },
+];
+
+//## dummy userEvent table array
+const userEvent = [
+    { userId: 1, eventId: 101, canAttend: true },
+    { userId: 1, eventId: 102, canAttend: false },
+    { userId: 2, eventId: 101, canAttend: true },
+    { userId: 3, eventId: 102, canAttend: true },
+];
+
+//## build one big array from all imported data because react tables are a dumb bitch and want it that way
+const constructArray = (userInfo, events, attendance) => {
+    return userInfo.map(user => ({...user,
+        nodes: events.map(event => {
+            // Find attendance record for this user-event pair
+            const userEvent = attendance.find(a => a.userId === user.id && a.eventId === event.id) || {};
+            return {...event,
+                canAttend: userEvent.canAttend ?? false // Default to false if no record exists
+            };
+        })
+    }));
+};
 
 const UserSearch = () => {
     //##### variables
     const [searchQuery, setSearchQuery] = useState("");
-    const [users, setUsers] = useState(dummyUsers); //import user data here
+    const constructedArray = constructArray(userInfo
+    , events, userEvent);
+    const [users, setUsers] = useState(constructedArray); //import user data here
     const PAGELIMIT = 10;
 
     // filter search logic
@@ -56,7 +72,11 @@ const UserSearch = () => {
     const data = {nodes: filteredUsers};
     const tree = useTree(data, {
         onChange: onTreeChange,
-    });
+    },
+    {
+        clickType: TreeExpandClickTypes.ButtonClick,
+    }
+    );
 
     //##### functions
 
@@ -72,9 +92,12 @@ const UserSearch = () => {
     //## Needs adjustment for backent querying and updating
     const handleRSVPChange = (userId) => {
         setUsers((prevUsers) => 
-            prevUsers.map((user) =>
-                user.id === userId ? { ...user, canAttend: !user.canAttend } : user
-            )
+            prevUsers.map((user) => ({
+                ...user,
+                nodes: user.nodes.map((node) => 
+                    node.id === userId ? { ...node, canAttend: !node.canAttend } : node
+                )
+            }))
         );
     };
 
@@ -125,25 +148,45 @@ const UserSearch = () => {
 
                     <Body>
                         {tableList.map((item) => (
-                            <Row key={item.id} item={item}>
-                                <Cell className={styles.cell}>{item.firstName}</Cell>
-                                <Cell className={styles.cell}>{item.lastName}</Cell>
-                                <Cell className={styles.cell}>{item.title}</Cell>
-                                <Cell className={styles.cell}>{item.location}</Cell>
+                            <Row className={styles.body} key={item.id} item={item}>
+                                {(item.firstName) && (
+                                    <CellTree item={item} className={styles.cell}>{item.firstName}</CellTree>
+                                ) || (
+                                    <Cell className={styles.cell}> - </Cell>
+                                )}
+
+                                {(item.lastName) && (
+                                    <Cell className={styles.cell}>{item.lastName}</Cell>
+                                ) || (
+                                    <Cell className={styles.cell}> - </Cell>
+                                )}
+                                
+                                {(item.title) && (
+                                    <Cell className={styles.cell}>{item.title}</Cell>
+                                ) || (
+                                    <Cell className={styles.cell}> - </Cell>
+                                )}
+
+                                {(item.title) && (
+                                    <Cell className={styles.cell}>{item.location}</Cell>
+                                ) || (
+                                    <Cell className={styles.cell}> - </Cell>
+                                )}
+                                
                                 {(item.date || item.time) && (
                                     <Cell className={styles.cell}>{item.date}, {item.time}</Cell>
                                 ) || (
-                                    <Cell className={styles.cell}></Cell>
+                                    <Cell className={styles.cell}> - </Cell>
                                 )}
+
+                                {!(item.nodes) && (
                                 <Cell className={styles.cell}>
-                                    <input
-                                    type="checkbox"
-                                    checked={item.canAttend}
-                                    />
-                                    <button onClick={() => handleRSVPChange(item.id)}>
-                                        {item.canAttend ? " -Cancel RSVP" : " -RSVP"}
-                                    </button>
+                                    <input type="checkbox" checked={item.canAttend}/>
+                                    <button onClick={() => handleRSVPChange(item.id)}>-edit</button>
                                 </Cell>
+                                ) || (
+                                    <Cell className={styles.cell}> - </Cell>
+                                )}
                             </Row>
                         ))}
                     </Body>

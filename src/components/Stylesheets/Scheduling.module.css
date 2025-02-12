@@ -21,7 +21,7 @@
     margin-left: 0%;
 }
 
-/*Tables*/
+/* Tables */
     .tableContainer {
         width: 90%;
         height: 640px;
@@ -45,24 +45,19 @@
     }
 
     .tableContainer caption {
-        font-size: 1.5rem;
+        font-size: 1.75rem;
         font-weight: 700;
         color:#2c3e50;
         text-align: center
     }
 
-    .scheduleTable{
-        width: 90%;
-        margin: auto;
-        border-collapse: collapse;
-        background: lightblue;
-        border: black;
-    }
+    /* React Table */
 
     .reactTable {
         margin-top: 10px;
         border: 1px solid lightblue;
         border-radius: 10px;
+        background-color: lightblue;
     }
 
     .reactTable *{
@@ -78,21 +73,85 @@
         border-right: 2px solid black;
     }
 
+    .header {
+        background-color: lightblue;
+    }
+
+    .body {
+        background-color: rgb(234, 234, 234);
+    }
+
     .cell {
         border-top: 1px solid lightblue;
+        background-color: lightblue;
         border-right: 1px solid black;
     }
+
+    .subcell {
+        background-color: rgb(255, 255, 255);
+    }
+
+    /* Schedule Table */
+    .scheduleTable {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 1rem 0;
+      }
+      
+      .scheduleTableHeader {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        padding: 0.5rem;
+      }
+      
+      .scheduleTable th {
+        background-color:#4896ac;
+        color: white;
+        padding: 1rem;
+        text-align: left;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+      
+      }
+      
+      .scheduleTable td {
+        padding: 1rem;
+        border-bottom: 1px solid #ecf0f1;
+        background: white;
+      
+      }
+      
+      .scheduleTable tr:hover td {
+        background-color: #f8f9fa;
+      }
+      
+      
+      .scheduleTable th:first-child {
+        border-radius: 8px 0 0 0;
+      }
+      
+      .scheduleTable th:last-child {
+        border-radius: 0 8px 0 0;
+      }
+      
+      .scheduleTable input[type="checkbox"] {
+        margin-left: 40px;
+        transform: scale(1.5);
+        accent-color: #3498db;
+        cursor: pointer;
+      }
+
 /**/
 
 /*Buttons*/
     .toggleButton {
-        width: auto;
-        height: auto;
         margin-left: auto;
         margin-right: auto;
-        padding: px;
+        padding: 10px;
         background-color:#4896ac;
-        font-size: 80%;
         color: white;
         border: none;
         border-radius: 5px;
@@ -111,7 +170,7 @@
         transition-duration: 0.01s;
     }
 
-    .save-button {
+    .saveButton {
         display: flex;
         justify-content: space-between;
         margin-top: 50px;
@@ -125,7 +184,7 @@
         cursor: pointer;
     }
 
-    .saved-message {
+    .savedMessage {
         display: flex;
         left: 50%;
         justify-content: center;
@@ -133,7 +192,7 @@
         margin-top: 20px
     }
 
-    .error-message {
+    .errorMessage {
         display: flex;
         left: 50%;
         justify-content: center;

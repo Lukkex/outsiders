@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../SelectPrisonForm.css';
+import '../Stylesheets/SelectPrisonForm.css';
 
 const SelectPrisonForm = ({ onPrisonSelected }) => {
     const [prisons, setPrisons] = useState([]);
