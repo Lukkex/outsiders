@@ -1,7 +1,7 @@
-import '../../../App.css'; //global styles
+import '../../Stylesheets/App.css'; //global styles
 import styles from '../../Stylesheets/Scheduling.module.css';
 import {useState , useEffect } from 'react';
-import SiteHeader from '../../SiteHeader';
+import SiteHeader from '../../../utils/SiteHeader';
 
 // Meeting dummy data simulating backend tables
 const dummyMeetingTimes = [
@@ -64,7 +64,7 @@ function Scheduling() {
         return (
         <div className={styles.tableContainer}>
             <table className={styles.scheduleTable}>
-                <caption /*classname='schedule-table-header'*/>Select Available Dates</caption>
+                <caption classname={styles.scheduleTableHeader}>Select Available Dates</caption>
                 <thead>
                     <tr>
                         <th>Location</th>
@@ -88,11 +88,11 @@ function Scheduling() {
                     ))}
                 </tbody>
             </table>
-            <button onClick={handleSave} className="save-button">
+            <button onClick={handleSave} className={styles.saveButton}>
                 Confirm Selection
             </button>
-            {showSaved && <div className="saved-message">Dates saved!</div>}
-            {showNoSelection && <div className="error-message">Please select at least one date</div>}
+            {showSaved && <div className={styles.savedMessage}>Dates saved!</div>}
+            {showNoSelection && <div className={styles.errorMessage}>Please select at least one date</div>}
         </div>
         );
     }
