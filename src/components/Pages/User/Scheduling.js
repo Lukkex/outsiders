@@ -1,5 +1,5 @@
 import '../../../App.css'; //global styles
-import '../../Stylesheets/Scheduling.module.css';
+import styles from '../../Stylesheets/Scheduling.module.css';
 import {useState , useEffect } from 'react';
 import SiteHeader from '../../SiteHeader';
 
