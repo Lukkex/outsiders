@@ -148,3 +148,114 @@ h1 {
   background-color: #0073e6;
   color: #fff;
 }
+
+.settings-container .rounded-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4896ac;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: 0.3s ease-in-out;
+}
+
+.Deletion {
+  width: 100%;
+  padding: 10px;
+  background-color: #ee0f0f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: 0.3s ease-in-out;
+}
+
+.settings-container .rounded-button:hover {
+  background-color: #305b61;
+  transform: scale(1.05);
+}
+
+
+.settings-container .admin-link {
+  text-decoration: none;
+  display: block;
+}
+
+
+
+/* TEMP LEFTOVER FROM SCHEDULING.CSS */
+
+.schedule-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1rem 0;
+}
+
+.schedule-table-header {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+}
+
+.schedule-table th {
+  background-color:#4896ac;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+
+}
+
+.schedule-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #ecf0f1;
+  background: white;
+
+}
+
+.schedule-table tr:hover td {
+  background-color: #f8f9fa;
+}
+
+
+.schedule-table th:first-child {
+  border-radius: 8px 0 0 0;
+}
+
+.schedule-table th:last-child {
+  border-radius: 0 8px 0 0;
+}
+
+.schedule-table input[type="checkbox"] {
+  margin-left: 40px;
+  transform: scale(1.5);
+  accent-color: #3498db;
+  cursor: pointer;
+}
+
+/*
+caption {
+      
+  font-size: 1.75rem;
+}
+
+.form-container {
+  width: 90%;
+  height: 500px;
+  margin: 0 auto;
+  background-color: white;
+  border: 2px solid#4896ac;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+*/
