@@ -3,7 +3,7 @@ import { useState } from 'react';
 import SiteHeader from '../../SiteHeader';
 import EventCreation from './EventCreation';
 import UserSearch from './UserSearch';
-import '../../../App.css'; //global styles
+//import '../../../App.css'; //global styles
 import styles from '../../Stylesheets/Scheduling.module.css';
 
 const AdminScheduling = () => {

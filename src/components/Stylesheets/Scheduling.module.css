@@ -21,18 +21,18 @@
     margin-left: 0%;
 }
 
-.tableContainer {
-    width: 90%;
-    height: 640px;
-    margin: 0 auto;
-    background-color: white;
-    border: 2px solid#4896ac;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+/*Tables*/
+    .tableContainer {
+        width: 90%;
+        height: 640px;
+        margin: 0 auto;
+        background-color: white;
+        border: 2px solid#4896ac;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-/*Table stuff*/
     .tableContainer caption,
     .tableContainer td,
     .tableContainer th {
@@ -49,12 +49,36 @@
         font-weight: 700;
     }
 
-    .scheduleTable {
+    .scheduleTable{
         width: 90%;
         margin: auto;
         border-collapse: collapse;
         background: lightblue;
         border: black;
+    }
+
+    .reactTable {
+        margin-top: 10px;
+        border: 1px solid lightblue;
+        border-radius: 10px;
+    }
+
+    .reactTable *{
+        text-align: left;
+        padding: 0px;
+    }
+
+    .headerCell{
+        padding: 0;
+        background-color: lightblue;
+        border-bottom: 1px solid lightblue;
+        border-left: 1px solid black;
+        border-right: 2px solid black;
+    }
+
+    .cell {
+        border-top: 1px solid lightblue;
+        border-right: 1px solid black;
     }
 /**/
 

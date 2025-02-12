@@ -127,7 +127,7 @@ const EventCreation = () => {
                 {/*List of existing events*/}
                 <h2>Upcoming Events</h2>
                 {events.length > 0 ? (
-                    <table border="1">
+                    <table className={styles.scheduleTable} border="1">
                         <thead>
                             <tr>
                                 <th>Event</th>
