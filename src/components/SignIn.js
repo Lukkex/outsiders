@@ -1,8 +1,8 @@
 import '../App.css'; //global styles
-import SiteHeader from './SiteHeader';
+import SiteHeader from './SiteHeader.js';
 import '../SignUp.css';
 import { useNavigate, Link } from "react-router-dom";
-import TextBlackBG from './TextBlackBG';
+import TextBlackBG from './TextBlackBG.js';
 
 function SignIn() {
     const navigate = useNavigate();

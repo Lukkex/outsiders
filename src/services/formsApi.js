@@ -1,4 +1,4 @@
-import API_BASE_URL from "./apiConfig";
+import API_BASE_URL from "./apiConfig.js";
 
 export async function getSubmittedForms() {
     try {

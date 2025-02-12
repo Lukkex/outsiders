@@ -1,7 +1,8 @@
-import { putObjToS3, getUserDataFromS3, checkS3Connection } from './awsServices/s3.js';
+import { putObjToS3, getUserDataFromS3, checkS3Connection, uploadPDFtoS3 } from './awsServices/s3.js';
 import { checkUserExists, addUserToTable } from './awsServices/dynamoDB.js';
 
 async function main() {
+    /*
     const userID = "777";
     const firstName = "qwer";
     const lastName = "asdf";
@@ -37,6 +38,12 @@ async function main() {
     } catch (error) {
         console.error("Error in main function:", error);
     }
+    */
+
+    const filePath = "./backend/CDCR_2301_B.pdf"; //from root directory (outsiders)
+    const folderName = "testuploads";
+  
+    uploadPDFtoS3(filePath, folderName);
 }
 
 main();

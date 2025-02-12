@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css'; // Global styles
 import '../Registration.css'; // Registration-specific styles
-import SiteHeader from './SiteHeader';
+import SiteHeader from './SiteHeader.js';
 
 function Registration() {
     const [selectedPrisons, setSelectedPrisons] = useState([]);

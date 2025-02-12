@@ -13,7 +13,7 @@ import {
     Button,
     useAuthenticator,
   } from '@aws-amplify/ui-react';
-import SiteHeader from './SiteHeader';
+import SiteHeader from './SiteHeader.js';
 
 export default function CustomAuthenticator({content}) {
     return (

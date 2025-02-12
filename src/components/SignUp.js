@@ -2,7 +2,7 @@ import '../App.css';
 import '../SignUp.css';
 import { useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
-import SiteHeader from './SiteHeader';
+import SiteHeader from './SiteHeader.js';
 
 function SignUp() {
     const navigate = useNavigate();

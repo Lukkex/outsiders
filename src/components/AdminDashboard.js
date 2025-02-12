@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getSubmittedForms, filterSubmittedForms } from '../services/formsApi';
+import { getSubmittedForms, filterSubmittedForms } from '../services/formsApi.js';
 import '../AdminDashboard.css';
-import SiteHeader from './SiteHeader';
+import SiteHeader from './SiteHeader.js';
 
 function AdminDashboard() {
     const [forms, setForms] = useState([]);

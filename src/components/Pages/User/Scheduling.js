@@ -1,7 +1,7 @@
 import '../../../App.css'; //global styles
 import '../../Stylesheets/Scheduling.css';
 import { useState, useEffect } from 'react';
-import SiteHeader from '../../SiteHeader';
+import SiteHeader from '../../SiteHeader.js';
 
 // Meeting dummy data simulating backend tables
 const dummyMeetingTimes = [
