@@ -1,11 +1,4 @@
-h1 {
-    font-size: 150%; 
-    text-align: center;
-    margin-bottom: 20px;
-    margin-left: 0%;
-}
-
-.alert-container {
+.alertContainer, .formContainer {
     width: 70%;
     max-width: 480px;
     height: auto;
@@ -21,92 +14,78 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-container {
-    width: 90%;
-    height: 500px;
-    margin: 0 auto;
-    background-color: white;
-    border: 2px solid#4896ac;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.alertContainer h1 {
+    font-size: 150%; 
+    text-align: center;
+    margin-bottom: 20px;
+    margin-left: 0%;
 }
 
-/*Table stuff*/
-    caption,
-    td,
-    th {
+/*Tables*/
+    .tableContainer {
+        width: 90%;
+        height: 640px;
+        margin: 0 auto;
+        background-color: white;
+        border: 2px solid#4896ac;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .tableContainer caption,
+    .tableContainer td,
+    .tableContainer th {
         padding:1rem;
     }
 
-    caption,
-    th {
+    .tableContainer caption,
+    .tableContainer th {
         text-align: left;
     }
 
-    caption {
-        
-        font-size: 1.75rem;
+    .tableContainer caption {
+        font-size: 1.5rem;
         font-weight: 700;
         color:#2c3e50;
         text-align: center
     }
 
-    .schedule-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        margin: 1rem 0;
+    .scheduleTable{
+        width: 90%;
+        margin: auto;
+        border-collapse: collapse;
+        background: lightblue;
+        border: black;
     }
 
-    .schedule-table-header {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 1.5rem;
-        padding: 0.5rem;
+    .reactTable {
+        margin-top: 10px;
+        border: 1px solid lightblue;
+        border-radius: 10px;
     }
 
-    .schedule-table th {
-        background-color:#4896ac;
-        color: white;
-        padding: 1rem;
+    .reactTable *{
         text-align: left;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-
+        padding: 0px;
     }
 
-    .schedule-table td {
-        padding: 1rem;
-        border-bottom: 1px solid #ecf0f1;
-        background: white;
-
+    .headerCell{
+        padding: 0;
+        background-color: lightblue;
+        border-bottom: 1px solid lightblue;
+        border-left: 1px solid black;
+        border-right: 2px solid black;
     }
 
-    .schedule-table tr:hover td {
-        background-color: #f8f9fa;
-    }
-
-
-    .schedule-table th:first-child {
-        border-radius: 8px 0 0 0;
-    }
-
-    .schedule-table th:last-child {
-        border-radius: 0 8px 0 0;
-    }
-
-    .schedule-table input[type="checkbox"] {
-        margin-left: 40px;
-        transform: scale(1.5);
-        accent-color: #3498db;
-        cursor: pointer;
+    .cell {
+        border-top: 1px solid lightblue;
+        border-right: 1px solid black;
     }
 /**/
 
 /*Buttons*/
-    .toggle-button {
+    .toggleButton {
         width: auto;
         height: auto;
         margin-left: auto;
@@ -120,13 +99,13 @@ h1 {
         cursor: pointer;
     }
 
-    .toggle-button:hover {
+    .toggleButton:hover {
         background-color: #3f6c77;
         color:white;
         transition-duration: 0.3s;
     }
 
-    .toggle-button:active {
+    .toggleButton:active {
         background-color: #4896ac;
         color:white;
         transition-duration: 0.01s;

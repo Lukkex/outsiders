@@ -1,6 +1,6 @@
 import '../../../App.css'; //global styles
-import '../../Stylesheets/Scheduling.css';
-import { useState, useEffect } from 'react';
+import styles from '../../Stylesheets/Scheduling.module.css';
+import {useState , useEffect } from 'react';
 import SiteHeader from '../../SiteHeader';
 
 // Meeting dummy data simulating backend tables
@@ -62,9 +62,9 @@ function Scheduling() {
     // Returns table of available meeting times, allowing for user selection
     function Schedule() {
         return (
-        <div className='form-container'>
-            <table className='schedule-table'>
-                <caption classname='schedule-table-header'>Select Available Dates</caption>
+        <div className={styles.tableContainer}>
+            <table className={styles.scheduleTable}>
+                <caption /*classname='schedule-table-header'*/>Select Available Dates</caption>
                 <thead>
                     <tr>
                         <th>Location</th>
@@ -103,9 +103,9 @@ function Scheduling() {
             <br></br>
             <br></br>
             <br></br>
-            <div className="alert-container">
+            <div className={styles.alertContainer}>
                 <h1>Please Complete Registration to Continue.</h1>
-                <button onClick={() => hideComponent("shScheduling")} className="toggle-button">[debug] Toggle Registration </button>
+                <button onClick={() => hideComponent("shScheduling")} className={styles.toggleButton}>[debug] Toggle Registration </button>
             </div>
             <br></br>
             <br></br>
