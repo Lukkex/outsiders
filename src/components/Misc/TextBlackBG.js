@@ -1,4 +1,4 @@
-import '../App.css'; //global styles
+import '../Stylesheets/App.css'; //global styles
 import React from 'react';
 
 const TextBlackBG = ({label}) => {

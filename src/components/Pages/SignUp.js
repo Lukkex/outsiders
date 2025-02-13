@@ -1,8 +1,8 @@
-import '../App.css';
-import '../SignUp.css';
+import '../Stylesheets/App.css';
+import '../Stylesheets/SignUp.css';
 import { useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
-import SiteHeader from './SiteHeader';
+import SiteHeader from '../../utils/SiteHeader';
 
 function SignUp() {
     const navigate = useNavigate();
