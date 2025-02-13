@@ -102,4 +102,4 @@ async function uploadPDFtoS3(filePath, folderName) {
   
   //uploadPDFtoS3(filePath, folderName);
 
-export { putObjToS3, getUserDataFromS3, checkS3Connection };
+export { putObjToS3, getUserDataFromS3, checkS3Connection, uploadPDFtoS3 };
