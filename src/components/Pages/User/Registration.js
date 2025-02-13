@@ -80,6 +80,43 @@ function Registration() {
         availableForms = availableForms.filter((form) => !form.requiresYes);
     }
 
+    const [fileMap, setFileMap] = useState({}); // Stores selected files for each form
+
+    const handleFileChange = (formId, event) => {
+        const file = event.target.files[0]; // Get the selected file
+        if (file) {
+            setFileMap((prev) => ({ ...prev, [formId]: file }));
+        }
+    };
+
+    const handleSubmit = async () => {
+        // Check if all forms have a file selected
+        const allFormsHaveFiles = selectedForms.every((formId) => fileMap[formId]);
+
+        if (!allFormsHaveFiles) {
+            alert("Please select a file for each form before submitting.");
+            return;
+        }
+        else {
+            alert("Submitting...");
+        }
+        /*
+        try {
+            await Promise.all(
+                selectedForms.map((formId) => {
+                    const file = fileMap[formId];
+                    return uploadFileToS3(file, `uploads/${file.name}`); // Adjust the S3 path as needed
+                })
+            );
+            alert("Files uploaded successfully!");
+        } catch (error) {
+            console.error("Upload failed:", error);
+            alert("Error uploading files. Please try again.");
+        }
+        */
+
+    };
+
     return (
         <div>
             <SiteHeader />
@@ -88,6 +125,7 @@ function Registration() {
             <br />
             <div className="signup-container">
                 <h1 className="font-semibold">Registration</h1>
+                <br></br>
                 <div className="form-container">
                     {step === 1 && (
                         <div>
@@ -166,18 +204,41 @@ function Registration() {
                             <p>
                                 <strong>Selected Prisons:</strong> {selectedPrisons.join(", ")}
                             </p>
+                            <br></br>
                             <p>
-                                <strong>Selected Forms:</strong>{" "}
+                                <strong>Selected Forms</strong>
+                            </p>
+                            <div className={"max-h-80 overflow-y-auto border p-2 rounded"}>
                                 {forms
                                     .filter((form) => selectedForms.includes(form.id))
-                                    .map((form) => form.name)
-                                    .join(", ")}
-                            </p>
-                            <button className="rounded-button" onClick={() => alert("Submitting...")}>
+                                    .map((form) => (
+                                        <div key={form.id} className="flex items-center justify-between border-b p-2">
+                                            <span>{form.name}</span>
+                                            <div className="flex items-center space-x-2">
+                                                <input
+                                                    type="file"
+                                                    accept="application/pdf"
+                                                    onChange={(event) => handleFileChange(form.id, event)}
+                                                    className="hidden"
+                                                    id={`file-upload-${form.id}`}
+                                                />
+                                                <label
+                                                    htmlFor={`file-upload-${form.id}`}
+                                                    className="rounded-button"
+                                                >
+                                                    {fileMap[form.id] ? "Change File" : "Upload"}
+                                                </label>
+                                                {fileMap[form.id] && <span className="text-sm">{fileMap[form.id].name}</span>}
+                                            </div>
+                                        </div>
+                                    ))}
+                            </div>
+                            <button className="rounded-button mt-3" onClick={handleSubmit}>
                                 Submit
                             </button>
                         </div>
                     )}
+
                 </div>
                 <div className="navigation-buttons">
                     {step > 1 && (
