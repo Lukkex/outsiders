@@ -132,9 +132,9 @@ const EventCreation = () => {
                             <tr>
                                 <th>Event</th>
                                 <th onClick={() => handleSort("location")} style={{ cursor: "pointer" }}>
-                                    Location{getArrow("location")}</th>
+                                    Location {getArrow("location")}</th>
                                 <th onClick={() => handleSort("date")} style={{ cursor: "pointer" }}>
-                                    Date{getArrow("date")}</th>
+                                    Date {getArrow("date")}</th>
                                 <th>Time</th>
                                 <th>RSVPs</th>
                             </tr>

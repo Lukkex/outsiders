@@ -1,6 +1,6 @@
 //AdminScheduling.js
 import { useState } from 'react';
-import SiteHeader from '../../SiteHeader';
+import SiteHeader from '../../../utils/SiteHeader';
 import EventCreation from './EventCreation';
 import UserSearch from './UserSearch';
 //import '../../../App.css'; //global styles

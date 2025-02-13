@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import '../App.css'; //global styles
+import '../components/Stylesheets/App.css'; //global styles
 import '@aws-amplify/ui-react/styles.css';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { signOut } from 'aws-amplify/auth';

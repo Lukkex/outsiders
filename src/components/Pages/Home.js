@@ -1,8 +1,8 @@
-import '../App.css';
+import '../Stylesheets/App.css';
 import '@aws-amplify/ui-react/styles.css';
-import SiteHeader from './SiteHeader';
+import SiteHeader from '../../utils/SiteHeader.js';
 import { Link } from 'react-router-dom';
-import CustomAuthenticator from './CustomAuthenticator.js';
+import CustomAuthenticator from '../../utils/CustomAuthenticator.js';
 
 function Home() {
     return (

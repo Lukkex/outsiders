@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../AssociatedForms.css';
+import '../Stylesheets/AssociatedForms.css';
 
 const AssociatedForms = ({ prison }) => {
     const [formData, setFormData] = useState({}); // Store form data for the prison
