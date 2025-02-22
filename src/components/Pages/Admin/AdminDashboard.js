@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { getSubmittedForms, filterSubmittedForms } from '../../../services/formsApi';
 import '../../Stylesheets/AdminDashboard.css';
 import SiteHeader from '../../../utils/SiteHeader';
+import { useNavigate } from 'react-router-dom';
 
 function AdminDashboard() {
     const [forms, setForms] = useState([]);
     const [filteredForms, setFilteredForms] = useState([]);
     const [prisonFilter, setPrisonFilter] = useState('');
     const [playerFilter, setPlayerFilter] = useState('');
-    
+
     useEffect(() => {
         async function fetchForms() {
             const allForms = await getSubmittedForms();
@@ -27,6 +28,8 @@ function AdminDashboard() {
         setFilteredForms(prevForms => [...prevForms].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)));
     };
 
+    const navigate = useNavigate();
+
     return (
         <div>
             <SiteHeader />
@@ -38,13 +41,14 @@ function AdminDashboard() {
                         <option value="Folsom">Folsom</option>
                         <option value="San Quentin">San Quentin</option>
                     </select>
-                    <input 
-                        type="text" 
-                        placeholder="Search by Player" 
-                        onChange={(e) => setPlayerFilter(e.target.value)} 
+                    <input
+                        type="text"
+                        placeholder="Search by Player"
+                        onChange={(e) => setPlayerFilter(e.target.value)}
                     />
                     <button onClick={handleFilterChange}>Filter</button>
                     <button onClick={handleSort}>Sort by Most Recent</button>
+                    <button onClick={() => navigate('/viewplayers')}>View Players</button>
                 </div>
                 <table>
                     <thead>
