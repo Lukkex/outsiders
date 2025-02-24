@@ -9,6 +9,7 @@ import Scheduling from './components/Pages/User/Scheduling';
 import SelectPrisonForm from './components/SelectPrisonForm';
 import AdminDashboard from './components/AdminDashboard';
 import AdminScheduling from './components/Pages/Admin/AdminScheduling';
+import AccountInfo from './components/Pages/User/AccountInfo';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/scheduling" element={<Scheduling />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/adminscheduling" element={<AdminScheduling />} />
+        <Route path="/accountinfo" element={<AccountInfo />} />
       </Routes>
     </Router>
   );
