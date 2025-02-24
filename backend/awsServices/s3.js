@@ -74,4 +74,32 @@ async function checkS3Connection() {
     }
 }
 
-export { putObjToS3, getUserDataFromS3, checkS3Connection };
+async function uploadPDFtoS3(filePath, folderName) {
+    try {
+        const fileStream = fs.createReadStream(filePath);
+        const fileName = path.basename(filePath);
+
+        const uploadParams = {
+        Bucket: bucketName,
+        Key: `${folderName}/${fileName}`,
+        Body: fileStream,
+        ContentType: "application/pdf",
+        };
+
+        const command = new PutObjectCommand(uploadParams);
+        const response = await s3.send(command);
+
+        console.log(`File uploaded successfully: ${uploadParams.Key}`);
+        return response;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      throw error;
+    }
+}
+
+  //const filePath = "./backend/CDCR_2301_B.pdf"; //from root directory (outsiders)
+  //const folderName = "testuploads";
+  
+  //uploadPDFtoS3(filePath, folderName);
+
+export { putObjToS3, getUserDataFromS3, checkS3Connection, uploadPDFtoS3 };

@@ -1,10 +1,10 @@
 //AdminScheduling.js
 import { useState } from 'react';
-import SiteHeader from '../../SiteHeader';
+import SiteHeader from '../../../utils/SiteHeader';
 import EventCreation from './EventCreation';
 import UserSearch from './UserSearch';
-import '../../../App.css'; //global styles
-import '../../Stylesheets/Scheduling.css';
+//import '../../../App.css'; //global styles
+import styles from '../../Stylesheets/Scheduling.module.css';
 
 const AdminScheduling = () => {
     const [activeSection, setActiveSection] = useState('event');
