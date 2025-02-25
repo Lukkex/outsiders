@@ -1,4 +1,5 @@
-import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { GetItemCommand, PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { unmarshall} from '@aws-sdk/util-dynamodb';
 import { dynamoDB } from '../awsConfig.js';
 
 const tableName = process.env.DYNAMODB_USER_TABLE;
@@ -27,13 +28,13 @@ async function checkUserExists(userID) {
     }
 }
 
-async function addUserToTable(userID, firstName, lastname, email) {
+async function addUserToTable(userID, firstName, lastName, email) {
     const params = {
         TableName: tableName,
         Item: {
             userID: { S: userID},
             firstName: { S: firstName},
-            lastname: { S: lastname},
+            lastName: { S: lastName},
             email: { S: email}
         }
     };
@@ -48,5 +49,22 @@ async function addUserToTable(userID, firstName, lastname, email) {
     }
 }
 
-export { checkUserExists, addUserToTable };
+async function getUserList() {
+    const command = new ScanCommand({TableName: "userTable"});
+    
+    try{
+        const response = await dynamoDB.send(command);
+
+        if (!response.Items || response.Items.length === 0) {
+            return [];
+        }
+        const users = response.Items.map(item => unmarshall(item));
+        return users;
+    } catch(error) {
+        console.error("Error retrieving list of users:", error);
+        return [];
+    }
+}
+
+export { checkUserExists, addUserToTable, getUserList };
 
