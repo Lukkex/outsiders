@@ -121,3 +121,31 @@
         padding: 10px;
     }
 }
+
+.hoverable {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+}
+
+.hover-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 1000;
+    transform: translateY(5px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hover-tooltip.pinned {
+    border: 2px solid white;
+    padding: 12px;
+}
