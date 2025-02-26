@@ -1,4 +1,4 @@
-import '../Stylesheets/App.css'; //global styles
+import '../Stylesheets/App.css';
 import SiteHeader from '../../utils/SiteHeader';
 import { useNavigate, Link } from "react-router-dom";
 
