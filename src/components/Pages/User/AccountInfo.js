@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import SiteHeader from '../../SiteHeader';
+import SiteHeader from '../../../utils/SiteHeader';
 import '../../Stylesheets/AccountInfo.css' // Import the new CSS file
 
 function AccountInfo() {
