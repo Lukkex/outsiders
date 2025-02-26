@@ -21,7 +21,9 @@ function Settings() {
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
                         <button type="submit" className="rounded-button">Reset Password</button>
-                        <button type="submit" className="rounded-button">Account Info</button>
+                        <Link to="/accountinfo" className="accountinfo_link">
+                            <button type="button" className="rounded-button">Account Information</button>
+                        </Link>
                         <button type="submit" className="rounded-button">Help</button>
                         <Link to="/admindashboard" className="admin-link">
                             <button type="button" className="rounded-button">Admin Dashboard</button>
