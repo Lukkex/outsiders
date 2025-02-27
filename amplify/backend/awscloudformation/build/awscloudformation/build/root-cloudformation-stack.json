@@ -199,6 +199,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "authoutsidersf788891a": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -208,6 +209,60 @@
           "allowUnauthenticatedIdentities": false,
           "resourceNameTruncated": "outsidf788891a",
           "userPoolName": "outsidersf788891a_userpool_f788891a",
+=======
+    "AuthTriggerCustomLambdaStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json",
+        "Parameters": {
+          "env": "dev",
+          "userpoolId": {
+            "Fn::GetAtt": [
+              "authoutsiders782de14c",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "userpoolArn": {
+            "Fn::GetAtt": [
+              "authoutsiders782de14c",
+              "Outputs.UserPoolArn"
+            ]
+          },
+          "functionoutsiders782de14cPostConfirmationLambdaExecutionRole": {
+            "Fn::GetAtt": [
+              "functionoutsiders782de14cPostConfirmation",
+              "Outputs.LambdaExecutionRoleArn"
+            ]
+          },
+          "functionoutsiders782de14cPostConfirmationArn": {
+            "Fn::GetAtt": [
+              "functionoutsiders782de14cPostConfirmation",
+              "Outputs.Arn"
+            ]
+          },
+          "functionoutsiders782de14cPostConfirmationName": {
+            "Fn::GetAtt": [
+              "functionoutsiders782de14cPostConfirmation",
+              "Outputs.Name"
+            ]
+          }
+        }
+      },
+      "DependsOn": [
+        "authoutsiders782de14c",
+        "functionoutsiders782de14cPostConfirmation"
+      ]
+    },
+    "authoutsiders782de14c": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/auth/outsiders782de14c-cloudformation-template.json",
+        "Parameters": {
+          "identityPoolName": "outsiders782de14c_identitypool_782de14c",
+          "allowUnauthenticatedIdentities": false,
+          "resourceNameTruncated": "outsid782de14c",
+          "userPoolName": "outsiders782de14c_userpool_782de14c",
+>>>>>>> main
           "autoVerifiedAttributes": "email",
           "mfaConfiguration": "OFF",
           "mfaTypes": "SMS Text Message",
@@ -218,12 +273,17 @@
           "defaultPasswordPolicy": false,
           "passwordPolicyMinLength": 8,
           "passwordPolicyCharacters": "",
+<<<<<<< HEAD
           "requiredAttributes": "email",
+=======
+          "requiredAttributes": "email,family_name,given_name",
+>>>>>>> main
           "aliasAttributes": "",
           "userpoolClientGenerateSecret": false,
           "userpoolClientRefreshTokenValidity": 30,
           "userpoolClientWriteAttributes": "email",
           "userpoolClientReadAttributes": "email",
+<<<<<<< HEAD
           "userpoolClientLambdaRole": "outsidf788891a_userpoolclient_lambda_role",
           "userpoolClientSetAttributes": false,
           "sharedId": "f788891a",
@@ -231,6 +291,16 @@
           "authSelections": "identityPoolAndUserPool",
           "useDefault": "default",
           "usernameAttributes": "email",
+=======
+          "userpoolClientLambdaRole": "outsid782de14c_userpoolclient_lambda_role",
+          "userpoolClientSetAttributes": false,
+          "sharedId": "782de14c",
+          "resourceName": "outsiders782de14c",
+          "authSelections": "identityPoolAndUserPool",
+          "useDefault": "default",
+          "usernameAttributes": "email",
+          "triggers": "{\"PostConfirmation\":[\"add-to-group\"]}",
+>>>>>>> main
           "userPoolGroupList": "",
           "serviceName": "Cognito",
           "usernameCaseSensitive": false,
@@ -248,7 +318,67 @@
             ]
           },
           "breakCircularDependency": true,
+<<<<<<< HEAD
           "dependsOn": "",
+=======
+          "dependsOn": "[object Object]",
+          "permissions": "{\"policyName\":\"AddToGroupCognito\",\"trigger\":\"PostConfirmation\",\"effect\":\"Allow\",\"actions\":[\"cognito-idp:AdminAddUserToGroup\",\"cognito-idp:GetGroup\",\"cognito-idp:CreateGroup\"],\"resource\":{\"paramType\":\"!GetAtt\",\"keys\":[\"UserPool\",\"Arn\"]}}",
+          "authTriggerConnections": "{\"triggerType\":\"PostConfirmation\",\"lambdaFunctionName\":\"outsiders782de14cPostConfirmation\"}",
+          "env": "dev"
+        }
+      }
+    },
+    "functionoutsiders4caa281eDefineAuthChallenge": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsiders4caa281eDefineAuthChallenge-cloudformation-template.json",
+        "Parameters": {
+          "modules": "captcha-define-challenge",
+          "resourceName": "outsiders4caa281eDefineAuthChallenge",
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsiders4caa281eDefineAuthChallenge-66613636543359743249-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "functionoutsiders4caa281eCreateAuthChallenge": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsiders4caa281eCreateAuthChallenge-cloudformation-template.json",
+        "Parameters": {
+          "modules": "captcha-create-challenge",
+          "resourceName": "outsiders4caa281eCreateAuthChallenge",
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsiders4caa281eCreateAuthChallenge-386f6f38793552347839-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "functionoutsidersbd449033PostConfirmation": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsidersbd449033PostConfirmation-cloudformation-template.json",
+        "Parameters": {
+          "modules": "add-to-group",
+          "resourceName": "outsidersbd449033PostConfirmation",
+          "GROUP": "basic_users",
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsidersbd449033PostConfirmation-6751414d2b7755747677-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "functionoutsiders782de14cPostConfirmation": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsiders782de14cPostConfirmation-cloudformation-template.json",
+        "Parameters": {
+          "modules": "add-to-group",
+          "resourceName": "outsiders782de14cPostConfirmation",
+          "GROUP": "basic_users",
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-394138613252644a332b-build.zip",
+>>>>>>> main
           "env": "dev"
         }
       }
@@ -257,7 +387,11 @@
       "DependsOn": [
         "AuthRole",
         "UnauthRole",
+<<<<<<< HEAD
         "authoutsidersf788891a"
+=======
+        "authoutsiders782de14c"
+>>>>>>> main
       ],
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -367,7 +501,11 @@
         },
         "idpId": {
           "Fn::GetAtt": [
+<<<<<<< HEAD
             "authoutsidersf788891a",
+=======
+            "authoutsiders782de14c",
+>>>>>>> main
             "Outputs.IdentityPoolId"
           ]
         },

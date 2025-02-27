@@ -1,14 +1,22 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from 'react';
 import { getSubmittedForms, filterSubmittedForms } from '../../../services/formsApi';
 import '../../Stylesheets/AdminDashboard.css';
 import SiteHeader from '../../../utils/SiteHeader';
 import { useNavigate } from 'react-router-dom';
+=======
+import React, { useState, useEffect } from 'react';
+import { getSubmittedForms, filterSubmittedForms } from '../../../services/formsApi';
+import '../../Stylesheets/AdminDashboard.css';
+import SiteHeader from '../../../utils/SiteHeader';
+>>>>>>> main
 
 function AdminDashboard() {
     const [forms, setForms] = useState([]);
     const [filteredForms, setFilteredForms] = useState([]);
     const [prisonFilter, setPrisonFilter] = useState('');
     const [playerFilter, setPlayerFilter] = useState('');
+<<<<<<< HEAD
     const [hoverData, setHoverData] = useState({ text: '', x: 0, y: 0, visible: false, pinned: false });
 
     const hoverRef = useRef(null);
@@ -45,6 +53,15 @@ function AdminDashboard() {
             }
         }
 
+=======
+    
+    useEffect(() => {
+        async function fetchForms() {
+            const allForms = await getSubmittedForms();
+            setForms(allForms);
+            setFilteredForms(allForms);
+        }
+>>>>>>> main
         fetchForms();
     }, []);
 
@@ -54,6 +71,7 @@ function AdminDashboard() {
     };
 
     const handleSort = () => {
+<<<<<<< HEAD
         setFilteredForms(prevForms =>
             [...prevForms].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))
         );
@@ -102,6 +120,11 @@ function AdminDashboard() {
         return () => document.removeEventListener("click", handleOutsideClick);
     }, []);
 
+=======
+        setFilteredForms(prevForms => [...prevForms].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)));
+    };
+
+>>>>>>> main
     return (
         <div>
             <SiteHeader />
@@ -113,6 +136,7 @@ function AdminDashboard() {
                         <option value="Folsom">Folsom</option>
                         <option value="San Quentin">San Quentin</option>
                     </select>
+<<<<<<< HEAD
                     <input
                         type="text"
                         placeholder="Search by Player"
@@ -121,21 +145,37 @@ function AdminDashboard() {
                     <button onClick={handleFilterChange}>Filter</button>
                     <button onClick={handleSort}>Sort by Most Recent</button>
                     <button onClick={() => navigate('/viewplayers')}>View Players</button>
+=======
+                    <input 
+                        type="text" 
+                        placeholder="Search by Player" 
+                        onChange={(e) => setPlayerFilter(e.target.value)} 
+                    />
+                    <button onClick={handleFilterChange}>Filter</button>
+                    <button onClick={handleSort}>Sort by Most Recent</button>
+>>>>>>> main
                 </div>
                 <table>
                     <thead>
                         <tr>
+<<<<<<< HEAD
                             <th>Form Code</th>
                             <th>Prison</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
+=======
+                            <th>Form ID</th>
+                            <th>Prison</th>
+                            <th>Player</th>
+>>>>>>> main
                             <th>Submission Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredForms.map(form => (
                             <tr key={form.formID}>
+<<<<<<< HEAD
                                 <td
                                     className="hoverable"
                                     onMouseEnter={(e) => handleMouseEnter(e, form.formID)}
@@ -155,11 +195,17 @@ function AdminDashboard() {
                                 >
                                     {form.email}
                                 </td>
+=======
+                                <td>{form.formID}</td>
+                                <td>{form.prison}</td>
+                                <td>{form.player}</td>
+>>>>>>> main
                                 <td>{new Date(form.submittedAt).toLocaleString()}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+<<<<<<< HEAD
                 {hoverData.visible && (
                     <div
                         ref={hoverRef}
@@ -169,6 +215,8 @@ function AdminDashboard() {
                         {hoverData.text}
                     </div>
                 )}
+=======
+>>>>>>> main
             </div>
         </div>
     );
