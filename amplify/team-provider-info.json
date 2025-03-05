@@ -9,13 +9,6 @@
       "UnauthRoleName": "amplify-outsiders-dev-37233-unauthRole",
       "StackName": "amplify-outsiders-dev-37233",
       "StackId": "arn:aws:cloudformation:us-west-1:242201266697:stack/amplify-outsiders-dev-37233/e7017f90-e75b-11ef-a7fa-020c0912ad7b",
-<<<<<<< HEAD
-      "AmplifyAppId": "d3371hvyw48n2r"
-    },
-    "categories": {
-      "auth": {
-        "outsidersf788891a": {}
-=======
       "AmplifyAppId": "d3371hvyw48n2r",
       "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
@@ -44,7 +37,6 @@
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
           "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-394138613252644a332b-build.zip"
         }
->>>>>>> main
       }
     }
   }
