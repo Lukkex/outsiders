@@ -1,5 +1,10 @@
 {
   "auth": {
+<<<<<<< HEAD
+    "outsidersf788891a": {
+      "customAuth": false,
+      "dependsOn": [],
+=======
     "outsiders782de14c": {
       "customAuth": false,
       "dependsOn": [
@@ -13,6 +18,7 @@
           "triggerProvider": "Cognito"
         }
       ],
+>>>>>>> main
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -23,9 +29,13 @@
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
+<<<<<<< HEAD
+          "EMAIL"
+=======
           "EMAIL",
           "FAMILY_NAME",
           "GIVEN_NAME"
+>>>>>>> main
         ],
         "socialProviders": [],
         "usernameAttributes": [
@@ -38,6 +48,8 @@
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
     }
+<<<<<<< HEAD
+=======
   },
   "function": {
     "outsiders4caa281eCreateAuthChallenge": {
@@ -142,5 +154,6 @@
         }
       ]
     }
+>>>>>>> main
   }
 }

@@ -1,6 +1,10 @@
 export type AmplifyDependentResourcesAttributes = {
   "auth": {
+<<<<<<< HEAD
+    "outsidersf788891a": {
+=======
     "outsiders782de14c": {
+>>>>>>> main
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -9,6 +13,8 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolId": "string",
       "UserPoolName": "string"
     }
+<<<<<<< HEAD
+=======
   },
   "function": {
     "outsiders4caa281eCreateAuthChallenge": {
@@ -39,5 +45,6 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     }
+>>>>>>> main
   }
 }

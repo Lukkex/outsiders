@@ -199,6 +199,17 @@
         }
       }
     },
+<<<<<<< HEAD
+    "authoutsidersf788891a": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/auth/outsidersf788891a-cloudformation-template.json",
+        "Parameters": {
+          "identityPoolName": "outsidersf788891a_identitypool_f788891a",
+          "allowUnauthenticatedIdentities": false,
+          "resourceNameTruncated": "outsidf788891a",
+          "userPoolName": "outsidersf788891a_userpool_f788891a",
+=======
     "AuthTriggerCustomLambdaStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -251,6 +262,7 @@
           "allowUnauthenticatedIdentities": false,
           "resourceNameTruncated": "outsid782de14c",
           "userPoolName": "outsiders782de14c_userpool_782de14c",
+>>>>>>> main
           "autoVerifiedAttributes": "email",
           "mfaConfiguration": "OFF",
           "mfaTypes": "SMS Text Message",
@@ -261,12 +273,25 @@
           "defaultPasswordPolicy": false,
           "passwordPolicyMinLength": 8,
           "passwordPolicyCharacters": "",
+<<<<<<< HEAD
+          "requiredAttributes": "email",
+=======
           "requiredAttributes": "email,family_name,given_name",
+>>>>>>> main
           "aliasAttributes": "",
           "userpoolClientGenerateSecret": false,
           "userpoolClientRefreshTokenValidity": 30,
           "userpoolClientWriteAttributes": "email",
           "userpoolClientReadAttributes": "email",
+<<<<<<< HEAD
+          "userpoolClientLambdaRole": "outsidf788891a_userpoolclient_lambda_role",
+          "userpoolClientSetAttributes": false,
+          "sharedId": "f788891a",
+          "resourceName": "outsidersf788891a",
+          "authSelections": "identityPoolAndUserPool",
+          "useDefault": "default",
+          "usernameAttributes": "email",
+=======
           "userpoolClientLambdaRole": "outsid782de14c_userpoolclient_lambda_role",
           "userpoolClientSetAttributes": false,
           "sharedId": "782de14c",
@@ -275,6 +300,7 @@
           "useDefault": "default",
           "usernameAttributes": "email",
           "triggers": "{\"PostConfirmation\":[\"add-to-group\"]}",
+>>>>>>> main
           "userPoolGroupList": "",
           "serviceName": "Cognito",
           "usernameCaseSensitive": false,
@@ -292,6 +318,9 @@
             ]
           },
           "breakCircularDependency": true,
+<<<<<<< HEAD
+          "dependsOn": "",
+=======
           "dependsOn": "[object Object]",
           "permissions": "{\"policyName\":\"AddToGroupCognito\",\"trigger\":\"PostConfirmation\",\"effect\":\"Allow\",\"actions\":[\"cognito-idp:AdminAddUserToGroup\",\"cognito-idp:GetGroup\",\"cognito-idp:CreateGroup\"],\"resource\":{\"paramType\":\"!GetAtt\",\"keys\":[\"UserPool\",\"Arn\"]}}",
           "authTriggerConnections": "{\"triggerType\":\"PostConfirmation\",\"lambdaFunctionName\":\"outsiders782de14cPostConfirmation\"}",
@@ -349,6 +378,7 @@
           "GROUP": "basic_users",
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
           "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-394138613252644a332b-build.zip",
+>>>>>>> main
           "env": "dev"
         }
       }
@@ -357,7 +387,11 @@
       "DependsOn": [
         "AuthRole",
         "UnauthRole",
+<<<<<<< HEAD
+        "authoutsidersf788891a"
+=======
         "authoutsiders782de14c"
+>>>>>>> main
       ],
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -467,7 +501,11 @@
         },
         "idpId": {
           "Fn::GetAtt": [
+<<<<<<< HEAD
+            "authoutsidersf788891a",
+=======
             "authoutsiders782de14c",
+>>>>>>> main
             "Outputs.IdentityPoolId"
           ]
         },
