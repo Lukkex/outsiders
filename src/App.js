@@ -16,6 +16,7 @@ import ViewPlayers from './components/Pages/Admin/ViewPlayers';
 import AccountInfo from './components/Pages/User/AccountInfo';
 //import AccountInfo from './components/Pages/User/AccountInfo';
 
+
 Amplify.configure(awsconfig);
 
 function App() {
