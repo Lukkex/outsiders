@@ -12,6 +12,9 @@ import AdminScheduling from './components/Pages/Admin/AdminScheduling';
 import {Amplify, Auth} from 'aws-amplify';
 import awsconfig from './aws-exports';
 import {AmplifySignOut, withAuthenticator} from '@aws-amplify/ui-react';
+import ViewPlayers from './components/Pages/Admin/ViewPlayers';
+import AccountInfo from './components/Pages/User/AccountInfo';
+//import AccountInfo from './components/Pages/User/AccountInfo';
 
 Amplify.configure(awsconfig);
 
@@ -28,10 +31,11 @@ function App() {
             <Route path="/scheduling" element={<Scheduling />} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
             <Route path="/adminscheduling" element={<AdminScheduling />} />
+            <Route path="/viewplayers" element={<ViewPlayers />} />
+            <Route path="/accountinfo" element={<AccountInfo />} />
           </Routes>
         </Router>
 
   );
 }
-
 export default withAuthenticator(App);

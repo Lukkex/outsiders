@@ -1,8 +1,18 @@
 {
   "auth": {
-    "outsidersf788891a": {
+    "outsiders782de14c": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "outsiders782de14cPostConfirmation",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -13,7 +23,9 @@
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-          "EMAIL"
+          "EMAIL",
+          "FAMILY_NAME",
+          "GIVEN_NAME"
         ],
         "socialProviders": [],
         "usernameAttributes": [
@@ -25,6 +37,110 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "outsiders4caa281eCreateAuthChallenge": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "outsiders4caa281eDefineAuthChallenge": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "outsiders782de14cPostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "outsidersbd449033PostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_outsiders4caa281eCreateAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsiders4caa281eCreateAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsiders4caa281eCreateAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsiders4caa281eCreateAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsiders4caa281eDefineAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsiders4caa281eDefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsiders4caa281eDefineAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsiders4caa281eDefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsiders782de14cPostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsiders782de14cPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsiders782de14cPostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsiders782de14cPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsiders782de14cPostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsiders782de14cPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsidersbd449033PostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsidersbd449033PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsidersbd449033PostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsidersbd449033PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_outsidersbd449033PostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "outsidersbd449033PostConfirmation"
+        }
+      ]
     }
   }
 }

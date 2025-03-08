@@ -3,6 +3,7 @@ import { DeleteItemCommand,
     PutItemCommand, 
     ScanCommand, 
     UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+    
 import { dynamoDB } from '../awsConfig.js';
 
 

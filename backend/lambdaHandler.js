@@ -19,12 +19,12 @@ export const handler = async (event, context) => {
         return await postSignUpTrigger(event)
     }
     switch (`${event.httpMethod} ${event.resource}`) { //.routekey is for HTTP API, use .httpMethod and .resource for REST API e.g., "GET" and "/Users"
-      case "DELETE /User/{id}":
-        body = await deleteUser(event.pathParameters.id)
+      case "DELETE /User/{userID}":
+        body = await deleteUser(event.pathParameters.userID)
         break;
 
-      case "GET /User/{id}":
-        body = await getUserByID(event.pathParameters.id)
+      case "GET /User/{userID}":
+        body = await getUserByID(event.pathParameters.userID)
         break;
 
       case "GET /Users":
@@ -37,7 +37,7 @@ export const handler = async (event, context) => {
         break;
 
       default:
-        throw new Error(`Unsupported route: "${event.routeKey}"`);
+        throw new Error(`Unsupported route: "${event.httpMethod} ${event.resource}"`);
     }
   } catch (err) {
     statusCode = 400;

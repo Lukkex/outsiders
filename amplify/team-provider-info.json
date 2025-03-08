@@ -9,11 +9,34 @@
       "UnauthRoleName": "amplify-outsiders-dev-37233-unauthRole",
       "StackName": "amplify-outsiders-dev-37233",
       "StackId": "arn:aws:cloudformation:us-west-1:242201266697:stack/amplify-outsiders-dev-37233/e7017f90-e75b-11ef-a7fa-020c0912ad7b",
-      "AmplifyAppId": "d3371hvyw48n2r"
+      "AmplifyAppId": "d3371hvyw48n2r",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "outsidersf788891a": {}
+        "outsiders4caa281e": {},
+        "outsiders61e06d45": {},
+        "outsiders782de14c": {}
+      },
+      "function": {
+        "outsiders4caa281eDefineAuthChallenge": {
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsiders4caa281eDefineAuthChallenge-66613636543359743249-build.zip"
+        },
+        "outsiders4caa281eCreateAuthChallenge": {
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsiders4caa281eCreateAuthChallenge-386f6f38793552347839-build.zip"
+        },
+        "outsidersbd449033PostConfirmation": {
+          "GROUP": "basic_users",
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsidersbd449033PostConfirmation-6751414d2b7755747677-build.zip"
+        },
+        "outsiders782de14cPostConfirmation": {
+          "GROUP": "basic_users",
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-394138613252644a332b-build.zip"
+        }
       }
     }
   }
