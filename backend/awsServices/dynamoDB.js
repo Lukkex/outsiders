@@ -1,27 +1,26 @@
-import { GetItemCommand, PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
-import { unmarshall} from '@aws-sdk/util-dynamodb';
+import { DeleteItemCommand, 
+    GetItemCommand, 
+    PutItemCommand, 
+    ScanCommand, 
+    UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { dynamoDB } from '../awsConfig.js';
 
-const tableName = process.env.DYNAMODB_USER_TABLE;
 
 async function checkUserExists(userID) {
     const params = {
-        TableName: tableName,
+        TableName: "userTable",
         Key: {
-            userID: { S: userID} //the S specify attribute type as string, capitalized
+            userID 
         }
     };
     
     try {
         const command = new GetItemCommand(params);
         const data = await dynamoDB.send(command);
-        return !!data.Item;
-        /*
         if(data.Item) {
-            return true //user exists in database
+            return true 
         }
-        else return false; //user does not exists, then process
-        */
+        else return false; 
     } catch (error) {
         console.error("Error checking if user exists:", error);
         throw error;
@@ -30,12 +29,12 @@ async function checkUserExists(userID) {
 
 async function addUserToTable(userID, firstName, lastName, email) {
     const params = {
-        TableName: tableName,
-        Item: {
-            userID: { S: userID},
-            firstName: { S: firstName},
-            lastName: { S: lastName},
-            email: { S: email}
+        TableName: "userTable",
+        Item: { 
+            userID,
+            firstName,
+            lastName,
+            email,
         }
     };
 
@@ -49,22 +48,103 @@ async function addUserToTable(userID, firstName, lastName, email) {
     }
 }
 
-async function getUserList() {
-    const command = new ScanCommand({TableName: "userTable"});
-    
-    try{
-        const response = await dynamoDB.send(command);
+async function getUserByID(userID) {
+    const params = {
+        TableName: "userTable",
+        Key: {
+            userID
+        }
+    };
 
+    try {
+        const command = new GetItemCommand(params);
+        const data = await dynamoDB.send(command);
+        return data.Item;
+    } catch (error) {
+        console.error("Error retrieving user information:", error);
+        throw error;
+    }
+}
+
+async function getUserList() {
+    const params = { TableName: "userTable"};
+
+    try{
+        const command = new ScanCommand(params);
+        const response = await dynamoDB.send(command);
+        //Return empty array if no items found
         if (!response.Items || response.Items.length === 0) {
             return [];
         }
-        const users = response.Items.map(item => unmarshall(item));
-        return users;
+        return response.Items;
     } catch(error) {
         console.error("Error retrieving list of users:", error);
         return [];
     }
 }
 
-export { checkUserExists, addUserToTable, getUserList };
+async function updateUserInfo(userID, firstName, lastName, email) {
+    if (!userID) {
+        throw new Error("UserID is required for updating user information.");
+    }
+
+    //Prepare update field dynamically
+    let updateFields = [];
+    let expressionAttributeValues = {};
+    //Check which field is being updated, add to updateField only if value is provided
+    if (firstName) {
+        updateFields.push("firstName = :fn"); //:fn is a placehold that hold new value for firstName
+        expressionAttributeValues[":fn"] = firstName;
+    }
+    if (lastName) {
+        updateFields.push("lastName = :ln");
+        expressionAttributeValues[":ln"] = lastName;
+    }
+    if (email) {
+        updateFields.push("email = :email");
+        expressionAttributeValues[":email"] = email;
+    }
+    //Ensures field are not empty
+    if (updateFields.length === 0) {
+        throw new Error("Field must not be empty!");
+    }
+    //Builds the UpdateExpression string  Ex: "SET firstName = :fn, lastName = :ln"
+    const updateExpression = "SET " + updateFields.join(",");
+
+    const params = {
+        TableName: "userTable",
+        Key: { userID: userID }, 
+        UpdateExpression: updateExpression,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues: "ALL_NEW" //Returns the updated items
+    };
+
+    try {
+        const command = new UpdateItemCommand(params);
+        const response = await dynamoDB.send(command);
+        console.log("User information updated:", response.Attributes);
+        return response.Attributes;
+    } catch (error) {
+        console.error("Error updating user:", error);
+        throw error;
+    }
+}
+
+async function deleteUser(userID) {
+    const params = {
+        TableName: "userTable",
+        Key: {userID: userID}
+    };
+
+    try {
+        const command = new DeleteItemCommand(params);
+        await dynamoDB.send(command);
+        console.log(`User ${userID} deleted successfully.`);
+    } catch(error) {
+        console.error("Error deleting user:", error);
+        throw error;
+    }
+}
+
+export { checkUserExists, addUserToTable, getUserList, deleteUser, updateUserInfo, getUserByID};
 
