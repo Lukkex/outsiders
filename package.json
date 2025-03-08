@@ -8,6 +8,8 @@
     "@aws-amplify/ui-react": "^6.9.1",
     "@aws-sdk/client-dynamodb": "^3.699.0",
     "@aws-sdk/client-s3": "^3.699.0",
+    "@aws-sdk/lib-dynamodb": "^3.758.0",
+    "@aws-sdk/util-dynamodb": "^3.751.0",
     "@emotion/react": "^11.14.0",
     "@table-library/react-table-library": "^4.1.7",
     "@testing-library/jest-dom": "^5.17.0",

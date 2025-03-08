@@ -44,7 +44,7 @@ async function main() {
     const app = express();
     const PORT = process.env.PORT || 5000;
 
-    app.get("wen-Test-stage", async (req, res) => {
+    app.get("/wen-Test-stage", async (req, res) => {
         try {
             const response = await fetch("https://any99dk2qk.execute-api.us-west-1.amazonaws.com/wen-Test-stage");
 
