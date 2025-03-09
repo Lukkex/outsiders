@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchUsersInGroup, getAuthToken } from '../../../services/authConfig';
+import { fetchUsersInGroup } from '../../../services/authConfig';
 import '../../Stylesheets/AdminDashboard.css';
 import SiteHeader from '../../../utils/SiteHeader';
 
@@ -20,16 +20,15 @@ function ViewPlayers() {
         }
         fetchPlayers();
     }, []);
-    
-    
 
     const handleFilterChange = (event) => {
         setPrisonFilter(event.target.value);
     };
 
     const filteredPlayers = prisonFilter
-        ? players.filter(player => player.prison === prisonFilter)
-        : players;
+    ? players.filter(player => Array.isArray(player.preferred_prisons) && player.preferred_prisons.includes(prisonFilter))
+    : players;
+
 
     return (
         <div>
@@ -49,7 +48,7 @@ function ViewPlayers() {
                     <thead>
                         <tr>
                             <th>PLAYER NAME</th>
-                            <th>PRISON</th>
+                            <th>PREFERRED PRISONS</th>
                             <th>REGISTRATION DATE</th>
                         </tr>
                     </thead>
@@ -58,7 +57,7 @@ function ViewPlayers() {
                             filteredPlayers.map((player, index) => (
                                 <tr key={index}>
                                     <td>{`${player.given_name} ${player.family_name}`}</td>
-                                    <td>{player.prison || "Unknown"}</td>
+                                    <td>{player.preferred_prisons || "Unknown"}</td>
                                     <td>{new Date(player.created_at).toLocaleString()}</td>
                                 </tr>
                             ))

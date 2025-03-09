@@ -3,10 +3,8 @@ import { GraphQLAPI, graphqlOperation } from '@aws-amplify/api-graphql';
 import awsconfig from '../aws-exports';
 import { listTasks, listUserProfiles, listFormSubmissions } from '../graphql/queries';
 
-// Ensure Amplify is configured at the app level
 Amplify.configure(awsconfig);
 
-// Function to fetch tasks
 export async function fetchTasks() {
   try {
     const result = await GraphQLAPI.graphql(graphqlOperation(listTasks));
@@ -17,7 +15,6 @@ export async function fetchTasks() {
   }
 }
 
-// Function to fetch user profiles
 export async function fetchUserProfiles() {
   try {
     const result = await GraphQLAPI.graphql(graphqlOperation(listUserProfiles));
@@ -28,7 +25,6 @@ export async function fetchUserProfiles() {
   }
 }
 
-// Function to fetch form submissions
 export async function fetchFormSubmissions() {
   try {
     const result = await GraphQLAPI.graphql(graphqlOperation(listFormSubmissions));

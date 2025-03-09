@@ -6,20 +6,18 @@ const REGION = "us-west-1";
 const USER_POOL_ID = "us-west-1_gp60TrWKN";
 const IDENTITY_POOL_ID = "us-west-1:4820a351-3879-423b-93e0-6a28b3e92d4e";
 
-async function getAuthenticatedCredentials() {
-  const session = await fetchAuthSession();
-  return fromCognitoIdentityPool({
-      clientConfig: { region: REGION },
-      identityPoolId: IDENTITY_POOL_ID,
-      logins: {
-          [`cognito-idp.${REGION}.amazonaws.com/${USER_POOL_ID}`]: session.tokens.idToken.toString(),
-      },
-  });
-}
-
 const cognitoClient = new CognitoIdentityProviderClient({
   region: REGION,
-  credentials: await getAuthenticatedCredentials()
+  credentials: fromCognitoIdentityPool({
+      clientConfig: { region: REGION },
+      identityPoolId: IDENTITY_POOL_ID,
+      logins: async () => {
+          const session = await fetchAuthSession();
+          return {
+              [`cognito-idp.${REGION}.amazonaws.com/${USER_POOL_ID}`]: session.tokens.idToken.toString(),
+          };
+      },
+  }),
 });
 
 export async function getCurrentUserInfo() {
@@ -34,7 +32,8 @@ export async function getCurrentUserInfo() {
             sub: attributes.sub || "No sub found",
             email: attributes.email || "No email found",
             given_name: attributes.given_name || "No given name found",
-            family_name: attributes.family_name || "No family name found"
+            family_name: attributes.family_name || "No family name found",
+            preferred_prisons: attributes["custom:preferred_prisons"] || "No preferred prisons"
         };
     } catch (error) {
         console.error("Error fetching user info:", error);
@@ -46,10 +45,8 @@ export async function getUserRole() {
     try {
         const session = await fetchAuthSession();
         const accessToken = session.tokens?.accessToken;
-
         const roles = accessToken?.payload["cognito:groups"] || [];
         console.log("User roles:", roles);
-
         return roles;
     } catch (error) {
         console.error("Error fetching user role:", error);
@@ -57,29 +54,27 @@ export async function getUserRole() {
     }
 }
 
-export async function getAuthToken() {
-    try {
-        const session = await fetchAuthSession();
-        console.log("Full Auth Session:", session);
-        return session.tokens?.idToken?.toString() || null;
-    } catch (error) {
-        console.error("Error fetching auth token:", error);
-        return null;
-    }
-}
-
-export async function signOutUser() {
-    try {
-        await signOut();
-    } catch (error) {
-        console.error("Error signing out:", error);
-    }
-}
-
-
 export async function fetchUsersInGroup(groupName) {
   try {
       console.log(`Fetching users in group: ${groupName}`);
+
+      const session = await fetchAuthSession();
+      if (!session.tokens?.idToken) {
+          throw new Error("User is not authenticated.");
+      }
+
+      const credentials = await fromCognitoIdentityPool({
+          clientConfig: { region: REGION },
+          identityPoolId: IDENTITY_POOL_ID,
+          logins: {
+              [`cognito-idp.${REGION}.amazonaws.com/${USER_POOL_ID}`]: session.tokens.idToken.toString(),
+          },
+      })();
+
+      const cognitoClient = new CognitoIdentityProviderClient({
+          region: REGION,
+          credentials
+      });
 
       const command = new ListUsersInGroupCommand({
           UserPoolId: USER_POOL_ID,
@@ -90,12 +85,12 @@ export async function fetchUsersInGroup(groupName) {
       console.log("Fetched users:", response.Users);
 
       return response.Users.map(user => ({
-        given_name: user.Attributes.find(attr => attr.Name === "given_name")?.Value || "No First Name",
-        family_name: user.Attributes.find(attr => attr.Name === "family_name")?.Value || "No Last Name",
-        email: user.Attributes.find(attr => attr.Name === "email")?.Value || "No Email",
-        preferred_prisons: user.Attributes.find(attr => attr.Name === "custom:preferred_prisons")?.Value || "Unknown",
-        created_at: user.UserCreateDate
-    }));
+          given_name: user.Attributes.find(attr => attr.Name === "given_name")?.Value || "No First Name",
+          family_name: user.Attributes.find(attr => attr.Name === "family_name")?.Value || "No Last Name",
+          email: user.Attributes.find(attr => attr.Name === "email")?.Value || "No Email",
+          preferred_prisons: user.Attributes.find(attr => attr.Name === "custom:preferred_prisons")?.Value?.split(", ") || [],
+          created_at: user.UserCreateDate
+      }));
   } catch (error) {
       console.error("Error fetching users:", error);
       return [];
