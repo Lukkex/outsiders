@@ -4,6 +4,7 @@ import Home from './components/Pages/Home';
 import SignUp from './components/Pages/SignUp';
 import SignIn from './components/Pages/SignIn';
 import Settings from './components/Pages/Settings';
+import Help from './components/Pages/Help';
 import Registration from './components/Pages/User/Registration';
 import Scheduling from './components/Pages/User/Scheduling';
 import SelectPrisonForm from './components/Misc/SelectPrisonForm';
@@ -27,6 +28,7 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/help" element={<Help />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/scheduling" element={<Scheduling />} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
