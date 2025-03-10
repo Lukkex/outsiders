@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import PrivateRoute from './utils/PrivateRoute';
 import Home from './components/Pages/Home';
 import SignUp from './components/Pages/SignUp';
 import SignIn from './components/Pages/SignIn';
 import Settings from './components/Pages/Settings';
 import Help from './components/Pages/Help';
+import AccessDenied from './components/Pages/AccessDenied';
 import Registration from './components/Pages/User/Registration';
 import Scheduling from './components/Pages/User/Scheduling';
 import AdminDashboard from './components/Pages/Admin/AdminDashboard';
@@ -28,11 +30,12 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/access-denied" element={<AccessDenied />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/scheduling" element={<Scheduling />} />
-            <Route path="/admindashboard" element={<AdminDashboard />} />
-            <Route path="/adminscheduling" element={<AdminScheduling />} />
-            <Route path="/viewplayers" element={<ViewPlayers />} />
+            <Route path="/admindashboard" element={<PrivateRoute content = {<AdminDashboard/>} redirectPage="/access-denied"></PrivateRoute>} />
+            <Route path="/adminscheduling" element={<PrivateRoute><AdminScheduling/></PrivateRoute>} />
+            <Route path="/viewplayers" element={<PrivateRoute><ViewPlayers/></PrivateRoute>} />
             <Route path="/accountinfo" element={<AccountInfo />} />
           </Routes>
         </Router>

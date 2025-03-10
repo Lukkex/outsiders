@@ -98,4 +98,4 @@ function AdminDashboard() {
     );
 }
 
-export default AdminDashboard;
+export default AdminDashboard; //Private route will protect from this page non-admins
