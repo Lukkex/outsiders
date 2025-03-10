@@ -1,68 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import { getSubmittedForms } from '../../../services/formsApi';
+import { fetchUsersInGroup } from '../../../services/authConfig';
 import '../../Stylesheets/AdminDashboard.css';
 import SiteHeader from '../../../utils/SiteHeader';
 
 function ViewPlayers() {
     const [players, setPlayers] = useState([]);
-    const [filteredPlayers, setFilteredPlayers] = useState([]);
     const [prisonFilter, setPrisonFilter] = useState("");
 
     useEffect(() => {
         async function fetchPlayers() {
-            const allForms = await getSubmittedForms();
-            const playerList = allForms.map(form => ({
-                player: form.player,
-                prison: form.prison,
-                submissionDate: form.submittedAt
-            }));
-            setPlayers(playerList);
-            setFilteredPlayers(playerList); 
+            try {
+                console.log("Fetching users from group...");
+                const users = await fetchUsersInGroup("basic_users");
+                console.log("Fetched Users:", users);
+                setPlayers(users);
+            } catch (error) {
+                console.error("Fetch Players Error:", error);
+            }
         }
         fetchPlayers();
     }, []);
 
     const handleFilterChange = (event) => {
-        const selectedPrison = event.target.value;
-        setPrisonFilter(selectedPrison);
-
-        if (selectedPrison === "") {
-            setFilteredPlayers(players); 
-        } else {
-            setFilteredPlayers(players.filter(player => player.prison === selectedPrison));
-        }
+        setPrisonFilter(event.target.value);
     };
+
+    const filteredPlayers = prisonFilter
+    ? players.filter(player => Array.isArray(player.preferred_prisons) && player.preferred_prisons.includes(prisonFilter))
+    : players;
+
 
     return (
         <div>
             <SiteHeader />
             <div className="admin-dashboard">
-                <h1>View Players</h1>
-                
-                {/* Prison Filter Dropdown */}
+                <h1 className="dashboard-title">VIEW PLAYERS</h1>
+
                 <div className="filters">
                     <select onChange={handleFilterChange} value={prisonFilter}>
                         <option value="">All Prisons</option>
-                        <option value="Folsom State Prison">Folsom State Prison</option>
-                        <option value="San Quentin State Prison">San Quentin State Prison</option>
+                        <option value="Folsom">Folsom</option>
+                        <option value="San Quentin">San Quentin</option>
                     </select>
                 </div>
 
                 <table>
                     <thead>
                         <tr>
-                            <th>Player Name</th>
-                            <th>Prison</th>
-                            <th>Registration Date</th>
+                            <th>PLAYER NAME</th>
+                            <th>PREFERRED PRISONS</th>
+                            <th>REGISTRATION DATE</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredPlayers.length > 0 ? (
                             filteredPlayers.map((player, index) => (
                                 <tr key={index}>
-                                    <td>{player.player}</td>
-                                    <td>{player.prison}</td>
-                                    <td>{new Date(player.submissionDate).toLocaleString()}</td>
+                                    <td>{`${player.given_name} ${player.family_name}`}</td>
+                                    <td>{player.preferred_prisons || "Unknown"}</td>
+                                    <td>{new Date(player.created_at).toLocaleString()}</td>
                                 </tr>
                             ))
                         ) : (
