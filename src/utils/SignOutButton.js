@@ -1,13 +1,22 @@
 import React from 'react';
-import { signOut } from 'aws-amplify/auth';
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import { Link } from 'react-router-dom';
+import { signOut } from '@aws-amplify/auth';
+import { Link, useNavigate } from 'react-router-dom';
 
 function SignOutButton() {
-    return(
-        <Link onClick={() => signOut()}>Sign Out</Link>
+    const navigate = useNavigate();
+
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            navigate('/login'); // Redirect to login page after sign out
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
+    };
+
+    return (
+        <Link onClick={handleSignOut}>Sign Out</Link>
     );
 }
 
-
-export default withAuthenticator(SignOutButton);
+export default SignOutButton; // Remove withAuthenticator

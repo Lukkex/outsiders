@@ -11,21 +11,27 @@ import AdminDashboard from './components/Pages/Admin/AdminDashboard';
 import AdminScheduling from './components/Pages/Admin/AdminScheduling';
 import ViewPlayers from './components/Pages/Admin/ViewPlayers';
 import AccountInfo from './components/Pages/User/AccountInfo';
+import CustomLoginPage from './components/Pages/CustomLoginPage';
+import CustomRegistrationPage from './components/Pages/CustomRegistrationPage';
 import { Amplify } from 'aws-amplify';
-import awsconfig from './aws-exports';
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css';
 
-// Ensure Amplify is configured at the root level
+//import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import awsconfig from './aws-exports';
+
+// Configure Amplify once with awsExports
 Amplify.configure(awsconfig);
 
 function App() {
+
+
+  
   return (
  <Router>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<CustomRegistrationPage />} />
+            <Route path="/login" element={<CustomLoginPage />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/help" element={<Help />} />
             <Route path="/registration" element={<Registration />} />
@@ -39,4 +45,4 @@ function App() {
   );
 }
 
-export default withAuthenticator(App);
+export default App;

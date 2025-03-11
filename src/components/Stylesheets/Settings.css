@@ -1,0 +1,79 @@
+/* src/components/Stylesheets/Settings.css */
+
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.settings-title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.settings-form-container {
+    background-color: white;
+    border: 2px solid #4896ac;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.settings-button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.settings-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4896ac;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.settings-button:hover {
+    background-color: #3a7a8c;
+    transform: translateY(-2px);
+}
+
+.settings-link {
+    text-decoration: none;
+    width: 100%;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    margin-top: 20px;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 20px 10px;
+    }
+
+    .settings-form-container {
+        padding: 20px;
+    }
+
+    .settings-button {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
