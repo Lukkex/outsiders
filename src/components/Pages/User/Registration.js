@@ -104,7 +104,7 @@ function Registration() {
             alert("Please select a file for each form before submitting.");
             return;
         }if (sigCanvas.current.isEmpty()) {
-            alert("Please enter your full name and sign on the signature pad.");
+            alert("Please enter your full name and sign before submitting.");
           } else {
             alert("Submitting...");
              }
