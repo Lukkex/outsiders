@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../Stylesheets/App.css'; // Global styles
 import '../../Stylesheets/Registration.css'; // Registration-specific styles
-import SiteHeader from '../../../utils/SiteHeader';
+import SiteHeader from '../../../utils/SiteHeader'
 import SignaturePad from 'react-signature-canvas'
 
 function Registration() {
@@ -246,18 +246,16 @@ function Registration() {
                                 onChange={handleInputChange} 
                                 placeholder="Enter Full Name" 
                                  />
-                                 <t className="font-nobold"> </t>
+                                 <t className="font-nobold"></t>
                                  <t className="font-bold">Signature: </t>
                                 <SignaturePad penColor='Black'
                                 canvasProps={{width: 350, height: 200, className: 'sigCanvas'}}
                                 />
-
                             <button className="rounded-button mt-3" onClick={handleSubmit}>
                                 Submit
                             </button>
                         </div>
                     )}
-
                 </div>
                 <div className="navigation-buttons">
                     {step > 1 && (
