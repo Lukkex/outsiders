@@ -24,7 +24,9 @@ function Settings() {
                         <Link to="/accountinfo" className="accountinfo_link">
                             <button type="button" className="rounded-button">Account Information</button>
                         </Link>
-                        <button type="submit" className="rounded-button">Help</button>
+                        <Link to="/help" className="accountinfo_link">
+                            <button type="submit" className="rounded-button">Help</button>
+                        </Link>
                         <Link to="/admindashboard" className="admin-link">
                             <button type="button" className="rounded-button">Admin Dashboard</button>
                         </Link>

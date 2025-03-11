@@ -242,6 +242,26 @@
         "functionoutsiders782de14cPostConfirmation"
       ]
     },
+    "apioutsiders": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "Parameters": {
+          "AppSyncApiName": "outsiders",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": false,
+          "AuthCognitoUserPoolId": {
+            "Fn::GetAtt": [
+              "authoutsiders782de14c",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "S3DeploymentBucket": "amplify-outsiders-dev-37233-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/92863ec61c30f58132642831eaa59aec522bc603",
+          "env": "dev"
+        }
+      }
+    },
     "authoutsiders782de14c": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -299,19 +319,6 @@
         }
       }
     },
-    "functionoutsiders4caa281eDefineAuthChallenge": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsiders4caa281eDefineAuthChallenge-cloudformation-template.json",
-        "Parameters": {
-          "modules": "captcha-define-challenge",
-          "resourceName": "outsiders4caa281eDefineAuthChallenge",
-          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/outsiders4caa281eDefineAuthChallenge-66613636543359743249-build.zip",
-          "env": "dev"
-        }
-      }
-    },
     "functionoutsiders4caa281eCreateAuthChallenge": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -320,21 +327,20 @@
           "modules": "captcha-create-challenge",
           "resourceName": "outsiders4caa281eCreateAuthChallenge",
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/outsiders4caa281eCreateAuthChallenge-386f6f38793552347839-build.zip",
+          "s3Key": "amplify-builds/outsiders4caa281eCreateAuthChallenge-786a4a487461754e3444-build.zip",
           "env": "dev"
         }
       }
     },
-    "functionoutsidersbd449033PostConfirmation": {
+    "functionoutsiders4caa281eDefineAuthChallenge": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsidersbd449033PostConfirmation-cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsiders4caa281eDefineAuthChallenge-cloudformation-template.json",
         "Parameters": {
-          "modules": "add-to-group",
-          "resourceName": "outsidersbd449033PostConfirmation",
-          "GROUP": "basic_users",
+          "modules": "captcha-define-challenge",
+          "resourceName": "outsiders4caa281eDefineAuthChallenge",
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/outsidersbd449033PostConfirmation-6751414d2b7755747677-build.zip",
+          "s3Key": "amplify-builds/outsiders4caa281eDefineAuthChallenge-4d6538596333324c2f74-build.zip",
           "env": "dev"
         }
       }
@@ -348,7 +354,21 @@
           "resourceName": "outsiders782de14cPostConfirmation",
           "GROUP": "basic_users",
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-394138613252644a332b-build.zip",
+          "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-6b696859527638674371-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "functionoutsidersbd449033PostConfirmation": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsidersbd449033PostConfirmation-cloudformation-template.json",
+        "Parameters": {
+          "modules": "add-to-group",
+          "resourceName": "outsidersbd449033PostConfirmation",
+          "GROUP": "basic_users",
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/outsidersbd449033PostConfirmation-68446b43485172483355-build.zip",
           "env": "dev"
         }
       }

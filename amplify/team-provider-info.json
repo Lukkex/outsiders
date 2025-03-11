@@ -16,27 +16,31 @@
       "auth": {
         "outsiders4caa281e": {},
         "outsiders61e06d45": {},
-        "outsiders782de14c": {}
+        "outsiders782de14c": {},
+        "outsidersbd449033": {}
       },
       "function": {
         "outsiders4caa281eDefineAuthChallenge": {
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/outsiders4caa281eDefineAuthChallenge-66613636543359743249-build.zip"
+          "s3Key": "amplify-builds/outsiders4caa281eDefineAuthChallenge-4d6538596333324c2f74-build.zip"
         },
         "outsiders4caa281eCreateAuthChallenge": {
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/outsiders4caa281eCreateAuthChallenge-386f6f38793552347839-build.zip"
+          "s3Key": "amplify-builds/outsiders4caa281eCreateAuthChallenge-786a4a487461754e3444-build.zip"
         },
         "outsidersbd449033PostConfirmation": {
           "GROUP": "basic_users",
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/outsidersbd449033PostConfirmation-6751414d2b7755747677-build.zip"
+          "s3Key": "amplify-builds/outsidersbd449033PostConfirmation-68446b43485172483355-build.zip"
         },
         "outsiders782de14cPostConfirmation": {
           "GROUP": "basic_users",
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-394138613252644a332b-build.zip"
+          "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-6b696859527638674371-build.zip"
         }
+      },
+      "api": {
+        "outsiders": {}
       }
     }
   }
