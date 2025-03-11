@@ -3,8 +3,10 @@ import '../../Stylesheets/App.css'; // Global styles
 import '../../Stylesheets/Registration.css'; // Registration-specific styles
 import SiteHeader from '../../../utils/SiteHeader'
 import SignaturePad from 'react-signature-canvas'
+import { useRef } from 'react';
 
 function Registration() {
+    const sigCanvas = useRef({});
     const [selectedPrisons, setSelectedPrisons] = useState([]);
     const [selectedForms, setSelectedForms] = useState([]);
     const [step, setStep] = useState(1);
@@ -101,10 +103,11 @@ function Registration() {
         if (!allFormsHaveFiles) {
             alert("Please select a file for each form before submitting.");
             return;
-        }
-        else {
+        }if (sigCanvas.current.isEmpty()) {
+            alert("Please enter your full name and sign on the signature pad.");
+          } else {
             alert("Submitting...");
-        }
+             }
         /*
         try {
             await Promise.all(
@@ -248,7 +251,7 @@ function Registration() {
                                  />
                                  <t className="font-nobold"></t>
                                  <t className="font-bold">Signature: </t>
-                                <SignaturePad penColor='Black'
+                                <SignaturePad ref={sigCanvas} penColor='Black'
                                 canvasProps={{width: 350, height: 200, className: 'sigCanvas'}}
                                 />
                             <button className="rounded-button mt-3" onClick={handleSubmit}>
