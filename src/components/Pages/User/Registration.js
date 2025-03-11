@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import '../../Stylesheets/App.css'; // Global styles
 import '../../Stylesheets/Registration.css'; // Registration-specific styles
 import SiteHeader from '../../../utils/SiteHeader';
+import SignaturePad from 'react-signature-canvas'
 
 function Registration() {
     const [selectedPrisons, setSelectedPrisons] = useState([]);
     const [selectedForms, setSelectedForms] = useState([]);
     const [step, setStep] = useState(1);
     const [needsSpecialForm, setNeedsSpecialForm] = useState(null); // Response to prompt after Folsom selection
+    const [inputValue, setInputValue] = useState('');
+    const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+}
 
     const prisons = ["Folsom State Prison", "San Quentin State Prison"];
     const forms = [
@@ -233,6 +238,20 @@ function Registration() {
                                         </div>
                                     ))}
                             </div>
+                            <t className="font-bold">E-Signature: </t>
+                            <input 
+                                type="text" 
+                                variant="outlined"
+                                value={inputValue} 
+                                onChange={handleInputChange} 
+                                placeholder="Enter Full Name" 
+                                 />
+                                 <t className="font-nobold"> </t>
+                                 <t className="font-bold">Signature: </t>
+                                <SignaturePad penColor='Black'
+                                canvasProps={{width: 350, height: 200, className: 'sigCanvas'}}
+                                />
+
                             <button className="rounded-button mt-3" onClick={handleSubmit}>
                                 Submit
                             </button>
