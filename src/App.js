@@ -13,6 +13,7 @@ import ViewPlayers from './components/Pages/Admin/ViewPlayers';
 import AccountInfo from './components/Pages/User/AccountInfo';
 import CustomLoginPage from './components/Pages/CustomLoginPage';
 import CustomRegistrationPage from './components/Pages/CustomRegistrationPage';
+import CustomSignUpConfirmation from './components/Pages/CustomSignUpConfirmation';
 import { Amplify } from 'aws-amplify';
 
 //import { withAuthenticator } from '@aws-amplify/ui-react';
@@ -40,6 +41,7 @@ function App() {
             <Route path="/adminscheduling" element={<AdminScheduling />} />
             <Route path="/viewplayers" element={<ViewPlayers />} />
             <Route path="/accountinfo" element={<AccountInfo />} />
+            <Route path="/confirm-signup" element={<CustomSignUpConfirmation />} />
           </Routes>
         </Router>
   );
