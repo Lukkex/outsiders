@@ -21,6 +21,13 @@ function AccountInfo() {
                 const user = await getCurrentUserInfo();
                 const roleGroups = await getUserRole();
 
+                var displayRole = "Unknown";
+                if (roleGroups.includes("admin")) {
+                    displayRole = "Admin";
+                } else if (roleGroups.includes("basic_users")) {
+                    displayRole = "User";
+                }
+
                 console.log("User Info:", user);
                 console.log("User Roles:", roleGroups);
 
@@ -28,7 +35,8 @@ function AccountInfo() {
                     setUserInfo({
                         name: `${user.given_name} ${user.family_name}`,
                         email: user.email,
-                        role: roleGroups.length > 0 ? roleGroups.join(", ") : "Unknown",
+                        //role: roleGroups.length > 0 ? roleGroups.join(", ") : "Unknown",
+                        role: displayRole,
                         sub: user.sub
                     });
 
