@@ -1,9 +1,16 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import '../components/Stylesheets/App.css'; //global styles
+import { useUser } from '../context/UserContext';
 import SignOutButton from './SignOutButton.js';
 
 function SiteHeader() {
+    const { userInfo, loading } = useUser();
+
+    if (loading) return null; // Prevent initial flicker
+    if (!userInfo) return null; 
+
+    const schedPage = userInfo?.role.includes("admin") ? "/adminscheduling" : "/scheduling";
+
     return (
         <div>
             <div className="w-full bg-cyan-700 bg-opacity-60">
@@ -14,8 +21,12 @@ function SiteHeader() {
             
             <div className="site-header font-semibold bg-cyan-700 bg-opacity-60">
                 <Link to="/"><button className="rounded-button cyan-gradient">HOME</button></Link>
-                <Link to="/registration"><button className="rounded-button cyan-gradient">REGISTRATION</button></Link>
-                <Link to="/scheduling"><button className="rounded-button cyan-gradient">SCHEDULING</button></Link>
+                {!userInfo.role.includes("admin") ? (
+                    <Link to="/registration"><button className="rounded-button cyan-gradient">REGISTRATION</button></Link>
+                ) : (
+                    <Link to="/admindashboard"><button className="rounded-button cyan-gradient">ADMIN DASH</button></Link>
+                )}
+                <Link to={schedPage}><button className="rounded-button cyan-gradient">SCHEDULING</button></Link>
                 <div className="dropdown">
                     <button className="rounded-button cyan-gradient dropdown-button">ACCOUNT</button>
                     <div className="dropdown-content">
@@ -28,4 +39,4 @@ function SiteHeader() {
     );
 }
 
-export default SiteHeader; // Remove withAuthenticator
+export default SiteHeader;
