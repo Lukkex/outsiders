@@ -13,6 +13,7 @@ import ViewPlayers from './components/Pages/Admin/ViewPlayers';
 import AccountInfo from './components/Pages/User/AccountInfo';
 import CustomLoginPage from './components/Pages/CustomLoginPage';
 import CustomRegistrationPage from './components/Pages/CustomRegistrationPage';
+import { UserProvider } from './context/UserContext';
 import { Amplify } from 'aws-amplify';
 
 //import { withAuthenticator } from '@aws-amplify/ui-react';
@@ -27,21 +28,23 @@ function App() {
 
   
   return (
- <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<CustomRegistrationPage />} />
-            <Route path="/login" element={<CustomLoginPage />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/registration" element={<Registration />} />
-            <Route path="/scheduling" element={<Scheduling />} />
-            <Route path="/admindashboard" element={<AdminDashboard />} />
-            <Route path="/adminscheduling" element={<AdminScheduling />} />
-            <Route path="/viewplayers" element={<ViewPlayers />} />
-            <Route path="/accountinfo" element={<AccountInfo />} />
-          </Routes>
-        </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<CustomRegistrationPage />} />
+          <Route path="/login" element={<CustomLoginPage />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/scheduling" element={<Scheduling />} />
+          <Route path="/admindashboard" element={<AdminDashboard />} />
+          <Route path="/adminscheduling" element={<AdminScheduling />} />
+          <Route path="/viewplayers" element={<ViewPlayers />} />
+          <Route path="/accountinfo" element={<AccountInfo />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 
