@@ -63,7 +63,7 @@ const CustomRegistrationPage = () => {
           {error && <div className="error-message">{error}</div>}
           
           <div className="form-group">
-            <label htmlFor="given_name">Given Name</label>
+            <label htmlFor="given_name">First Name</label>
             <input
               id="given_name"
               name="given_name"
@@ -71,14 +71,14 @@ const CustomRegistrationPage = () => {
               autoComplete="given-name"
               value={given_name}
               onChange={(e) => setGivenName(e.target.value)}
-              placeholder="Enter your given name"
+              placeholder="Enter your first name"
               required
               className="form-control"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="family_name">Family Name</label>
+            <label htmlFor="family_name">Last Name</label>
             <input
               id="family_name"
               name="family_name"
@@ -86,7 +86,7 @@ const CustomRegistrationPage = () => {
               autoComplete="family-name"
               value={family_name}
               onChange={(e) => setFamilyName(e.target.value)}
-              placeholder="Enter your family name"
+              placeholder="Enter your last name"
               required
               className="form-control"
             />

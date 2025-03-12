@@ -20,22 +20,24 @@ function Settings() {
                 <div className="settings-form-container">
                     <form onSubmit={handleSubmit}>
                         <div className="settings-button-group">
-                            <button type="submit" className="settings-button">
-                                Reset Password
-                            </button>
+                            <Link to="/admindashboard" className="settings-link">
+                                <button type="button" className="settings-button">
+                                    Admin Dashboard
+                                </button>
+                            </Link>
                             <Link to="/accountinfo" className="settings-link">
                                 <button type="button" className="settings-button">
                                     Account Information
                                 </button>
                             </Link>
+                            <Link to="/login">
+                                <button type="submit" className="settings-button">
+                                    Reset Password
+                                </button>
+                            </Link>
                             <Link to="/help" className="settings-link">
                                 <button type="button" className="settings-button">
                                     Help
-                                </button>
-                            </Link>
-                            <Link to="/admindashboard" className="settings-link">
-                                <button type="button" className="settings-button">
-                                    Admin Dashboard
                                 </button>
                             </Link>
                             <button type="submit" className="settings-button delete-button">
