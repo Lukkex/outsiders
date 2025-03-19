@@ -41,6 +41,9 @@
       },
       "api": {
         "outsiders": {}
+      },
+      "storage": {
+        "files": {}
       }
     }
   }
