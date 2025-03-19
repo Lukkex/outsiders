@@ -27,5 +27,7 @@
   },
   "aws_cognito_verification_mechanisms": [
     "EMAIL"
-  ]
+  ],
+  "aws_user_files_s3_bucket": "outsidersc28d06dc80124b6897e22ab7da83523e37233-dev",
+  "aws_user_files_s3_bucket_region": "us-west-1"
 }
