@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../Stylesheets/CustomLoginPage.css';
 import { signIn } from '@aws-amplify/auth';
+import { useUser } from '../../context/UserContext';
 
 const CustomLoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { refreshUserData } = useUser();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,6 +19,9 @@ const CustomLoginPage = () => {
         password: password
       });
       console.log('Success!');
+
+      await refreshUserData();
+
       navigate('/');
     } catch (err) {
       console.error('Error signing in:', err);

@@ -16,6 +16,7 @@ import ViewPlayers from './components/Pages/Admin/ViewPlayers';
 import AccountInfo from './components/Pages/User/AccountInfo';
 import CustomLoginPage from './components/Pages/CustomLoginPage';
 import CustomRegistrationPage from './components/Pages/CustomRegistrationPage';
+import { UserProvider } from './context/UserContext';
 import { Amplify } from 'aws-amplify';
 
 //import { withAuthenticator } from '@aws-amplify/ui-react';
@@ -27,22 +28,24 @@ Amplify.configure(awsmobile);
 
 function App() {
   return (
- <Router>
-          <Routes>
-            <Route path="/" element={<SignedOutRoute content = {<Home />}></SignedOutRoute>} />
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<SignedOutRoute content = {<Home />}></SignedOutRoute>} />
             <Route path="access-denied" element = {<SignedOutRoute content = {<AccessDenied/>}/>} />
-            <Route path="/signup" element={<CustomRegistrationPage />} />
-            <Route path="/login" element={<CustomLoginPage />} />
-            <Route path="/settings" element={<SignedOutRoute content = {<Settings />}/>} />
-            <Route path="/help" element={<SignedOutRoute content = {<Help />}/>} />
-            <Route path="/registration" element={<SignedOutRoute content = {<Registration />}/>} />
-            <Route path="/scheduling" element={<SignedOutRoute content = {<Scheduling />}/>} />
-            <Route path="/admindashboard" element={<PrivateRoute content = {<AdminDashboard />} redirectPage = "/access-denied"/>} />
-            <Route path="/adminscheduling" element={<PrivateRoute content = {<AdminScheduling />} redirectPage = "/access-denied"/>} />
-            <Route path="/viewplayers" element={<PrivateRoute content = {<ViewPlayers />} redirectPage = "/access-denied"/>} />
-            <Route path="/accountinfo" element={<SignedOutRoute content = {<AccountInfo />} />} />
-          </Routes>
-        </Router>
+          <Route path="/signup" element={<CustomRegistrationPage />} />
+          <Route path="/login" element={<CustomLoginPage />} />
+          <Route path="/settings" element={<SignedOutRoute content = {<Settings />}/>} />
+          <Route path="/help" element={<SignedOutRoute content = {<Help />}/>} />
+          <Route path="/registration" element={<SignedOutRoute content = {<Registration />}/>} />
+          <Route path="/scheduling" element={<SignedOutRoute content = {<Scheduling />}/>} />
+          <Route path="/admindashboard" element={<PrivateRoute content = {<AdminDashboard />} redirectPage = "/access-denied"/>} />
+          <Route path="/adminscheduling" element={<PrivateRoute content = {<AdminScheduling />} redirectPage = "/access-denied"/>} />
+          <Route path="/viewplayers" element={<PrivateRoute content = {<ViewPlayers />} redirectPage = "/access-denied"/>} />
+          <Route path="/accountinfo" element={<SignedOutRoute content = {<AccountInfo />} />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 
