@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../Stylesheets/CustomLoginPage.css';
-import { signUp } from 'aws-amplify/auth'; // ✅ Modular import!
+import { signUp } from 'aws-amplify/auth'; 
 
 const CustomRegistrationPage = () => {
   const [email, setEmail] = useState('');

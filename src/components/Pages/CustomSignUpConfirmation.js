@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom'; // ✅ Added useLocation
+import { useNavigate, useLocation, Link } from 'react-router-dom'; 
 import '../Stylesheets/CustomLoginPage.css';
-import { confirmSignUp } from 'aws-amplify/auth'; // ✅ Modular import!
+import { confirmSignUp } from 'aws-amplify/auth';
 
 const CustomSignUpConfirmation = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ Grab location
+  const location = useLocation(); 
 
   // Grab the username (email) from state when navigating
   const prefilledUsername = location.state?.username || '';
