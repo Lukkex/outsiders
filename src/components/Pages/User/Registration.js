@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../../Stylesheets/App.css'; // Global styles
 import '../../Stylesheets/Registration.css'; // Registration-specific styles
 import SiteHeader from '../../../utils/SiteHeader'
+import SiteFooter from '../../../utils/SiteFooter.js';
 import SignaturePad from 'react-signature-canvas'
 import { useRef } from 'react';
 import { uploadData, getUrl } from 'aws-amplify/storage';
@@ -496,6 +497,8 @@ function Registration() {
                 </div>
                 )}
             </div>
+            <div className="site-footer-break"/>
+            <SiteFooter></SiteFooter>
         </div>
     );
 }

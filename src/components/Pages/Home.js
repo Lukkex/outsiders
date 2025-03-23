@@ -1,6 +1,7 @@
 import '../Stylesheets/App.css';
 import '@aws-amplify/ui-react/styles.css';
 import SiteHeader from '../../utils/SiteHeader.js';
+import SiteFooter from '../../utils/SiteFooter.js';
 import { Link } from 'react-router-dom';
 import CustomAuthenticator from '../../utils/CustomAuthenticator.js';
 
@@ -20,7 +21,12 @@ function Home() {
                         
                         <p>New here? Head over to <Link to="/registration" class="underline font-semibold">registration</Link> to get started.</p>
                     </div>
+                    
+                    
                 </div>
+                
+                <SiteFooter></SiteFooter>
+
             </div>
     );
   }
