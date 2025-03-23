@@ -57,7 +57,7 @@ function ViewPlayers() {
                             filteredPlayers.map((player, index) => (
                                 <tr key={index}>
                                     <td>{`${player.given_name} ${player.family_name}`}</td>
-                                    <td>{player.preferred_prisons || "Unknown"}</td>
+                                    <td>{player.preferred_prisons.join(', ') || "Unknown"}</td>
                                     <td>{new Date(player.created_at).toLocaleString()}</td>
                                 </tr>
                             ))

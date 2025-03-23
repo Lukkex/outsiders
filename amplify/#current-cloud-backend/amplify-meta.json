@@ -39,12 +39,12 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
+      "lastPushTimeStamp": "2025-03-18T00:33:56.231Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apioutsiders"
       },
-      "lastPushTimeStamp": "2025-03-06T04:50:03.149Z",
-      "lastPushDirHash": "MocwWr3pwaw1gcZVPYPgAsMu3rI="
+      "lastPushDirHash": "iHV0WqQjmqSHeBaRhTlQK/wYRiA="
     }
   },
   "auth": {
@@ -94,12 +94,11 @@
         "IdentityPoolName": "outsiders782de14c_identitypool_782de14c__dev",
         "UserPoolName": "outsiders782de14c_userpool_782de14c"
       },
-      "lastPushTimeStamp": "2025-03-06T04:50:01.109Z",
+      "lastPushTimeStamp": "2025-03-18T00:33:54.462Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/auth/outsiders782de14c-cloudformation-template.json",
         "logicalId": "authoutsiders782de14c"
-      },
-      "lastPushDirHash": "qOXSDDCR2voVraOgiLengScEuu4="
+      }
     }
   },
   "function": {
@@ -114,20 +113,15 @@
         "Name": "outsiders4caa281eCreateAuthChallenge-dev",
         "LambdaExecutionRole": "outsiders4caa281eCreateAuthChallenge-dev"
       },
-      "lastPushTimeStamp": "2025-03-06T04:50:01.131Z",
+      "lastPushTimeStamp": "2025-03-18T00:33:54.475Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsiders4caa281eCreateAuthChallenge-cloudformation-template.json",
         "logicalId": "functionoutsiders4caa281eCreateAuthChallenge"
       },
-      "lastBuildTimeStamp": "2025-03-06T04:07:40.707Z",
-      "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2025-03-06T04:07:40.843Z",
-      "distZipFilename": "outsiders4caa281eCreateAuthChallenge-786a4a487461754e3444-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
         "s3Key": "amplify-builds/outsiders4caa281eCreateAuthChallenge-786a4a487461754e3444-build.zip"
-      },
-      "lastPushDirHash": "gEea0MXHfUWPhSt36u3CFLlrUHM="
+      }
     },
     "outsiders4caa281eDefineAuthChallenge": {
       "build": true,
@@ -140,20 +134,15 @@
         "Name": "outsiders4caa281eDefineAuthChallenge-dev",
         "LambdaExecutionRole": "outsiders4caa281eDefineAuthChallenge-dev"
       },
-      "lastPushTimeStamp": "2025-03-06T04:50:01.156Z",
+      "lastPushTimeStamp": "2025-03-18T00:33:54.486Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsiders4caa281eDefineAuthChallenge-cloudformation-template.json",
         "logicalId": "functionoutsiders4caa281eDefineAuthChallenge"
       },
-      "lastBuildTimeStamp": "2025-03-06T04:07:41.879Z",
-      "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2025-03-06T04:07:41.987Z",
-      "distZipFilename": "outsiders4caa281eDefineAuthChallenge-4d6538596333324c2f74-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
         "s3Key": "amplify-builds/outsiders4caa281eDefineAuthChallenge-4d6538596333324c2f74-build.zip"
-      },
-      "lastPushDirHash": "nzURAjNgP26OFPEST/CuYfWSuMI="
+      }
     },
     "outsiders782de14cPostConfirmation": {
       "build": true,
@@ -166,20 +155,15 @@
         "Name": "outsiders782de14cPostConfirmation-dev",
         "LambdaExecutionRole": "outsiders782de14cPostConfirmation-dev"
       },
-      "lastPushTimeStamp": "2025-03-06T04:50:01.181Z",
+      "lastPushTimeStamp": "2025-03-18T00:33:54.497Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsiders782de14cPostConfirmation-cloudformation-template.json",
         "logicalId": "functionoutsiders782de14cPostConfirmation"
       },
-      "lastBuildTimeStamp": "2025-03-06T04:07:43.282Z",
-      "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2025-03-06T04:07:44.941Z",
-      "distZipFilename": "outsiders782de14cPostConfirmation-6b696859527638674371-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
         "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-6b696859527638674371-build.zip"
-      },
-      "lastPushDirHash": "LRUEZQGl8e+RrC/asqh3WaMHC5w="
+      }
     },
     "outsidersbd449033PostConfirmation": {
       "build": true,
@@ -192,20 +176,32 @@
         "Name": "outsidersbd449033PostConfirmation-dev",
         "LambdaExecutionRole": "outsidersbd449033PostConfirmation-dev"
       },
-      "lastPushTimeStamp": "2025-03-06T04:50:01.206Z",
+      "lastPushTimeStamp": "2025-03-18T00:33:54.510Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/outsidersbd449033PostConfirmation-cloudformation-template.json",
         "logicalId": "functionoutsidersbd449033PostConfirmation"
       },
-      "lastBuildTimeStamp": "2025-03-06T04:07:46.485Z",
-      "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2025-03-06T04:07:48.193Z",
-      "distZipFilename": "outsidersbd449033PostConfirmation-68446b43485172483355-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
         "s3Key": "amplify-builds/outsidersbd449033PostConfirmation-68446b43485172483355-build.zip"
+      }
+    }
+  },
+  "storage": {
+    "files": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "lastPushTimeStamp": "2025-03-18T00:33:56.231Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storagefiles"
       },
-      "lastPushDirHash": "RsRRAS/HRFZ02Qew3HyRd/Nv7+I="
+      "output": {
+        "BucketName": "outsidersc28d06dc80124b6897e22ab7da83523e37233-dev",
+        "Region": "us-west-1"
+      },
+      "lastPushDirHash": "lmFR46hcMmj/Brs0vFjbYbEMJ18="
     }
   }
 }
