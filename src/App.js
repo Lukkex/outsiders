@@ -5,6 +5,7 @@ import SignedOutRoute from './utils/SignedOutRoute';
 import AccessDenied from './components/Pages/AccessDenied';
 import Home from './components/Pages/Home';
 import Settings from './components/Pages/Settings';
+import ChangePassword from './components/Pages/ChangePassword';
 import Help from './components/Pages/Help';
 import AboutUs from './components/Pages/AboutUs';
 import Registration from './components/Pages/User/Registration';
@@ -43,6 +44,7 @@ function App() {
           <Route path="/adminscheduling" element={<PrivateRoute content = {<AdminScheduling />} redirectPage = "/access-denied"/>} />
           <Route path="/viewplayers" element={<PrivateRoute content = {<ViewPlayers />} redirectPage = "/access-denied"/>} />
           <Route path="/accountinfo" element={<SignedOutRoute content = {<AccountInfo />} />} />
+          <Route path="/changepassword" element={<SignedOutRoute content = {<ChangePassword />}/>} />
         </Routes>
       </Router>
     </UserProvider>
