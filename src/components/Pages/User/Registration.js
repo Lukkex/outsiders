@@ -278,12 +278,11 @@ function Registration() {
     return (
         <div>
             <SiteHeader />
-            <br />
-            <br />
-            <br />
-            <div className="signup-container">
+            <div className = "site-header-break" />
+            <div className = "flex justify-start"></div>
+            <div className="signup-container flex justify-start">
                 <h1 className="font-semibold">Registration</h1>
-                <br></br>
+                <br />
                 <div className="form-container">
                     {step === 1 && (
                         <div>
