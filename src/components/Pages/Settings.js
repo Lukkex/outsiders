@@ -30,9 +30,9 @@ function Settings() {
                                     Account Information
                                 </button>
                             </Link>
-                            <Link to="/login">
+                            <Link to="/changepassword">
                                 <button type="submit" className="settings-button">
-                                    Reset Password
+                                    Change Password
                                 </button>
                             </Link>
                             <Link to="/help" className="settings-link">

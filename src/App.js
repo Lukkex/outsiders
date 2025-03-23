@@ -7,6 +7,7 @@ import Home from './components/Pages/Home';
 import SignUp from './components/Pages/SignUp';
 import SignIn from './components/Pages/SignIn';
 import Settings from './components/Pages/Settings';
+import ChangePassword from './components/Pages/ChangePassword';
 import Help from './components/Pages/Help';
 import Registration from './components/Pages/User/Registration';
 import Scheduling from './components/Pages/User/Scheduling';
@@ -43,6 +44,7 @@ function App() {
           <Route path="/adminscheduling" element={<PrivateRoute content = {<AdminScheduling />} redirectPage = "/access-denied"/>} />
           <Route path="/viewplayers" element={<PrivateRoute content = {<ViewPlayers />} redirectPage = "/access-denied"/>} />
           <Route path="/accountinfo" element={<SignedOutRoute content = {<AccountInfo />} />} />
+          <Route path="/changepassword" element={<SignedOutRoute content = {<ChangePassword />}/>} />
         </Routes>
       </Router>
     </UserProvider>
