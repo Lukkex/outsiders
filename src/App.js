@@ -4,11 +4,10 @@ import PrivateRoute from './utils/PrivateRoute';
 import SignedOutRoute from './utils/SignedOutRoute';
 import AccessDenied from './components/Pages/AccessDenied';
 import Home from './components/Pages/Home';
-import SignUp from './components/Pages/SignUp';
-import SignIn from './components/Pages/SignIn';
 import Settings from './components/Pages/Settings';
 import ChangePassword from './components/Pages/ChangePassword';
 import Help from './components/Pages/Help';
+import AboutUs from './components/Pages/AboutUs';
 import Registration from './components/Pages/User/Registration';
 import Scheduling from './components/Pages/User/Scheduling';
 import AdminDashboard from './components/Pages/Admin/AdminDashboard';
@@ -38,6 +37,7 @@ function App() {
           <Route path="/login" element={<CustomLoginPage />} />
           <Route path="/settings" element={<SignedOutRoute content = {<Settings />}/>} />
           <Route path="/help" element={<SignedOutRoute content = {<Help />}/>} />
+          <Route path="/aboutus" element={<SignedOutRoute content = {<AboutUs />}/>} />
           <Route path="/registration" element={<SignedOutRoute content = {<Registration />}/>} />
           <Route path="/scheduling" element={<SignedOutRoute content = {<Scheduling />}/>} />
           <Route path="/admindashboard" element={<PrivateRoute content = {<AdminDashboard />} redirectPage = "/access-denied"/>} />
