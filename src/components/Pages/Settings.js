@@ -20,11 +20,6 @@ function Settings() {
                 <div className="settings-form-container">
                     <form onSubmit={handleSubmit}>
                         <div className="settings-button-group">
-                            <Link to="/admindashboard" className="settings-link">
-                                <button type="button" className="settings-button">
-                                    Admin Dashboard
-                                </button>
-                            </Link>
                             <Link to="/accountinfo" className="settings-link">
                                 <button type="button" className="settings-button">
                                     Account Information
