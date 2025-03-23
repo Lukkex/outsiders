@@ -4,8 +4,6 @@ import PrivateRoute from './utils/PrivateRoute';
 import SignedOutRoute from './utils/SignedOutRoute';
 import AccessDenied from './components/Pages/AccessDenied';
 import Home from './components/Pages/Home';
-import SignUp from './components/Pages/SignUp';
-import SignIn from './components/Pages/SignIn';
 import Settings from './components/Pages/Settings';
 import Help from './components/Pages/Help';
 import AboutUs from './components/Pages/AboutUs';

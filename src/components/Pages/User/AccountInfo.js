@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getCurrentUserInfo, getUserRole } from '../../../services/authConfig';
-import SiteHeader from '../../../utils/SiteHeader';
+import SiteContainer from '../../../utils/SiteContainer.js';
 import '../../Stylesheets/AccountInfo.css';
 
 function AccountInfo() {
@@ -65,49 +65,50 @@ function AccountInfo() {
     };
 
     return (
-        <div>
-            <SiteHeader />
-            <div className="profile-container">
-                <h1 className="font-semibold">Account Information</h1>
-                <div className="user-details">
-                    <p><strong>Name:</strong> {userInfo.name || "Unknown User"}</p>
-                    <p><strong>Email:</strong> {userInfo.email || "Unknown"}</p>
-                    <p><strong>Role:</strong> {userInfo.role || "Unknown"}</p>
-                    <p><strong>Upcoming Dates:</strong> {upcomingDates.length > 0 ? upcomingDates.join(', ') : "No upcoming dates"}</p>
-                    <p><strong>Preferred Prisons:</strong></p>
-                    {isEditing ? (
-                        <form onSubmit={handleSave} className="edit-form">
-                            {["San Quentin", "Folsom Prison"].map(prison => (
-                                <label key={prison} className="checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        checked={preferredPrisons.includes(prison)}
-                                        onChange={() => {
-                                            setPreferredPrisons(prev => prev.includes(prison)
-                                                ? prev.filter(p => p !== prison)
-                                                : [...prev, prison]);
-                                        }}
-                                    />
-                                    {prison}
-                                </label>
-                            ))}
-                            <button type="submit" className="rounded-button">Save Preferences</button>
-                        </form>
-                    ) : (
-                        <ul>
-                            {preferredPrisons.length > 0 ? (
-                                preferredPrisons.map(prison => <li key={prison}>{prison}</li>)
-                            ) : (
-                                <li>No preferred prisons selected</li>
-                            )}
-                        </ul>
-                    )}
-                    <button type="button" className="rounded-button" onClick={() => setIsEditing(!isEditing)}>
-                        {isEditing ? 'Cancel' : 'Edit'}
-                    </button>
+        <SiteContainer content = {
+            <div>
+                <div className="profile-container">
+                    <h1 className="font-semibold">Account Information</h1>
+                    <div className="user-details">
+                        <p><strong>Name:</strong> {userInfo.name || "Unknown User"}</p>
+                        <p><strong>Email:</strong> {userInfo.email || "Unknown"}</p>
+                        <p><strong>Role:</strong> {userInfo.role || "Unknown"}</p>
+                        <p><strong>Upcoming Dates:</strong> {upcomingDates.length > 0 ? upcomingDates.join(', ') : "No upcoming dates"}</p>
+                        <p><strong>Preferred Prisons:</strong></p>
+                        {isEditing ? (
+                            <form onSubmit={handleSave} className="edit-form">
+                                {["San Quentin", "Folsom Prison"].map(prison => (
+                                    <label key={prison} className="checkbox-label">
+                                        <input
+                                            type="checkbox"
+                                            checked={preferredPrisons.includes(prison)}
+                                            onChange={() => {
+                                                setPreferredPrisons(prev => prev.includes(prison)
+                                                    ? prev.filter(p => p !== prison)
+                                                    : [...prev, prison]);
+                                            }}
+                                        />
+                                        {prison}
+                                    </label>
+                                ))}
+                                <button type="submit" className="rounded-button">Save Preferences</button>
+                            </form>
+                        ) : (
+                            <ul>
+                                {preferredPrisons.length > 0 ? (
+                                    preferredPrisons.map(prison => <li key={prison}>{prison}</li>)
+                                ) : (
+                                    <li>No preferred prisons selected</li>
+                                )}
+                            </ul>
+                        )}
+                        <button type="button" className="rounded-button" onClick={() => setIsEditing(!isEditing)}>
+                            {isEditing ? 'Cancel' : 'Edit'}
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        }/>
     );
 }
 
