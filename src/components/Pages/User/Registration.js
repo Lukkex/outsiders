@@ -279,7 +279,6 @@ function Registration() {
         <SiteContainer content = {
             <div>
                 <div className = "site-header-break" />
-                <div className = "flex justify-start"></div>
                 <div className="signup-container flex justify-start">
                     <h1 className="font-semibold">Registration</h1>
                     <br />

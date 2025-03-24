@@ -31,7 +31,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<SignedOutRoute content = {<Home />}></SignedOutRoute>} />
-            <Route path="access-denied" element = {<SignedOutRoute content = {<AccessDenied/>}/>} />
+          <Route path="access-denied" element = {<SignedOutRoute content = {<AccessDenied/>}/>} />
           <Route path="/signup" element={<CustomRegistrationPage />} />
           <Route path="/login" element={<CustomLoginPage />} />
           <Route path="/settings" element={<SignedOutRoute content = {<Settings />}/>} />
