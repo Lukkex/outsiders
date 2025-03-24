@@ -4,36 +4,18 @@ import '../Stylesheets/AboutUs.css';
 import SiteContainer from '../../utils/SiteContainer.js';
 import FadeInSection from '../../utils/FadeInSection.js';
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function AboutUs() {
-    //Tracks if element in view
-    const [isVisible, setIsVisible] = useState(false);
-
-    //Reference to the element we want faded in
-    const elementRef = useRef(null);
-
-    const handleIntersection = (entries) => {
-        entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-            setIsVisible(true); 
-        }
-        });
-    };
-
     useEffect(() => {
-        const observer = new IntersectionObserver(handleIntersection, {
-        threshold: 0.5, 
-        });
-
-        if (elementRef.current) {
-        observer.observe(elementRef.current);
+        // This effect runs whenever the component mounts or updates
+        const hash = window.location.hash; // Get the current URL hash
+        if (hash) {
+            const targetElement = document.querySelector(hash); // Find the element with that ID
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' }); // Smooth scroll to the element
+            }
         }
-
-        return () => {
-        if (elementRef.current) {
-            observer.unobserve(elementRef.current);
-        }
-        };
     }, []);
 
     return (
@@ -42,17 +24,21 @@ function AboutUs() {
                 <div className="AboutUs">
                     <br/>
                     <br/>
-                    <div className = "flex justify-center items-center">
+                    <div className = "flex space-x-4 justify-center items-center">
                         <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
                             
-                            <p>About Us!</p>
+                            <a href="#AboutUs">About Us!</a>
+                        </div>
+                        <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                            
+                        <a href="#FAQ">FAQs</a>
                         </div>
                     </div>
                     <br/>
                     <br/>
                     <div class="w-full border-t-2 border-gray-400 my-4"/>
                     <br/>
-                    <br/>
+                    <br id = "AboutUs"/>
                     <div class = "flex items-center h-[60vh]">
                         <div class = "w-1/2 flex justify-center">
                             <img class = "h-[60vh] w-[40vw]" src="https://outsidersfc.com/wp-content/uploads/2018/07/dsc_0600.jpg?w=820"/>
@@ -102,7 +88,7 @@ function AboutUs() {
                     
                     <div class="w-full border-t-2 border-gray-400 my-4"/>
                     <br/>
-                    <br/>
+                    <br id = "FAQ"/>
 
                     <div className = "flex justify-center items-center">
                         <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
