@@ -1,14 +1,42 @@
-import { fetchFormSubmissions } from './apiConfig'; // Import API calls from apiConfig.js
+import { list } from 'aws-amplify/storage';
 
-// Fetch submitted forms from DynamoDB via GraphQL API
-export async function getSubmittedForms() {
+export async function getSubmittedFormsFromS3() {
+    const allForms = [];
+  
     try {
-        return await fetchFormSubmissions(); // Call the GraphQL function
+      const users = await list('uploads/', { level: 'public' });
+      for (const user of users.results) {
+        if (user.key.endsWith('/')) {
+          const email = user.key.split('/')[1];
+          const dates = await list(`uploads/${email}/`, { level: 'public' });
+  
+          for (const dateFolder of dates.results) {
+            if (dateFolder.key.endsWith('/')) {
+              const date = dateFolder.key.split('/')[2];
+              const files = await list(dateFolder.key, { level: 'public' });
+  
+              for (const file of files.results) {
+                allForms.push({
+                  email,
+                  submittedAt: new Date(date.replace(/_/g, '-')),
+                  fileName: file.key.split('/').pop(),
+                  formID: file.key.split('/').pop().replace('.pdf', ''),
+                  s3Key: file.key,
+                  firstName: '',
+                  lastName: '',
+                  prison: '',
+                });
+              }
+            }
+          }
+        }
+      }
     } catch (error) {
-        console.error("Error fetching submitted forms:", error);
-        return [];
+      console.error("Error fetching forms from S3:", error);
     }
-}
+  
+    return allForms;
+  }
 
 // Filter submitted forms based on prison and player input
 export async function filterSubmittedForms(prison, player) {
