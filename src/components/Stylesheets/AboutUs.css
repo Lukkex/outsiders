@@ -1,0 +1,16 @@
+.AboutUs {
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    width: 100vw;
+    flex-direction: column;
+    background-image: linear-gradient(to bottom, rgb(255, 255, 255), rgb(207 250 254))  
+}
+
+.AboutUs img {
+    border: 1px solid #e5e7eb;
+    padding: 0.2rem; 
+    border-radius: 1.5rem; 
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 139, 139, 0.9);
+}

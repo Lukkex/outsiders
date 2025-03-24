@@ -1,7 +1,7 @@
 import '../../Stylesheets/App.css'; //global styles
 import styles from '../../Stylesheets/Scheduling.module.css';
 import {useState , useEffect } from 'react';
-import SiteHeader from '../../../utils/SiteHeader';
+import SiteContainer from '../../../utils/SiteContainer.js';
 
 // Meeting dummy data simulating backend tables
 const dummyMeetingTimes = [
@@ -98,19 +98,21 @@ function Scheduling() {
     }
 
     return (
-        <div>
-            <SiteHeader className="navbar"></SiteHeader>
-            <br></br>
-            <br></br>
-            <br></br>
-            <div className={styles.alertContainer}>
-                <h1>Please Complete Registration to Continue.</h1>
-                <button onClick={() => hideComponent("shScheduling")} className={styles.toggleButton}>[debug] Toggle Registration </button>
+        <SiteContainer content = {
+            <div>
+                <br></br>
+                <br></br>
+                <br></br>
+                <div className={styles.alertContainer}>
+                    <h1>Please Complete Registration to Continue.</h1>
+                    <button onClick={() => hideComponent("shScheduling")} className={styles.toggleButton}>[debug] Toggle Registration </button>
+                </div>
+                <br></br>
+                <br></br>
+                {shScheduling && <Schedule />}
+                <br></br>
             </div>
-            <br></br>
-            <br></br>
-            {shScheduling && <Schedule />}
-        </div>
+        }/>
     );
 }
 

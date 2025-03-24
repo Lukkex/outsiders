@@ -67,26 +67,26 @@ const CustomRegistrationPage = () => {
           {error && <div className="error-message">{error}</div>}
 
           <div className="form-group">
-            <label htmlFor="givenName">Given Name</label>
+            <label htmlFor="given_name">First Name</label>
             <input
               id="givenName"
               type="text"
               value={givenName}
               onChange={(e) => setGivenName(e.target.value)}
-              placeholder="Enter your given name"
+              placeholder="Enter your first name"
               required
               className="form-control"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="familyName">Family Name</label>
+            <label htmlFor="family_name">Last Name</label>
             <input
               id="familyName"
               type="text"
               value={familyName}
               onChange={(e) => setFamilyName(e.target.value)}
-              placeholder="Enter your family name"
+              placeholder="Enter your last name"
               required
               className="form-control"
             />

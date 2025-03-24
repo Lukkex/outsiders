@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // ⬅️ NEW IMPORT
 import { getCurrentUserInfo, getUserRole } from '../../../services/authConfig';
-import SiteHeader from '../../../utils/SiteHeader';
+import SiteContainer from '../../../utils/SiteContainer.js';
 import '../../Stylesheets/AccountInfo.css';
 import { fetchMFAPreference } from 'aws-amplify/auth'; // Correct import
 
@@ -26,11 +26,22 @@ function AccountInfo() {
                 const user = await getCurrentUserInfo();
                 const roleGroups = await getUserRole();
 
+                var displayRole = "Unknown";
+                if (roleGroups.includes("admin")) {
+                    displayRole = "Admin";
+                } else if (roleGroups.includes("basic_users")) {
+                    displayRole = "User";
+                }
+
+                console.log("User Info:", user);
+                console.log("User Roles:", roleGroups);
+
                 if (user) {
                     setUserInfo({
                         name: `${user.given_name} ${user.family_name}`,
                         email: user.email,
-                        role: roleGroups.length > 0 ? roleGroups.join(", ") : "Unknown",
+                        //role: roleGroups.length > 0 ? roleGroups.join(", ") : "Unknown",
+                        role: displayRole,
                         sub: user.sub
                     });
 
@@ -82,15 +93,15 @@ function AccountInfo() {
     };
 
     return (
-        <div>
-            <SiteHeader />
-            <div className="profile-container">
-                <h1 className="font-semibold">Account Information</h1>
-                <div className="user-details">
-                    <p><strong>Name:</strong> {userInfo.name || "Unknown User"}</p>
-                    <p><strong>Email:</strong> {userInfo.email || "Unknown"}</p>
-                    <p><strong>Role:</strong> {userInfo.role || "Unknown"}</p>
-                    <p><strong>MFA Status:</strong> {mfaStatus}</p>
+        <SiteContainer content = {
+            <div>
+                <div className="profile-container">
+                    <h1 className="font-semibold">Account Information</h1>
+                    <div className="user-details">
+                        <p><strong>Name:</strong> {userInfo.name || "Unknown User"}</p>
+                        <p><strong>Email:</strong> {userInfo.email || "Unknown"}</p>
+                        <p><strong>Role:</strong> {userInfo.role || "Unknown"}</p>
+                        <p><strong>MFA Status:</strong> {mfaStatus}</p>
                     
                     <p>
                         {mfaStatus === 'Enabled' ? (
@@ -101,42 +112,43 @@ function AccountInfo() {
                     </p>
                     
                     <p><strong>Upcoming Dates:</strong> {upcomingDates.length > 0 ? upcomingDates.join(', ') : "No upcoming dates"}</p>
-                    <p><strong>Preferred Prisons:</strong></p>
-
+                        <p><strong>Preferred Prisons:</strong></p>
+    
                     {isEditing ? (
-                        <form onSubmit={handleSave} className="edit-form">
-                            {["San Quentin", "Folsom Prison"].map(prison => (
-                                <label key={prison} className="checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        checked={preferredPrisons.includes(prison)}
-                                        onChange={() => {
-                                            setPreferredPrisons(prev => prev.includes(prison)
-                                                ? prev.filter(p => p !== prison)
-                                                : [...prev, prison]);
-                                        }}
-                                    />
-                                    {prison}
-                                </label>
-                            ))}
-                            <button type="submit" className="rounded-button">Save Preferences</button>
-                        </form>
-                    ) : (
-                        <ul>
-                            {preferredPrisons.length > 0 ? (
-                                preferredPrisons.map(prison => <li key={prison}>{prison}</li>)
-                            ) : (
-                                <li>No preferred prisons selected</li>
-                            )}
-                        </ul>
-                    )}
-
+                            <form onSubmit={handleSave} className="edit-form">
+                                {["San Quentin", "Folsom Prison"].map(prison => (
+                                    <label key={prison} className="checkbox-label">
+                                        <input
+                                            type="checkbox"
+                                            checked={preferredPrisons.includes(prison)}
+                                            onChange={() => {
+                                                setPreferredPrisons(prev => prev.includes(prison)
+                                                    ? prev.filter(p => p !== prison)
+                                                    : [...prev, prison]);
+                                            }}
+                                        />
+                                        {prison}
+                                    </label>
+                                ))}
+                                <button type="submit" className="rounded-button">Save Preferences</button>
+                            </form>
+                        ) : (
+                            <ul>
+                                {preferredPrisons.length > 0 ? (
+                                    preferredPrisons.map(prison => <li key={prison}>{prison}</li>)
+                                ) : (
+                                    <li>No preferred prisons selected</li>
+                                )}
+                            </ul>
+                        )}
+    
                     <button type="button" className="rounded-button" onClick={() => setIsEditing(!isEditing)}>
-                        {isEditing ? 'Cancel' : 'Edit'}
-                    </button>
+                            {isEditing ? 'Cancel' : 'Edit'}
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        }/>
     );
 }
 
