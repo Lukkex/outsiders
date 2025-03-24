@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // ⬅️ NEW IMPORT
 import { getCurrentUserInfo, getUserRole } from '../../../services/authConfig';
-import SiteHeader from '../../../utils/SiteHeader';
+import SiteContainer from '../../../utils/SiteContainer.js';
 import '../../Stylesheets/AccountInfo.css';
 import { fetchMFAPreference } from 'aws-amplify/auth'; // Correct import
 
@@ -30,7 +30,8 @@ function AccountInfo() {
                     setUserInfo({
                         name: `${user.given_name} ${user.family_name}`,
                         email: user.email,
-                        role: roleGroups.length > 0 ? roleGroups.join(", ") : "Unknown",
+                        //role: roleGroups.length > 0 ? roleGroups.join(", ") : "Unknown",
+                        role: displayRole,
                         sub: user.sub
                     });
 

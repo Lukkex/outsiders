@@ -12,6 +12,7 @@ const CustomLoginPage = () => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  const { refreshUserData } = useUser();
 
   const handleLogin = async (e) => {
     e.preventDefault();

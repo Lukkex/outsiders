@@ -1,10 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import PrivateRoute from './utils/PrivateRoute';
+import SignedOutRoute from './utils/SignedOutRoute';
+import AccessDenied from './components/Pages/AccessDenied';
 import Home from './components/Pages/Home';
-import SignUp from './components/Pages/SignUp';
-import SignIn from './components/Pages/SignIn';
 import Settings from './components/Pages/Settings';
+import ChangePassword from './components/Pages/ChangePassword';
 import Help from './components/Pages/Help';
+import AboutUs from './components/Pages/AboutUs';
 import Registration from './components/Pages/User/Registration';
 import Scheduling from './components/Pages/User/Scheduling';
 import AdminDashboard from './components/Pages/Admin/AdminDashboard';
@@ -19,15 +22,12 @@ import { Amplify } from 'aws-amplify';
 
 //import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-import awsconfig from './aws-exports';
+import awsmobile from './aws-exports';
 
 // Configure Amplify once with awsExports
-Amplify.configure(awsconfig);
+Amplify.configure(awsmobile);
 
 function App() {
-
-
-  
   return (
  <Router>
           <Routes>
