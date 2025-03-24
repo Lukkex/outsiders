@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signIn, confirmSignIn } from '@aws-amplify/auth';
 import '../Stylesheets/CustomLoginPage.css';
-import { signIn } from '@aws-amplify/auth';
 import { useUser } from '../../context/UserContext';
 
 const CustomLoginPage = () => {
