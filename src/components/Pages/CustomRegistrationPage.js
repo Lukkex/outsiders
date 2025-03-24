@@ -37,11 +37,14 @@ const CustomRegistrationPage = () => {
       await signUp({
         username: email,
         password,
-        ttributes: {
+        options: {
+          userAttributes: {
             email: email,
             given_name: given_name,  
             family_name: family_name, 
           }
+        }
+        
       });
 
       console.log('Registration successful!');
