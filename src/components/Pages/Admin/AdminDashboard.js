@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getSubmittedFormsFromS3 } from '../../../services/formsApi';
 import '../../Stylesheets/AdminDashboard.css';
-import SiteHeader from '../../../utils/SiteHeader';
+import SiteContainer from '../../../utils/SiteContainer.js';
 import { useNavigate } from 'react-router-dom';
 import { uploadData } from '@aws-amplify/storage';
 
@@ -75,8 +75,8 @@ function AdminDashboard() {
     };
 
     return (
-        <div>
-            <SiteHeader />
+        <SiteContainer content = {
+          <div>
             <div className="admin-dashboard">
                 <h1 className="dashboard-title">ADMIN DASHBOARD - VIEW SUBMITTED FORMS</h1>
 
@@ -137,14 +137,15 @@ function AdminDashboard() {
                                 </tr>
                             ))
                         ) : (
-                            <tr>
-                                <td colSpan="6">No forms found</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                                <tr>
+                                    <td colSpan="6">No forms found</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        }/>
     );
 }
 
