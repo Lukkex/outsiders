@@ -19,29 +19,30 @@ function AboutUs() {
     }, []);
 
     return (
-        <SiteContainer content = {
+        <SiteContainer class = "w-[100vw]" content = {
             <FadeInSection>
                 <div className="AboutUs">
                     <br/>
                     <br/>
                     <div className = "flex space-x-4 justify-center items-center">
                         <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
-                            
                             <a href="#AboutUs">About Us!</a>
                         </div>
                         <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
-                            
-                        <a href="#FAQ">FAQs</a>
+                            <a href="#FAQ">FAQs</a>
+                        </div>
+                        <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                            <a href="#Contact">Contact</a>
                         </div>
                     </div>
                     <br/>
                     <br/>
-                    <div class="w-full border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br id = "AboutUs"/>
                     <div class = "flex items-center h-[60vh]">
                         <div class = "w-1/2 flex justify-center">
-                            <img class = "h-[60vh] w-[40vw]" src="https://outsidersfc.com/wp-content/uploads/2018/07/dsc_0600.jpg?w=820"/>
+                            <img class = "h-[60vh] w-[40vw]" src="/images/teamphoto2.jpg"/>
                         </div>
                         <div class = "w-1/2 p-20 font-sarif text-2xl">
                             <p>The Outsiders are a volunteer soccer program that competes against the inmate teams in various prisons across California. <br/><br/> Soccer has been played on the yard for decades and the Outsiders are the most frequent opponent for the host team(s).</p>
@@ -51,7 +52,7 @@ function AboutUs() {
                     </div>
                     <br/>
                     <br/>
-                    <div class="w-full border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br/>
 
@@ -63,19 +64,19 @@ function AboutUs() {
                         </div>
 
                         <div class = "h-[60vh] w-1/2 flex justify-center">
-                            <img class = "w-[40vw]" src="https://outsidersfc.com/wp-content/uploads/2018/07/dario-and-sancerhz.png?w=820"/>
+                            <img class = "w-[40vw]" src="/images/teamphoto3.png"/>
                         </div>
                     </div>
 
                     <br/>
                     <br/>
-                    <div class="w-full border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br/>
 
                     <div class = "flex items-center h-[60vh]">
                         <div class = "w-1/2 flex justify-center">
-                            <img class = "h-[60vh] w-[40vw]" src="https://outsidersfc.com/wp-content/uploads/2018/07/dsc_0407.jpg?w=820"/>
+                            <img class = "h-[60vh] w-[40vw]" src="/images/teamphoto4.jpg"/>
                         </div>
 
                         <div class = "w-1/2 p-20 font-sarif text-2xl">
@@ -86,7 +87,7 @@ function AboutUs() {
                     <br/>
                     <br/>
                     
-                    <div class="w-full border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br id = "FAQ"/>
 
@@ -127,12 +128,30 @@ function AboutUs() {
 
                     <br/>
                     <br/>
-                    <div class="w-full border-t-2 border-gray-400 my-4"/>
+                    
+                    
+                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
+                    <br/>
+                    <br id = "Contact"/>
+
+                    <div>
+                        <div className = "flex justify-center items-center">
+                            <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                                
+                                <p>Contact</p>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class = "w-1/2 p-20 font-sarif text-center justify-center text-xl">
+                            <p>Support email: OutsidersDevTeam@outlook.com</p>
+                        </div>
+                    </div>
+                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br/>
 
                     <div class = "w-full flex justify-center">
-                        <img class = "h-[80vh] w-[60vw]" src="https://outsidersfc.com/wp-content/uploads/2018/07/dsc_0707.jpg?w=820"/>
+                        <img class = "h-[80vh] w-[60vw]" src="/images/teamphoto5.jpg"/>
                     </div>
                     
                     <br/>

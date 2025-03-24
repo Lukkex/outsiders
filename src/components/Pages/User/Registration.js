@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../Stylesheets/App.css'; // Global styles
 import '../../Stylesheets/Registration.css'; // Registration-specific styles
+import '../../Stylesheets/SignUp.css';
 import SiteContainer from '../../../utils/SiteContainer.js';
 import SignaturePad from 'react-signature-canvas'
 import { useRef } from 'react';
@@ -280,7 +281,7 @@ function Registration() {
             <div>
                 <div className = "site-header-break" />
                 <div className="signup-container flex justify-start">
-                    <h1 className="font-semibold">Registration</h1>
+                    <h1 className="font-semibold text-center">Registration</h1>
                     <br />
                     <div className="form-container">
                         {step === 1 && (
