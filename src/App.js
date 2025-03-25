@@ -17,6 +17,8 @@ import AccountInfo from './components/Pages/User/AccountInfo';
 import CustomLoginPage from './components/Pages/CustomLoginPage';
 import CustomRegistrationPage from './components/Pages/CustomRegistrationPage';
 import { UserProvider } from './context/UserContext';
+import CustomSignUpConfirmation from './components/Pages/CustomSignUpConfirmation';
+import MFASetup from './components/Pages/User/MFASetup';
 import { Amplify } from 'aws-amplify';
 
 //import { withAuthenticator } from '@aws-amplify/ui-react';
@@ -45,6 +47,9 @@ function App() {
           <Route path="/viewplayers" element={<PrivateRoute content = {<ViewPlayers />} redirectPage = "/access-denied"/>} />
           <Route path="/accountinfo" element={<SignedOutRoute content = {<AccountInfo />} />} />
           <Route path="/changepassword" element={<SignedOutRoute content = {<ChangePassword />}/>} />
+            <Route path="/setup-mfa" element={<MFASetup />} />
+            <Route path="/confirm-signup" element={<CustomSignUpConfirmation />} />
+            
         </Routes>
       </Router>
     </UserProvider>
