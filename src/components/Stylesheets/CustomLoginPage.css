@@ -1,0 +1,265 @@
+/* src/components/Stylesheets/CustomLoginPage.css */
+
+.custom-login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.custom-login-page .login-card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(72, 150, 172, 0.2);
+    width: 100%;
+    max-width: 450px;
+    overflow: hidden;
+    margin: 20px;
+}
+
+.custom-login-page .login-header {
+    background-color: #4896ac;
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+    border-radius: 15px 15px 0 0;
+}
+
+.custom-login-page .login-header h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.custom-login-page .login-form {
+    padding: 30px;
+}
+
+.custom-login-page .form-group {
+    margin-bottom: 20px;
+}
+
+.custom-login-page .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.custom-login-page .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e5e8;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.custom-login-page .form-control:focus {
+    border-color: #4896ac;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(72, 150, 172, 0.1);
+}
+
+.custom-login-page .login-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #4896ac;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.custom-login-page .login-button:hover {
+    background-color: #3a7a8c;
+    transform: translateY(-2px);
+}
+
+.custom-login-page .login-button:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.custom-login-page .error-message {
+    background-color: #fff2f2;
+    border-left: 4px solid #d32f2f;
+    color: #d32f2f;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.custom-login-page .login-footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.custom-login-page .login-footer a {
+    color: #4896ac;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.custom-login-page .login-footer a:hover {
+    color: #3a7a8c;
+    text-decoration: underline;
+}
+
+/* Add some decorative elements */
+.custom-login-page .login-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(72, 150, 172, 0.1);
+    border-radius: 50%;
+}
+
+.custom-login-page .login-card::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(72, 150, 172, 0.1);
+    border-radius: 50%;
+}
+
+.mfa-form {
+  width: 100%;
+  text-align: center;
+}
+
+.mfa-header {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.mfa-label {
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #555;
+  font-size: 1rem;
+}
+
+.mfa-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.mfa-form .form-control {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.mfa-form .button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.mfa-form .login-button {
+  min-width: 150px;
+}
+
+.forgot-password {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.text-button {
+  background: none;
+  border: none;
+  color: #4896ac;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+.text-button:hover {
+  color: #3a7a8c;
+}
+
+.reset-password-form {
+  width: 100%;
+  padding: 30px;
+  text-align: center;
+}
+
+.reset-password-form .form-group {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.reset-password-form .form-group label {
+  display: block;
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.reset-password-form .form-control {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+.reset-password-form .button-group {
+  margin-top: 25px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.reset-password-form .button-group button {
+  min-width: 140px;
+}
+
+.success-message {
+  background-color: #d4edda;
+  border-left: 4px solid #28a745;
+  color: #155724;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.login-button.secondary {
+  background-color: #6c757d;
+}
+
+.login-button.secondary:hover {
+  background-color: #5a6268;
+}

@@ -67,7 +67,7 @@ async function deleteAccount(username, userPoolId, bucketName) {
 }
 
 const userPoolId = ""; // Replace with Cognito User Pool ID
-const username = ""; // grab the users name and insert here
+const username = ""; // grab the users name (email) and insert here
 const bucketName = ""; // Replace S3 bucket name
 
 deleteAccount(username, userPoolId, bucketName).then((response) => console.log(response));

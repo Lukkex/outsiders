@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.logoimage {
+  padding-top: 1vh;
+  padding-left: 0.6vw;
+  width: 100%;
+  height: auto;
+  max-width: 24vw;
+  display: inline;
+}
+
+h1 {
+  font-size: xx-large;
+  font-size: 1.5vw;
+  text-align: center;
+  display: inline;
+}
+
+/* Adjustable roundness for buttons */
+.rounded-button {
+  border-radius: 8px;
+}
+
+.site-header-break {
+  display: block;
+  height: 100px;
+  height: 3vh;
+}
+
+.site-footer-break {
+  display: block;
+  height: 100px;
+  height: 13.9vh;
+}
+
+/** SITE HEADER **/
+.site-header {
+  width: 100vw;
+}
+
+/* For main buttons at the top of the site */
+.site-header button {
+  /*background-color:#4896ac;*/
+  
+  color: white;
+  border: 1px rgb(18, 67, 95);
+  padding: 10px 20px;
+  border: 1px solid rgb(116, 116, 116);
+  width: 25vw;
+  height: 80px; /* Fallback in case browser support fails */
+  height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
+  min-height: 80px;
+  font-size: x-large; /* Fallback in case browser support fails */
+  font-size: 1.5vw; /* Auto adjusts font-size based on browser-view width */
+  float: left; /* Aligns buttons to the left */
+  cursor: pointer; /* Pointer icon when hovered over */
+  box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
+}
+
+/* For all buttons except the last, this removes the rightmost border (so it isn't doubled) */
+.site-header button:not(:last-child) {
+  border-right: none; 
+}
+
+/* Different background color when hovering over the button */
+.site-header button:hover {
+  background-color: #305b61;
+}
+
+/** SITE FOOTER **/
+.site-footer {
+  width: 100vw;
+  height: 80px; /* Fallback in case browser support fails */
+  height: 2vh; /* Auto adjusts height of buttons based on browser-view height */
+  min-height: 40px;
+}
+
+.site-footer p {
+  color: white;
+  font-size: large; /* Fallback in case browser support fails */
+  font-size: 1vw; /* Auto adjusts font-size based on browser-view width */
+}
+
+/** DROPDOWN MENU **/
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  background-color:#4896ac;
+}
+
+/* Content is hidden by default for dropdown */
+.dropdown-content {
+  z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: #e4e4e4;
+  min-width: 200px;
+  width: 20vw;
+  box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
+  top: 100%; /* Offsets the dropdown menu to be below the button when you hover over it */
+}
+
+/* The links <a></a> inside dropdown */
+.dropdown-content a {
+  text-decoration: none;
+  color: black;
+  padding: 14px 18px;
+  display: block;
+}
+
+/* Change color of dropdown content when hovered over */
+.dropdown-content a:hover {
+  background-color: #cecece;
+}
+
+/* Shows the dropdown menu when hovered over */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Changes background color when the dropdown content is shown */
+.dropdown:hover .dropdown-button {
+  background-color: #305b61;
+}
+
+/* Site main body container */
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(75.3vh);    width: 100%;
+  flex-direction: column;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(207 250 254))
+}
+
+/* Team Photo 1 Background */
+.Home {
+  background-image: url(../../../public/images/teamphoto1.png);
+  background-repeat: no-repeat;
+  background-position: center; 
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+/* Cyan gradient for buttons and sections */
+.cyan-gradient {
+  background-image: linear-gradient(to bottom, rgba(95, 197, 211, 255), rgba(8, 145, 178, 255));
+}
+
+.registration-page {
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+.registration-page h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.navigation-buttons button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.navigation-buttons button:hover {
+  background-color: #0073e6;
+  color: #fff;
+}
+
+.settings-container .rounded-button {
+  width: 100%;
+  padding: 100px;
+  background-color: #4896ac;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: 0.3s ease-in-out;
+}
+
+.Deletion {
+  width: 100%;
+  padding: 10px;
+  background-color: #ee0f0f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: 0.3s ease-in-out;
+}
+
+.settings-container .rounded-button:hover {
+  background-color: #305b61;
+  transform: scale(1.05);
+}
+
+
+.settings-container .admin-link {
+  text-decoration: none;
+  display: block;
+}

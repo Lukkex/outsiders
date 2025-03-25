@@ -1,7 +1,7 @@
-import '../../../App.css'; //global styles
-import '../../Stylesheets/Scheduling.css';
-import { useState, useEffect } from 'react';
-import SiteHeader from '../../SiteHeader';
+import '../../Stylesheets/App.css'; //global styles
+import styles from '../../Stylesheets/Scheduling.module.css';
+import {useState , useEffect } from 'react';
+import SiteContainer from '../../../utils/SiteContainer.js';
 
 // Meeting dummy data simulating backend tables
 const dummyMeetingTimes = [
@@ -62,9 +62,9 @@ function Scheduling() {
     // Returns table of available meeting times, allowing for user selection
     function Schedule() {
         return (
-        <div className='form-container'>
-            <table className='schedule-table'>
-                <caption classname='schedule-table-header'>Select Available Dates</caption>
+        <div className={styles.tableContainer}>
+            <table className={styles.scheduleTable}>
+                <caption classname={styles.scheduleTableHeader}>Select Available Dates</caption>
                 <thead>
                     <tr>
                         <th>Location</th>
@@ -88,29 +88,31 @@ function Scheduling() {
                     ))}
                 </tbody>
             </table>
-            <button onClick={handleSave} className="save-button">
+            <button onClick={handleSave} className={styles.saveButton}>
                 Confirm Selection
             </button>
-            {showSaved && <div className="saved-message">Dates saved!</div>}
-            {showNoSelection && <div className="error-message">Please select at least one date</div>}
+            {showSaved && <div className={styles.savedMessage}>Dates saved!</div>}
+            {showNoSelection && <div className={styles.errorMessage}>Please select at least one date</div>}
         </div>
         );
     }
 
     return (
-        <div>
-            <SiteHeader className="navbar"></SiteHeader>
-            <br></br>
-            <br></br>
-            <br></br>
-            <div className="alert-container">
-                <h1>Please Complete Registration to Continue.</h1>
-                <button onClick={() => hideComponent("shScheduling")} className="toggle-button">[debug] Toggle Registration </button>
+        <SiteContainer content = {
+            <div>
+                <br></br>
+                <br></br>
+                <br></br>
+                <div className={styles.alertContainer}>
+                    <h1>Please Complete Registration to Continue.</h1>
+                    <button onClick={() => hideComponent("shScheduling")} className={styles.toggleButton}>[debug] Toggle Registration </button>
+                </div>
+                <br></br>
+                <br></br>
+                {shScheduling && <Schedule />}
+                <br></br>
             </div>
-            <br></br>
-            <br></br>
-            {shScheduling && <Schedule />}
-        </div>
+        }/>
     );
 }
 

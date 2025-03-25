@@ -1,0 +1,13 @@
+{
+    "AppSyncApiName": "outsiders",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authoutsiders782de14c",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "S3DeploymentBucket": "amplify-outsiders-dev-37233-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/c3cd93a4c11a60f5175a38c3d9083f16e5c2b32f"
+}
