@@ -2,7 +2,7 @@
         import '../Stylesheets/Settings.css'; // Create this new file for Settings-specific styles
         import SiteContainer from '../../utils/SiteContainer';
         import { useNavigate, Link } from "react-router-dom";
-        import { signIn, confirmSignIn, signOut, resetPassword, confirmResetPassword } from '@aws-amplify/auth';
+        import {confirmResetPassword } from '@aws-amplify/auth';
         import React, { useState } from 'react';
 
         function ChangePassword() {
