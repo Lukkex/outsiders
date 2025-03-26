@@ -95,15 +95,15 @@ async function updateUserInfo(userID, firstName, lastName, email) {
     //Check which field is being updated, add to updateField only if value is provided
     if (firstName) {
         updateFields.push("firstName = :fn"); //:fn is a placehold that hold new value for firstName
-        expressionAttributeValues[":fn"] = firstName;
+        expressionAttributeValues[":fn"] = {S:firstName};
     }
     if (lastName) {
         updateFields.push("lastName = :ln");
-        expressionAttributeValues[":ln"] = lastName;
+        expressionAttributeValues[":ln"] = {S:lastName};
     }
     if (email) {
         updateFields.push("email = :email");
-        expressionAttributeValues[":email"] = email;
+        expressionAttributeValues[":email"] = {S:email};
     }
     //Ensures field are not empty
     if (updateFields.length === 0) {
@@ -114,7 +114,7 @@ async function updateUserInfo(userID, firstName, lastName, email) {
 
     const params = {
         TableName: "userTable",
-        Key: { userID: userID }, 
+        Key: { userID: {S:userID} }, 
         UpdateExpression: updateExpression,
         ExpressionAttributeValues: expressionAttributeValues,
         ReturnValues: "ALL_NEW" //Returns the updated items
@@ -134,7 +134,7 @@ async function updateUserInfo(userID, firstName, lastName, email) {
 async function deleteUser(userID) {
     const params = {
         TableName: "userTable",
-        Key: {userID: userID}
+        Key: {userID: {S: userID}}
     };
 
     try {

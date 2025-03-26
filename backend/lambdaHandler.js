@@ -31,9 +31,12 @@ export const handler = async (event, context) => {
         body = await getUserList(); 
         break;
 
-      case "PUT /User":
-        const {userID, firstName, lastName, email } = JSON.parse(event.body);
-        body = await updateUserInfo(userID, {firstName, lastName, email});
+      case "PUT /User/{userID}":
+        const userData = JSON.parse(event.body);
+        body = await updateUserInfo(event.pathParameters.userID, 
+          userData.firstName, 
+          userData.lastName, 
+          userData.email);
         break;
 
       default:
