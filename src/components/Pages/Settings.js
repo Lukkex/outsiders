@@ -35,9 +35,11 @@ function Settings() {
                                         Help
                                     </button>
                                 </Link>
-                                <button type="submit" className="settings-button delete-button">
-                                    Delete Account
-                                </button>
+                                <Link to="/useraccountdeletion" className="settings-link">
+                                    <button type="submit" className="settings-button">
+                                        Delete Account
+                                    </button>
+                                </Link>
                             </div>
                         </form>
                     </div>

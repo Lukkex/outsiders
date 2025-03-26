@@ -19,6 +19,7 @@ import CustomRegistrationPage from './components/Pages/CustomRegistrationPage';
 import { UserProvider } from './context/UserContext';
 import CustomSignUpConfirmation from './components/Pages/CustomSignUpConfirmation';
 import MFASetup from './components/Pages/User/MFASetup';
+import UserAccountDeletion from './components/Pages/User/UserAccountDeletion';
 import { Amplify } from 'aws-amplify';
 
 //import { withAuthenticator } from '@aws-amplify/ui-react';
@@ -49,6 +50,7 @@ function App() {
           <Route path="/changepassword" element={<SignedOutRoute content = {<ChangePassword />}/>} />
             <Route path="/setup-mfa" element={<MFASetup />} />
             <Route path="/confirm-signup" element={<CustomSignUpConfirmation />} />
+            <Route path="/useraccountdeletion" element={<UserAccountDeletion/>} />
             
         </Routes>
       </Router>
