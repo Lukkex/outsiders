@@ -1,10 +1,10 @@
-import { DeleteItemCommand, 
+const { DeleteItemCommand, 
     GetItemCommand, 
     PutItemCommand, 
     ScanCommand, 
-    UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+    UpdateItemCommand } = require ('@aws-sdk/client-dynamodb');
     
-import { dynamoDB } from '../awsConfig.js';
+const { dynamoDB } = require ('../awsConfig.js');
 
 
 async function checkUserExists(userID) {
@@ -147,5 +147,5 @@ async function deleteUser(userID) {
     }
 }
 
-export { checkUserExists, addUserToTable, getUserList, deleteUser, updateUserInfo, getUserByID};
+module.exports = { checkUserExists, addUserToTable, getUserList, deleteUser, updateUserInfo, getUserByID};
 
