@@ -1,7 +1,7 @@
 // src/components/Pages/Settings.js
 import '../Stylesheets/App.css';
 import '../Stylesheets/Settings.css'; // Create this new file for Settings-specific styles
-import SiteHeader from '../../utils/SiteHeader';
+import SiteContainer from '../../utils/SiteContainer.js';
 import { useNavigate, Link } from "react-router-dom";
 
 function Settings() {
@@ -13,41 +13,37 @@ function Settings() {
     };
 
     return (
-        <div>
-            <SiteHeader />
-            <div className="settings-container">
-                <h1 className="settings-title">Settings</h1>
-                <div className="settings-form-container">
-                    <form onSubmit={handleSubmit}>
-                        <div className="settings-button-group">
-                            <Link to="/admindashboard" className="settings-link">
-                                <button type="button" className="settings-button">
-                                    Admin Dashboard
+        <SiteContainer content = {
+            <div>
+                <div className="settings-container">
+                    <h1 className="settings-title">Settings</h1>
+                    <div className="settings-form-container">
+                        <form onSubmit={handleSubmit}>
+                            <div className="settings-button-group">
+                                <Link to="/accountinfo" className="settings-link">
+                                    <button type="button" className="settings-button">
+                                        Account Information
+                                    </button>
+                                </Link>
+                                <Link to="/changepassword">
+                                    <button type="submit" className="settings-button">
+                                        Change Password
+                                    </button>
+                                </Link>
+                                <Link to="/help" className="settings-link">
+                                    <button type="button" className="settings-button">
+                                        Help
+                                    </button>
+                                </Link>
+                                <button type="submit" className="settings-button delete-button">
+                                    Delete Account
                                 </button>
-                            </Link>
-                            <Link to="/accountinfo" className="settings-link">
-                                <button type="button" className="settings-button">
-                                    Account Information
-                                </button>
-                            </Link>
-                            <Link to="/changepassword">
-                                <button type="submit" className="settings-button">
-                                    Change Password
-                                </button>
-                            </Link>
-                            <Link to="/help" className="settings-link">
-                                <button type="button" className="settings-button">
-                                    Help
-                                </button>
-                            </Link>
-                            <button type="submit" className="settings-button delete-button">
-                                Delete Account
-                            </button>
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        }/>
     );
 }
 
