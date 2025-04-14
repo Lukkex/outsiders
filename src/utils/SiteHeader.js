@@ -20,15 +20,15 @@ function SiteHeader() {
             </div>
             
             <div className="site-header font-semibold bg-cyan-700 bg-opacity-60">
-                <Link to="/"><button className="rounded-button cyan-gradient">HOME</button></Link>
+                <Link to="/"><button className="rounded-button cyan-gradient xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">HOME</button></Link>
                 {!userInfo.role.includes("admin") ? (
-                    <Link to="/registration"><button className="rounded-button cyan-gradient">REGISTRATION</button></Link>
+                    <Link to="/registration"><button className="rounded-button cyan-gradient xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">REGISTRATION</button></Link>
                 ) : (
-                    <Link to="/admindashboard"><button className="rounded-button cyan-gradient">ADMIN DASH</button></Link>
+                    <Link to="/admindashboard"><button className="rounded-button cyan-gradient xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">ADMIN DASH</button></Link>
                 )}
-                <Link to={schedPage}><button className="rounded-button cyan-gradient">SCHEDULING</button></Link>
+                <Link to={schedPage}><button className="rounded-button cyan-gradient xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">SCHEDULING</button></Link>
                 <div className="dropdown">
-                    <button className="rounded-button cyan-gradient dropdown-button">ACCOUNT</button>
+                    <button className="rounded-button cyan-gradient dropdown-button xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">ACCOUNT</button>
                     <div className="dropdown-content">
                         <Link to="/settings">Settings</Link>
                         <SignOutButton />

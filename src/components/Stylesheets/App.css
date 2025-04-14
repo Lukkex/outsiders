@@ -52,8 +52,11 @@ h1 {
   height: 80px; /* Fallback in case browser support fails */
   height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
   min-height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   font-size: x-large; /* Fallback in case browser support fails */
-  font-size: 1.5vw; /* Auto adjusts font-size based on browser-view width */
   float: left; /* Aligns buttons to the left */
   cursor: pointer; /* Pointer icon when hovered over */
   box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
@@ -87,6 +90,12 @@ h1 {
 	.site-header {
 	}
 
+  .site-header button {
+    font-size: 3vw;
+    height: 6vh; /* Auto adjusts height of buttons based on browser-view height */
+    min-height: 30px;
+  }
+
   .site-container {
     width: 100%;
   }
@@ -108,7 +117,7 @@ h1 {
   display: none;
   position: absolute;
   background-color: #e4e4e4;
-  min-width: 200px;
+  min-width: 95px;
   width: 20vw;
   box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
   top: 100%; /* Offsets the dropdown menu to be below the button when you hover over it */
@@ -116,6 +125,7 @@ h1 {
 
 /* The links <a></a> inside dropdown */
 .dropdown-content a {
+  font-size: small;
   text-decoration: none;
   color: black;
   padding: 14px 18px;
