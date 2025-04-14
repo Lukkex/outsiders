@@ -25,6 +25,10 @@
     margin-left: 1rem;
 }
 
+.shortcut-buttons-container p {
+    width: 20vw;
+}
+
 .content-section {
     min-height: auto;
     justify-content: center;
@@ -33,11 +37,16 @@
 }
 
 .content-section img {
+    width: 50vw;
     height: auto;
 }
 
 .content-section div {
 
+}
+
+.FAQs {
+    width: 50vw;
 }
 
 /* MOBILE VIEW */
@@ -50,7 +59,7 @@
 
     .shortcut-buttons-container div {
         margin-top: 1rem;
-        width: 50vw;
+        width: 60vw;
     }
 
     .content-section {
@@ -68,5 +77,9 @@
         width: 90vw;
         min-width: 480px;
         max-width: 100%;
+    }
+
+    .FAQs {
+        width: 100vw;
     }
 }

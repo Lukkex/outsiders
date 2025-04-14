@@ -92,7 +92,7 @@ function AboutUs() {
                     <br id = "FAQ"/>
 
                     <div className = "flex justify-center items-center">
-                        <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                        <div className="content-section justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
                             
                             <p>FAQs</p>
                         </div>
@@ -100,7 +100,7 @@ function AboutUs() {
                     <br/>
                     <br/>
 
-                    <div class = "w-1/2 p-20 font-sarif justify-center text-white text-xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                    <div class = "FAQs p-20 font-sarif justify-center text-white text-xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
                         <p class = "text-2xl"><strong><u>What is the standard of play like among the prison teams?</u></strong></p>
                         <br/>
                         <p>The standard of play is equivalent to a good high school program. A few of the inmate team have played at a higher level and everyone is in good shape so the games are very competitive.</p>
@@ -136,13 +136,13 @@ function AboutUs() {
 
                     <div>
                         <div className = "flex justify-center items-center">
-                            <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                            <div className="content-section justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
                                 
                                 <p>Contact</p>
                             </div>
                         </div>
                         <br/>
-                        <div class = "w-1/2 p-20 font-sarif text-center justify-center text-xl">
+                        <div class = "content-section p-20 font-sarif text-center justify-center text-xl">
                             <p>Support email: OutsidersDevTeam@outlook.com</p>
                         </div>
                     </div>
@@ -150,14 +150,14 @@ function AboutUs() {
                     <br/>
                     <br/>
 
-                    <div class = "w-full flex justify-center">
-                        <img class = "h-[80vh] w-[60vw]" src="/images/teamphoto5.jpg"/>
+                    <div class = "content-section flex justify-center">
+                        <img class = "" src="/images/teamphoto5.jpg"/>
                     </div>
                     
                     <br/>
                     <br/>
 
-                    <div class = "text-center w-1/2 p-5 font-sarif text-3xl cyan-gradient text-white">
+                    <div class = "text-center content-section p-5 font-sarif text-3xl cyan-gradient text-white">
                         <p>We look forward to seeing you out there on the field!</p></div>  
 
                     <br/>
