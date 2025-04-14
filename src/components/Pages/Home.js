@@ -30,14 +30,14 @@ function Home() {
 
                 <FadeInSection duration={3500}>
                     {!isAdmin ? (
-                        <div class="text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
-                            <p>New here? Head over to <Link to="/registration" class="underline font-semibold">registration</Link> to get started.</p>
+                        <div class="xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                            <p>New here?<br/>Head over to <Link to="/registration" class="underline font-semibold">registration</Link> to get started.</p>
                         </div>
                     ) 
                     : 
                     (
-                        <div class="text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
-                            <p>Welcome Admin. Click <Link to="/admindashboard" class="underline font-semibold">here</Link> access your dashboard.</p>
+                        <div class="xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                            <p>Welcome Admin. <br/>Click <Link to="/admindashboard" class="underline font-semibold">here</Link> access your dashboard.</p>
                         </div>
                     )}
 

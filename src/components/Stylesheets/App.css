@@ -83,6 +83,15 @@ h1 {
   font-size: 1vw; /* Auto adjusts font-size based on browser-view width */
 }
 
+@media (max-width: 768px) {
+	.site-header {
+	}
+
+  .site-container {
+    width: 100%;
+  }
+}
+
 /** DROPDOWN MENU **/
 .dropdown {
   position: relative;
