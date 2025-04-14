@@ -346,7 +346,7 @@ function Registration() {
                                                 onChange={handleFormChange}
                                                 checked={selectedForms.includes(form.id)}
                                             />
-                                            <label>{form.name}</label>
+                                            <label>{" " + form.name}</label>
                                         </div>
                                     ))
                                 ) : (
@@ -418,7 +418,7 @@ function Registration() {
                                     <t className="font-nobold"></t>
                                     <t className="font-semibold">Signature: </t>
                                     <SignaturePad ref={sigCanvas} penColor='Black'
-                                    canvasProps={{width: 360, height: 120, className: 'sigCanvas'}}
+                                    canvasProps={{width: 340, height: 120, className: 'sigCanvas'}}
                                     />
                                 <button className="rounded-button mt-3" onClick={handleClear}>
                                     Clear Signature
