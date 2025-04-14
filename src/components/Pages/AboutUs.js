@@ -24,14 +24,14 @@ function AboutUs() {
                 <div className="AboutUs">
                     <br/>
                     <br/>
-                    <div className = "flex space-x-4 justify-center items-center">
-                        <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                    <div className = "shortcut-buttons-container flex justify-center items-center">
+                        <div className="justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
                             <a href="#AboutUs">About Us!</a>
                         </div>
-                        <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                        <div className="justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
                             <a href="#FAQ">FAQs</a>
                         </div>
-                        <div className="w-[20vw] justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
+                        <div className="justify-center text-white text-center text-3xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
                             <a href="#Contact">Contact</a>
                         </div>
                     </div>
@@ -40,9 +40,9 @@ function AboutUs() {
                     <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br id = "AboutUs"/>
-                    <div class = "flex items-center h-[60vh]">
+                    <div class = "content-section flex items-center">
                         <div class = "w-1/2 flex justify-center">
-                            <img class = "h-[60vh] w-[40vw]" src="/images/teamphoto2.jpg"/>
+                            <img class = "" src="/images/teamphoto2.jpg"/>
                         </div>
                         <div class = "w-1/2 p-20 font-sarif text-2xl">
                             <p>The Outsiders are a volunteer soccer program that competes against the inmate teams in various prisons across California. <br/><br/> Soccer has been played on the yard for decades and the Outsiders are the most frequent opponent for the host team(s).</p>
@@ -56,15 +56,15 @@ function AboutUs() {
                     <br/>
                     <br/>
 
-                    <div class = "flex items-center h-[60vh]">
+                    <div class = "content-section flex items-center">
                         <div class = "w-1/2 p-20 font-sarif text-2xl">
                             <p>The Sacramento branch of the Outsiders plays at Sacramento State Prison in Folsom. <br/> <br/> The team plays once a month on a Saturday (9 &#8211; 1 pm) and is open to players of all ages and abilities.</p>
                             <br/> 
                             <p><strong>**PLEASE NOTE**</strong>: Although we are always looking for new players, everyone must be processed on a game-by-game basis. <br/> <br/> Part of this processing requires submitting information such as your driving license and social security number. <br/> <br/> Whilst all data is handled <em><u>extremely</u></em> securely, this requirement is non-negotiable and standard practice for all CSP-SAC volunteer programs.</p>
                         </div>
 
-                        <div class = "h-[60vh] w-1/2 flex justify-center">
-                            <img class = "w-[40vw]" src="/images/teamphoto3.png"/>
+                        <div class = "w-1/2 flex justify-center">
+                            <img class = "" src="/images/teamphoto3.png"/>
                         </div>
                     </div>
 
@@ -74,9 +74,9 @@ function AboutUs() {
                     <br/>
                     <br/>
 
-                    <div class = "flex items-center h-[60vh]">
+                    <div class = "content-section flex items-center">
                         <div class = "w-1/2 flex justify-center">
-                            <img class = "h-[60vh] w-[40vw]" src="/images/teamphoto4.jpg"/>
+                            <img class = "" src="/images/teamphoto4.jpg"/>
                         </div>
 
                         <div class = "w-1/2 p-20 font-sarif text-2xl">
