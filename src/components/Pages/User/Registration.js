@@ -306,7 +306,7 @@ function Registration() {
                         {step === 2 && isFolsomSelected && (
                             <div>
                                 <h2 className="font-semibold">Notice</h2>
-                                <h3>In accordance with the California Department of Corrections and Rehabilitation (CDCR) California Code of Regulations, Title 15 Section 3406, and Department Operations Manual Section 33010.25.1, CDCR 2189 must be completed each time an employee becomes aware of a relative or person with whom the employee has/had a personal or business relationship who has been committed or transferred to the jurisdiction of CDCR. Do you know anyone who has been incarcerated or is on parole in the CDCR system?</h3>
+                                <h3>In accordance with the California Department of Corrections and Rehabilitation (CDCR) California Code of Regulations, Title 15 Section 3406, and Department Operations Manual Section 33010.25.1, CDCR 2189 must be completed each time an individual becomes aware of a relative or person with whom the individual has/had a personal or business relationship who has been committed or transferred to the jurisdiction of CDCR.<br/><br/>Do you know anyone who has been incarcerated or is on parole in the CDCR system?</h3>
                                 <br></br>
                                 <label>
                                     <input
@@ -346,7 +346,7 @@ function Registration() {
                                                 onChange={handleFormChange}
                                                 checked={selectedForms.includes(form.id)}
                                             />
-                                            <label>{form.name}</label>
+                                            <label>{" " + form.name}</label>
                                         </div>
                                     ))
                                 ) : (
@@ -418,7 +418,7 @@ function Registration() {
                                     <t className="font-nobold"></t>
                                     <t className="font-semibold">Signature: </t>
                                     <SignaturePad ref={sigCanvas} penColor='Black'
-                                    canvasProps={{width: 360, height: 120, className: 'sigCanvas'}}
+                                    canvasProps={{width: 340, height: 120, className: 'sigCanvas'}}
                                     />
                                 <button className="rounded-button mt-3" onClick={handleClear}>
                                     Clear Signature

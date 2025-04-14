@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.contact-container{
+  width: 640px;
+}
+
+/* MOBILE VIEW */
+@media (max-width: 768px) {
+  .contact-container{
+    width: 80vw;
+  }
+}
