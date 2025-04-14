@@ -415,10 +415,10 @@ function Registration() {
                                     onChange={handleInputChange} 
                                     placeholder="Enter Full Name" 
                                     />
-                                    <t className="font-nobold"></t>
+                                    <t className="font-nobold"></t><br/><br/>
                                     <t className="font-semibold">Signature: </t>
                                     <SignaturePad ref={sigCanvas} penColor='Black'
-                                    canvasProps={{width: 340, height: 120, className: 'sigCanvas'}}
+                                    canvasProps={{width: 340, height: 120, className: 'sigCanvas border border-black'}}
                                     />
                                 <button className="rounded-button mt-3" onClick={handleClear}>
                                     Clear Signature
