@@ -6,6 +6,13 @@ const awsmobile = {
     "aws_appsync_graphqlEndpoint": "https://ksbpsa4yyrbi7ejhrrrx5p2age.appsync-api.us-west-1.amazonaws.com/graphql",
     "aws_appsync_region": "us-west-1",
     "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
+    "aws_cloud_logic_custom": [
+        {
+            "name": "userdataapi",
+            "endpoint": "https://f1z25x3dj5.execute-api.us-west-1.amazonaws.com/dev",
+            "region": "us-west-1"
+        }
+    ],
     "aws_cognito_identity_pool_id": "us-west-1:4820a351-3879-423b-93e0-6a28b3e92d4e",
     "aws_cognito_region": "us-west-1",
     "aws_user_pools_id": "us-west-1_gp60TrWKN",
@@ -32,7 +39,14 @@ const awsmobile = {
         "EMAIL"
     ],
     "aws_user_files_s3_bucket": "outsidersc28d06dc80124b6897e22ab7da83523e37233-dev",
-    "aws_user_files_s3_bucket_region": "us-west-1"
+    "aws_user_files_s3_bucket_region": "us-west-1",
+    "aws_dynamodb_all_tables_region": "us-west-1",
+    "aws_dynamodb_table_schemas": [
+        {
+            "tableName": "eventsTable-dev",
+            "region": "us-west-1"
+        }
+    ]
 };
 
 

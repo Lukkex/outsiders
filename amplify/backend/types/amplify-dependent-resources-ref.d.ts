@@ -3,6 +3,11 @@ export type AmplifyDependentResourcesAttributes = {
     "outsiders": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string"
+    },
+    "userdataapi": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
     }
   },
   "auth": {
@@ -17,6 +22,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "eventsFunction": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "outsiders4caa281eCreateAuthChallenge": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -47,6 +59,14 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
+    "eventsTable": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
+    },
     "files": {
       "BucketName": "string",
       "Region": "string"

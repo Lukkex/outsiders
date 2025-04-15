@@ -23,6 +23,20 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync"
+    },
+    "userdataapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "eventsFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -66,6 +80,25 @@
     }
   },
   "function": {
+    "eventsFunction": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "eventsTable"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "outsiders4caa281eCreateAuthChallenge": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -88,6 +121,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_eventsFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "eventsFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_eventsFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "eventsFunction"
+        }
+      ]
+    },
     "AMPLIFY_function_outsiders4caa281eCreateAuthChallenge_deploymentBucketName": {
       "usedBy": [
         {
@@ -170,6 +219,10 @@
     }
   },
   "storage": {
+    "eventsTable": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
     "files": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

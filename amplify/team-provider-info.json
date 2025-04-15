@@ -10,7 +10,8 @@
       "StackName": "amplify-outsiders-dev-37233",
       "StackId": "arn:aws:cloudformation:us-west-1:242201266697:stack/amplify-outsiders-dev-37233/e7017f90-e75b-11ef-a7fa-020c0912ad7b",
       "AmplifyAppId": "d3371hvyw48n2r",
-      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -37,13 +38,22 @@
           "GROUP": "basic_users",
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
           "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-6b696859527638674371-build.zip"
-        }
+        },
+        "eventsFunction": {
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/eventsFunction-39535a342b3263582b49-build.zip"
+        },
+        "rsvpFunction": {},
+        "OutsidersDB": {},
+        "userTable": {}
       },
       "api": {
-        "outsiders": {}
+        "outsiders": {},
+        "userdataapi": {}
       },
       "storage": {
-        "files": {}
+        "files": {},
+        "eventsTable": {}
       }
     }
   }

@@ -199,6 +199,27 @@
         }
       }
     },
+    "APIGatewayAuthStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
+        "Parameters": {
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "env": "dev",
+          "userdataapi": {
+            "Fn::GetAtt": [
+              "apiuserdataapi",
+              "Outputs.ApiId"
+            ]
+          }
+        }
+      }
+    },
     "AuthTriggerCustomLambdaStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -258,6 +279,27 @@
           },
           "S3DeploymentBucket": "amplify-outsiders-dev-37233-deployment",
           "S3DeploymentRootKey": "amplify-appsync-files/c3cd93a4c11a60f5175a38c3d9083f16e5c2b32f",
+          "env": "dev"
+        }
+      }
+    },
+    "apiuserdataapi": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/userdataapi-cloudformation-template.json",
+        "Parameters": {
+          "functioneventsFunctionName": {
+            "Fn::GetAtt": [
+              "functioneventsFunction",
+              "Outputs.Name"
+            ]
+          },
+          "functioneventsFunctionArn": {
+            "Fn::GetAtt": [
+              "functioneventsFunction",
+              "Outputs.Arn"
+            ]
+          },
           "env": "dev"
         }
       }
@@ -373,6 +415,29 @@
         }
       }
     },
+    "functioneventsFunction": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/eventsFunction-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/eventsFunction-39535a342b3263582b49-build.zip",
+          "storageeventsTableName": {
+            "Fn::GetAtt": [
+              "storageeventsTable",
+              "Outputs.Name"
+            ]
+          },
+          "storageeventsTableArn": {
+            "Fn::GetAtt": [
+              "storageeventsTable",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "dev"
+        }
+      }
+    },
     "storagefiles": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -402,6 +467,18 @@
           "s3PermissionsAuthenticatedUploads": "s3:PutObject",
           "s3PermissionsGuestPublic": "DISALLOW",
           "s3PermissionsGuestUploads": "DISALLOW",
+          "env": "dev"
+        }
+      }
+    },
+    "storageeventsTable": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/storage/eventsTable-cloudformation-template.json",
+        "Parameters": {
+          "tableName": "eventsTable",
+          "partitionKeyName": "eventId",
+          "partitionKeyType": "S",
           "env": "dev"
         }
       }
