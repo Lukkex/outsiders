@@ -2,9 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;  
-    width: 100vw;
-    flex-direction: column;
-    background-image: linear-gradient(to bottom, rgb(255, 255, 255), rgb(207 250 254))  
+    width: 100%;
+    flex-direction: column; 
 }
 
 .AboutUs img {
@@ -13,4 +12,73 @@
     border-radius: 1.5rem; 
     background-color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 139, 139, 0.9);
+}
+
+.shortcut-buttons-container {
+    display: flex;
+    justify-content: center;
+}
+
+.shortcut-buttons-container div {
+    width: 20vw;
+    margin-left: 1rem;
+}
+
+.shortcut-buttons-container p {
+    width: 20vw;
+}
+
+.content-section {
+    min-height: auto;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.content-section img {
+    width: 50vw;
+    height: auto;
+}
+
+.content-section div {
+
+}
+
+.FAQs {
+    width: 50vw;
+}
+
+/* MOBILE VIEW */
+@media (max-width: 996px) {
+    .shortcut-buttons-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .shortcut-buttons-container div {
+        margin-top: 1rem;
+        width: 60vw;
+    }
+
+    .content-section {
+        flex-direction: column;
+    }
+
+    .content-section img {
+        width: 80vw;
+        min-width: 360px;
+        height: auto;
+        max-width: 100%;
+    }
+
+    .content-section div {
+        width: 90vw;
+        min-width: 480px;
+        max-width: 100%;
+    }
+
+    .FAQs {
+        width: 100vw;
+    }
 }

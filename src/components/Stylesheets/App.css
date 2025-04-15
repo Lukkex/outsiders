@@ -8,6 +8,7 @@
   width: 100%;
   height: auto;
   max-width: 24vw;
+  min-width: 300px;
   display: inline;
 }
 
@@ -37,24 +38,28 @@ h1 {
 
 /** SITE HEADER **/
 .site-header {
-  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 /* For main buttons at the top of the site */
 .site-header button {
   /*background-color:#4896ac;*/
-  
   color: white;
   border: 1px rgb(18, 67, 95);
   padding: 10px 20px;
-  border: 1px solid rgb(116, 116, 116);
-  width: 25vw;
+  border: 1px solid rgb(116, 116, 116); 
   height: 80px; /* Fallback in case browser support fails */
   height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
+  width: 24.8vw;
   min-height: 80px;
-  font-size: x-large; /* Fallback in case browser support fails */
-  font-size: 1.5vw; /* Auto adjusts font-size based on browser-view width */
-  float: left; /* Aligns buttons to the left */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: x-large; /* Fallback in case browser support fails */ 
   cursor: pointer; /* Pointer icon when hovered over */
   box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
 }
@@ -71,16 +76,19 @@ h1 {
 
 /** SITE FOOTER **/
 .site-footer {
-  width: 100vw;
+  width: 100%;
   height: 80px; /* Fallback in case browser support fails */
   height: 2vh; /* Auto adjusts height of buttons based on browser-view height */
-  min-height: 40px;
+  min-height: 50px;
 }
 
 .site-footer p {
   color: white;
   font-size: large; /* Fallback in case browser support fails */
-  font-size: 1vw; /* Auto adjusts font-size based on browser-view width */
+}
+
+.site-container {
+  width: 100%;
 }
 
 /** DROPDOWN MENU **/
@@ -99,14 +107,15 @@ h1 {
   display: none;
   position: absolute;
   background-color: #e4e4e4;
-  min-width: 200px;
-  width: 20vw;
+  min-width: 95px;
+  width: 24.5vw;
   box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
   top: 100%; /* Offsets the dropdown menu to be below the button when you hover over it */
 }
 
 /* The links <a></a> inside dropdown */
 .dropdown-content a {
+  font-size: small;
   text-decoration: none;
   color: black;
   padding: 14px 18px;
@@ -133,7 +142,8 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(75.3vh);    width: 100%;
+  height: 100vh;
+  width: 100%;
   flex-direction: column;
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(207 250 254))
 }
@@ -210,4 +220,50 @@ h1 {
 .settings-container .admin-link {
   text-decoration: none;
   display: block;
+}
+
+/* MOBILE VIEW */
+@media (max-width: 768px) {
+	.site-header {
+	}
+
+  .logoimage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100vw;
+    max-height: auto;
+    padding: 6vw;
+  }
+
+  .site-header button {
+    width: 24.5vw;
+    font-size: 3vw;
+    height: 6vh; /* Auto adjusts height of buttons based on browser-view height */
+    min-height: 30px;
+  }
+
+  .site-container {
+    width: 100%;
+  }
+
+  .site-footer {
+    width: 100%;
+    height: 80px; /* Fallback in case browser support fails */
+    height: 10vh; /* Auto adjusts height of buttons based on browser-view height */
+    min-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .site-footer p {
+    color: white;
+    font-size: large; /* Fallback in case browser support fails */
+  }
+
+  .main-container {
+    height: 73vh;
+  }
 }
