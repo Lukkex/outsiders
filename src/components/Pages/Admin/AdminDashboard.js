@@ -83,6 +83,7 @@ function AdminDashboard() {
                 <div className="p-4 border rounded shadow max-w-md mx-auto mb-4">
                     <h2 className="text-xl font-semibold mb-2">Upload New Form</h2>
                     <input
+                        data-testid="file-input" //jest testing
                         type="file"
                         accept="application/pdf"
                         onChange={handleFileChange}
@@ -110,7 +111,6 @@ function AdminDashboard() {
                     />
                     <button onClick={handleFilterChange}>Filter</button>
                     <button onClick={handleSort}>Sort by Most Recent</button>
-                    <button onClick={() => navigate('/viewplayers')}>View Players</button>
                 </div>
 
                 <table>
