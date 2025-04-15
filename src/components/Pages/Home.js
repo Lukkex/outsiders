@@ -31,7 +31,7 @@ function Home() {
                 <FadeInSection duration={3500}>
                     {!isAdmin ? (
                         <div class="xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl cyan-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-cyan-900 bg-cyan-600">
-                            <p>New here?<br/>Head over to <Link to="/registration" class="underline font-semibold">registration</Link> to get started.</p>
+                            <p>New here?<br/>Head over to <Link to="/registration" class="underline font-semibold">forms</Link> to get started.</p>
                         </div>
                     ) 
                     : 
