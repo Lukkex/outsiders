@@ -13,7 +13,7 @@ function SiteHeader() {
 
     return (
         <div>
-            <div className="w-full bg-cyan-700 bg-opacity-60">
+            <div className="w-[100%] bg-cyan-700 bg-opacity-60">
                 <Link to="/">
                     <img src="../images/outsidersinvert.png" className="logoimage py-3 md:flex" alt="Logo" />
                 </Link>
