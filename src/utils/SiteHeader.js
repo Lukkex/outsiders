@@ -13,7 +13,7 @@ function SiteHeader() {
 
     return (
         <div>
-            <div className="w-full bg-cyan-700 bg-opacity-60">
+            <div className="w-[100%] bg-cyan-700 bg-opacity-60">
                 <Link to="/">
                     <img src="../images/outsidersinvert.png" className="logoimage py-3 md:flex" alt="Logo" />
                 </Link>
@@ -22,7 +22,7 @@ function SiteHeader() {
             <div className="site-header font-semibold bg-cyan-700 bg-opacity-60">
                 <Link to="/"><button className="rounded-button cyan-gradient xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">HOME</button></Link>
                 {!userInfo.role.includes("admin") ? (
-                    <Link to="/registration"><button className="rounded-button cyan-gradient xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">REGISTRATION</button></Link>
+                    <Link to="/registration"><button className="rounded-button cyan-gradient xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">FORMS</button></Link>
                 ) : (
                     <Link to="/admindashboard"><button className="rounded-button cyan-gradient xl:text-4xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl">ADMIN DASH</button></Link>
                 )}

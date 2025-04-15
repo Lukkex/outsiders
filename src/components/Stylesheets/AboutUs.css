@@ -2,9 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;  
-    width: 100vw;
-    flex-direction: column;
-    background-image: linear-gradient(to bottom, rgb(255, 255, 255), rgb(207 250 254))  
+    width: 100%;
+    flex-direction: column; 
 }
 
 .AboutUs img {

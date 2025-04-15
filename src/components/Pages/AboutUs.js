@@ -19,7 +19,7 @@ function AboutUs() {
     }, []);
 
     return (
-        <SiteContainer class = "w-[100vw]" content = {
+        <SiteContainer class = "w-[100%]" content = {
             <FadeInSection>
                 <div className="AboutUs">
                     <br/>
@@ -37,7 +37,7 @@ function AboutUs() {
                     </div>
                     <br/>
                     <br/>
-                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100%] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br id = "AboutUs"/>
                     <div class = "content-section flex items-center">
@@ -52,7 +52,7 @@ function AboutUs() {
                     </div>
                     <br/>
                     <br/>
-                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100%] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br/>
 
@@ -70,7 +70,7 @@ function AboutUs() {
 
                     <br/>
                     <br/>
-                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100%] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br/>
 
@@ -87,7 +87,7 @@ function AboutUs() {
                     <br/>
                     <br/>
                     
-                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100%] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br id = "FAQ"/>
 
@@ -130,7 +130,7 @@ function AboutUs() {
                     <br/>
                     
                     
-                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100%] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br id = "Contact"/>
 
@@ -146,7 +146,7 @@ function AboutUs() {
                             <p>Support email: OutsidersDevTeam@outlook.com</p>
                         </div>
                     </div>
-                    <div class="w-[100vw] border-t-2 border-gray-400 my-4"/>
+                    <div class="w-[100%] border-t-2 border-gray-400 my-4"/>
                     <br/>
                     <br/>
 
