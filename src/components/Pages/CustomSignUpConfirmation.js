@@ -84,7 +84,7 @@ const CustomSignUpConfirmation = () => {
               id="confirmationCode"
               type="text"
               value={confirmationCode}
-              onChange={(e) => setConfirmationCode(e.target.value)}
+              onChange={(e) => setConfirmationCode((e.target.value).trim().substring(0,6))}
               placeholder="Enter confirmation code"
               required
               className="form-control"
