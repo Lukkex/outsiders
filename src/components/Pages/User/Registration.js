@@ -296,7 +296,7 @@ function Registration() {
                                             onChange={handlePrisonChange}
                                             checked={selectedPrisons.includes(prison)}
                                         />
-                                        <label>{prison}</label>
+                                        <label>{" " + prison}</label>
                                     </div>
                                 ))}
                             </div>
