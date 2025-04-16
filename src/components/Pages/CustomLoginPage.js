@@ -21,6 +21,9 @@ const CustomLoginPage = () => {
 
   const navigate = useNavigate();
   const { refreshUserData } = useUser();
+  const { userInfo, loading } = useUser();
+  const isAdmin = userInfo?.role.includes("admin") ? true : false;
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -38,15 +41,19 @@ const CustomLoginPage = () => {
         username: email,
         password: password
       });
-
+  
       console.log('Sign-in output:', output);
 
       const step = output.nextStep?.signInStep;
 
       if (!step || step === 'DONE') {
         console.log('Login successful!');
-        await refreshUserData(); // Refresh user data after successful login
-        navigate('/');
+        await refreshUserData(); // Refresh user data after successful loginz
+        
+        if(isAdmin)
+          navigate('/admindashboard')
+        else
+          navigate('/');
       } else {
         console.log('Next step:', step);
         setUser(output);
