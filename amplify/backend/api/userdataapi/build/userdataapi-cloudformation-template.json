@@ -1,5 +1,5 @@
 {
-  "Description": "{\"createdOn\":\"Windows\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.14.4\",\"stackType\":\"api-API Gateway\",\"metadata\":{\"whyContinueWithGen1\":\"Prefer not to answer\"}}",
+  "Description": "API Gateway Resource for AWS Amplify CLI",
   "AWSTemplateFormatVersion": "2010-09-09",
   "Parameters": {
     "functioneventsFunctionName": {
@@ -378,7 +378,7 @@
         "Name": "userdataapi"
       }
     },
-    "userdataapiDefault4XXResponsef3523aa5": {
+    "userdataapiDefault4XXResponse5be9bc0d": {
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseParameters": {
@@ -393,7 +393,7 @@
         }
       }
     },
-    "userdataapiDefault5XXResponsef3523aa5": {
+    "userdataapiDefault5XXResponse5be9bc0d": {
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseParameters": {
@@ -408,7 +408,7 @@
         }
       }
     },
-    "DeploymentAPIGWuserdataapi65fbed4d": {
+    "DeploymentAPIGWuserdataapi7bce5a52": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "Description": "The Development stage deployment of your API.",
@@ -426,8 +426,8 @@
         }
       },
       "DependsOn": [
-        "userdataapiDefault4XXResponsef3523aa5",
-        "userdataapiDefault5XXResponsef3523aa5"
+        "userdataapiDefault4XXResponse5be9bc0d",
+        "userdataapiDefault5XXResponse5be9bc0d"
       ]
     }
   }

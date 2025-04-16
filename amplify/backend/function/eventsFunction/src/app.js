@@ -56,6 +56,16 @@ const convertUrlType = (param, type) => {
   }
 }
 
+/* is lambda alive (short answer, no) */
+
+app.get('/events', (req, res) => {
+  res.json({ message: 'This is the /events route' });
+});
+
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Lambda is alive!' });
+});
+
 /************************************
 * HTTP Get method to list objects *
 ************************************/
@@ -70,6 +80,7 @@ app.get(path, async function(req, res) {
     const data = await ddbDocClient.send(new ScanCommand(params));
     res.json(data.Items);
   } catch (err) {
+    console.error("Scan error: ", err);
     res.statusCode = 500;
     res.json({error: 'Could not load items: ' + err.message});
   }
@@ -241,11 +252,18 @@ app.delete(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res
   }
 });
 
+app.use(express.json());
+app.get('/hello', (req, res) => {
+  res.json({ message: "Hello from Lambda!" });
+});
+
+/*
 app.listen(3000, function() {
   console.log("App started")
 });
+*/
 
 // Export the app object. When executing the application local this does nothing. However,
 // to port it to AWS Lambda we will create a wrapper around that will load the app from
 // this file
-module.exports = app
+module.exports = app;

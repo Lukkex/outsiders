@@ -421,7 +421,7 @@
         "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/eventsFunction-cloudformation-template.json",
         "Parameters": {
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/eventsFunction-39535a342b3263582b49-build.zip",
+          "s3Key": "amplify-builds/eventsFunction-6944482f65336b596b5a-build.zip",
           "storageeventsTableName": {
             "Fn::GetAtt": [
               "storageeventsTable",
