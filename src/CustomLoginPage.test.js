@@ -30,8 +30,8 @@ describe('CustomLoginPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /login/i }));
 
     expect(mockOnLogin).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      password: 'password123',
+      email: 'outsidersdevteam@outlook.com',
+      password: 'password',
     });
   });
 });
