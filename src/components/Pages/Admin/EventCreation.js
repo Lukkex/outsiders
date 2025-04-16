@@ -48,6 +48,7 @@ const fetchEvents = async () => {
             'Content-Type': 'application/json',
             ...(await getAuthHeader()),
         };
+        //console.log('Fetch headers:', headers);
 
         const response = await fetch(API_URL, {
             method: 'GET',
@@ -65,6 +66,22 @@ const fetchEvents = async () => {
 const EventCreation = () => {
     //## Dummy locations (replace with a fetch from DynamoDB later)
     const availableLocation = ["Folsom", "San Quentin"];
+
+    /* testing just OPTIONS method (should work)
+    useEffect(() => {
+        const testOptions = async () => {
+          try {
+            const response = await fetch(API_URL, { method: 'OPTIONS' });
+            console.log('OPTIONS Response:', response.status);
+            console.log(await response.text());
+          } catch (err) {
+            console.error('OPTIONS failed:', err);
+          }
+        };
+      
+        testOptions();
+    }, []);
+    */
 
     //!!individual event data (replace rsvp:'' with proper fetch and input)
     const [eventData, setEventData] = useState({
