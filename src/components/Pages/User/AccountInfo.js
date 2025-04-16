@@ -116,7 +116,7 @@ function AccountInfo() {
     
                     {isEditing ? (
                             <form onSubmit={handleSave} className="edit-form">
-                                {["San Quentin", "Folsom Prison"].map(prison => (
+                                {["San Quentin State Prison", "Folsom State Prison"].map(prison => (
                                     <label key={prison} className="checkbox-label">
                                         <input
                                             type="checkbox"
