@@ -147,5 +147,23 @@ async function deleteUser(userID) {
     }
 }
 
-module.exports = { checkUserExists, addUserToTable, getUserList, deleteUser, updateUserInfo, getUserByID};
+async function importFromS3(userid, filename, bucket, key) {
+    const params = {
+        TableName: "UserUploads",
+        id: {S: userid},
+        formName: {S: filename},
+        bucketName: {S: bucket},
+        objectKey: {S: key}
+    };
 
+    try {
+        const command = new PutItemCommand(params);
+        await dynamoDB.send(command);
+        console.log(`Object ${key} stored successfully.`);
+    } catch (error) {
+        console.error("Error storing object.", error);
+        throw error;
+    }
+}
+
+module.exports = { checkUserExists, addUserToTable, getUserList, deleteUser, updateUserInfo, getUserByID, importFromS3};
