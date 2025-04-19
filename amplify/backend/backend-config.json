@@ -121,6 +121,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_AdminQueriesc939b8b6_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueriesc939b8b6"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueriesc939b8b6_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueriesc939b8b6"
+        }
+      ]
+    },
     "AMPLIFY_function_eventsFunction_deploymentBucketName": {
       "usedBy": [
         {

@@ -378,7 +378,7 @@
         "Name": "userdataapi"
       }
     },
-    "userdataapiDefault4XXResponse5be9bc0d": {
+    "userdataapiDefault4XXResponse0b7231c5": {
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseParameters": {
@@ -393,7 +393,7 @@
         }
       }
     },
-    "userdataapiDefault5XXResponse5be9bc0d": {
+    "userdataapiDefault5XXResponse0b7231c5": {
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseParameters": {
@@ -408,7 +408,7 @@
         }
       }
     },
-    "DeploymentAPIGWuserdataapi7bce5a52": {
+    "DeploymentAPIGWuserdataapi05dedb22": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "Description": "The Development stage deployment of your API.",
@@ -426,8 +426,8 @@
         }
       },
       "DependsOn": [
-        "userdataapiDefault4XXResponse5be9bc0d",
-        "userdataapiDefault5XXResponse5be9bc0d"
+        "userdataapiDefault4XXResponse0b7231c5",
+        "userdataapiDefault5XXResponse0b7231c5"
       ]
     }
   }

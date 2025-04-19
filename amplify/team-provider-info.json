@@ -39,17 +39,18 @@
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
           "s3Key": "amplify-builds/outsiders782de14cPostConfirmation-6b696859527638674371-build.zip"
         },
+        "AdminQueriesc939b8b6": {
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/AdminQueriesc939b8b6-5642733157774d362b44-build.zip"
+        },
         "eventsFunction": {
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
           "s3Key": "amplify-builds/eventsFunction-6944482f65336b596b5a-build.zip"
-        },
-        "rsvpFunction": {},
-        "OutsidersDB": {},
-        "userTable": {}
+        }
       },
       "api": {
         "outsiders": {},
-        "userdataapi": {}
+        "AdminQueries": {}
       },
       "storage": {
         "files": {},

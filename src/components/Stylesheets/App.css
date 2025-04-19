@@ -38,27 +38,28 @@ h1 {
 
 /** SITE HEADER **/
 .site-header {
-  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 /* For main buttons at the top of the site */
 .site-header button {
   /*background-color:#4896ac;*/
-  
   color: white;
   border: 1px rgb(18, 67, 95);
   padding: 10px 20px;
-  border: 1px solid rgb(116, 116, 116);
-  width: 25vw;
+  border: 1px solid rgb(116, 116, 116); 
   height: 80px; /* Fallback in case browser support fails */
   height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
+  width: 25vw;
   min-height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-size: x-large; /* Fallback in case browser support fails */
-  float: left; /* Aligns buttons to the left */
+  font-size: x-large; /* Fallback in case browser support fails */ 
   cursor: pointer; /* Pointer icon when hovered over */
   box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
 }
@@ -75,7 +76,7 @@ h1 {
 
 /** SITE FOOTER **/
 .site-footer {
-  width: 100vw;
+  width: 100%;
   height: 80px; /* Fallback in case browser support fails */
   height: 2vh; /* Auto adjusts height of buttons based on browser-view height */
   min-height: 50px;
@@ -84,6 +85,10 @@ h1 {
 .site-footer p {
   color: white;
   font-size: large; /* Fallback in case browser support fails */
+}
+
+.site-container {
+  width: 100%;
 }
 
 /** DROPDOWN MENU **/
@@ -103,7 +108,7 @@ h1 {
   position: absolute;
   background-color: #e4e4e4;
   min-width: 95px;
-  width: 20vw;
+  width: 24.5vw;
   box-shadow: 0px 10px 12px 0px rgba(0,0,0,0.2);
   top: 100%; /* Offsets the dropdown menu to be below the button when you hover over it */
 }
@@ -137,7 +142,8 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;    width: 100%;
+  height: 100vh;
+  width: 100%;
   flex-direction: column;
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(207 250 254))
 }
@@ -231,6 +237,7 @@ h1 {
   }
 
   .site-header button {
+    width: 24.5vw;
     font-size: 3vw;
     height: 6vh; /* Auto adjusts height of buttons based on browser-view height */
     min-height: 30px;
@@ -241,7 +248,7 @@ h1 {
   }
 
   .site-footer {
-    width: 100vw;
+    width: 100%;
     height: 80px; /* Fallback in case browser support fails */
     height: 10vh; /* Auto adjusts height of buttons based on browser-view height */
     min-height: 40px;
