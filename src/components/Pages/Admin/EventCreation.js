@@ -19,27 +19,9 @@ const getAuthHeader = async () => {
     };
 };
 
-
-
 const EventCreation = () => {
     //## Dummy locations (replace with a fetch from DynamoDB later)
     const availableLocation = ["Folsom", "San Quentin"];
-
-    /* testing just OPTIONS method (should work)
-    useEffect(() => {
-        const testOptions = async () => {
-          try {
-            const response = await fetch(API_URL, { method: 'OPTIONS' });
-            console.log('OPTIONS Response:', response.status);
-            console.log(await response.text());
-          } catch (err) {
-            console.error('OPTIONS failed:', err);
-          }
-        };
-      
-        testOptions();
-    }, []);
-    */
 
     //!!individual event data (replace rsvp:'' with proper fetch and input)
     const [eventData, setEventData] = useState({
@@ -48,11 +30,7 @@ const EventCreation = () => {
         time: ''
     });
     
-    //const [name, setName] = useState('');
-    //const [location, setLocation] = useState('');
-    //const [date, setDate] = useState('');
-    
-    //##list of created events (replace with fetch from dynamoDB)
+    //##local list of created events
     const [events, setEvents] = useState([]);
     //sort tracking variables
     const [sortBy, setSortBy] = useState(null);
@@ -172,7 +150,7 @@ const EventCreation = () => {
     const timeCutoff = new Date((dayCutoff).getTime() - 2 * 60 * 60 * 1000);
     const filteredEvents = sortedEvents.filter(event => {
         const eventDateTime = new Date(`${event.date}T${event.time}`);
-        console.log('Event DateTime (raw):', `${event.date}T${event.time}`);
+        //console.log('Event DateTime', eventDateTime);
         return eventDateTime >= timeCutoff;
     });
 
