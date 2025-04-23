@@ -172,12 +172,7 @@ const EventCreation = () => {
     const timeCutoff = new Date((dayCutoff).getTime() - 2 * 60 * 60 * 1000);
     const filteredEvents = sortedEvents.filter(event => {
         const eventDateTime = new Date(`${event.date}T${event.time}`);
-        //console.log('Event DateTime (raw):', `${event.date}T${event.time}`);
-        console.log('Event DateTime:', eventDateTime);
-        console.log('day cutoff:', dayCutoff);
-        console.log('Time cutoff (2 hours after):', timeCutoff);
-        if(eventDateTime >= dayCutoff) { console.log('Day Success!')}
-        if(eventDateTime <= timeCutoff) { console.log('Time Success!')}
+        console.log('Event DateTime (raw):', `${event.date}T${event.time}`);
         return eventDateTime >= timeCutoff;
     });
 
