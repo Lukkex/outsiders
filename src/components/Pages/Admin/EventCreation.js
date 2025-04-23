@@ -9,7 +9,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../../Stylesheets/Scheduling.module.css';
 import { fetchAuthSession } from '@aws-amplify/auth';
-const API_URL = 'https://f1z25x3dj5.execute-api.us-west-1.amazonaws.com/dev';
+const API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/events';
 
 const getAuthHeader = async () => {
     const session = await fetchAuthSession();
@@ -19,49 +19,7 @@ const getAuthHeader = async () => {
     };
 };
 
-const createEvent = async (eventData) => {
-    try {
-        const headers = {
-            'Content-Type': 'application/json',
-            ...(await getAuthHeader()),
-        };
 
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(eventData)
-        });
-
-        if(!response.ok) throw new Error('Failed to create event');
-        const result = await response.json();
-        console.log('Event created:', result);
-        return result;
-    } catch (err) {
-        console.error('Error creating event:', err);
-        throw err;
-    }
-};
-
-const fetchEvents = async () => {
-    try {
-        const headers = {
-            'Content-Type': 'application/json',
-            ...(await getAuthHeader()),
-        };
-        //console.log('Fetch headers:', headers);
-
-        const response = await fetch(API_URL, {
-            method: 'GET',
-            headers
-        });
-
-        if(!response.ok) throw new Error('Failed to fetch events');
-        const data = await response.json();
-        setEvents(data);
-    }catch (error) {
-        console.error('Error fetching events:', error);
-    }
-}
 
 const EventCreation = () => {
     //## Dummy locations (replace with a fetch from DynamoDB later)
@@ -87,8 +45,7 @@ const EventCreation = () => {
     const [eventData, setEventData] = useState({
         location: '',
         date: '',
-        time: '',
-        rsvp: ''
+        time: ''
     });
     
     //const [name, setName] = useState('');
@@ -100,6 +57,51 @@ const EventCreation = () => {
     //sort tracking variables
     const [sortBy, setSortBy] = useState(null);
     const [sortOrder, setSortOrder] = useState("asc");
+
+    const createEvent = async (eventData) => {
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(await getAuthHeader()),
+            };
+    
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(eventData)
+            });
+    
+            if(!response.ok) throw new Error('Failed to create event');
+            const result = await response.json();
+            console.log('Event created:', result);
+            return result;
+        } catch (err) {
+            console.error('Error creating event:', err);
+            throw err;
+        }
+    };
+    
+    const fetchEvents = async () => {
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(await getAuthHeader()),
+            };
+            //console.log('Fetch headers:', headers);
+    
+            const response = await fetch(API_URL, {
+                method: 'GET',
+                headers
+            });
+    
+            if(!response.ok) throw new Error('Failed to fetch events');
+            const data = await response.json();
+            console.log("Fetched events:", data);
+            setEvents(data);
+        }catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    }
 
     //updates eventData variable (the event youre making)
     const handleChange = (e) => {
@@ -131,14 +133,14 @@ const EventCreation = () => {
 
         try {
             await createEvent(eventData);
-            console.log('Event created!', result);
+            //console.log('Event created!', result);
             await fetchEvents();
-            setEventData({ location: "", date: "", time: "", rsvp: [] })
+            setEventData({ location: "", date: "", time: ""})
         } catch (error) {
             console.error('Failed to create event:', error);
         }
         //([...events, eventData]);
-        //setEventData({ title: "", location: "", date: "", time:"", rsvp:[]});
+        //setEventData({ title: "", location: "", date: "", time:""});
     };
 
     //table sorting
@@ -166,7 +168,18 @@ const EventCreation = () => {
         return sortOrder === "asc" ? comparison : -comparison;
     });
 
-    const filteredEvents = sortedEvents.filter(event => new Date(event.date) >= new Date());
+    const dayCutoff = new Date();
+    const timeCutoff = new Date((dayCutoff).getTime() - 2 * 60 * 60 * 1000);
+    const filteredEvents = sortedEvents.filter(event => {
+        const eventDateTime = new Date(`${event.date}T${event.time}`);
+        //console.log('Event DateTime (raw):', `${event.date}T${event.time}`);
+        console.log('Event DateTime:', eventDateTime);
+        console.log('day cutoff:', dayCutoff);
+        console.log('Time cutoff (2 hours after):', timeCutoff);
+        if(eventDateTime >= dayCutoff) { console.log('Day Success!')}
+        if(eventDateTime <= timeCutoff) { console.log('Time Success!')}
+        return eventDateTime >= timeCutoff;
+    });
 
     const getArrow = (key) => {
         return sortBy === key ? (sortOrder === "asc" ? "⬆" : "⬇") : "↕";
@@ -245,11 +258,11 @@ const EventCreation = () => {
                                         <details>
                                             <summary>View RSVP List</summary>
                                             <ul>
-                                                {event.rsvp.length > 0 ? (
+                                                {/*event.rsvp.length > 0 ? (
                                                     event.rsvp.map((user,i) => <li key={i}>{user}</li>)
                                                 ) : ( 
                                                     <li>No RSVPs</li>
-                                                )}
+                                                )*/}
                                             </ul>
                                         </details>
                                     </td>

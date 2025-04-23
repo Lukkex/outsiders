@@ -56,7 +56,15 @@ const convertUrlType = (param, type) => {
   }
 }
 
-/* is lambda alive (short answer, no) */
+exports.handler = async(event) => {
+  console.log(event);
+  return 'The lambda is working?';
+}
+
+/* annoying shitass boilerplate code:
+// I REMOVED th eending SLASHES "/" at each title for the boilerplate functions
+
+/* is lambda alive (short answer, no) 
 
 app.get('/events', (req, res) => {
   res.json({ message: 'This is the /events route' });
@@ -68,7 +76,7 @@ app.get('/', (req, res) => {
 
 /************************************
 * HTTP Get method to list objects *
-************************************/
+************************************
 
 app.get(path, async function(req, res) {
   var params = {
@@ -88,7 +96,7 @@ app.get(path, async function(req, res) {
 
 /************************************
  * HTTP Get method to query objects *
- ************************************/
+ ************************************
 
 app.get(path + hashKeyPath, async function(req, res) {
   const condition = {}
@@ -123,7 +131,7 @@ app.get(path + hashKeyPath, async function(req, res) {
 
 /*****************************************
  * HTTP Get method for get single object *
- *****************************************/
+ *****************************************
 
 app.get(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
   const params = {};
@@ -168,7 +176,7 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
 
 /************************************
 * HTTP put method for insert object *
-*************************************/
+*************************************
 
 app.put(path, async function(req, res) {
 
@@ -191,7 +199,7 @@ app.put(path, async function(req, res) {
 
 /************************************
 * HTTP post method for insert object *
-*************************************/
+*************************************
 
 app.post(path, async function(req, res) {
 
@@ -214,7 +222,7 @@ app.post(path, async function(req, res) {
 
 /**************************************
 * HTTP remove method to delete object *
-***************************************/
+***************************************
 
 app.delete(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
   const params = {};
@@ -261,6 +269,8 @@ app.get('/hello', (req, res) => {
 app.listen(3000, function() {
   console.log("App started")
 });
+
+
 */
 
 // Export the app object. When executing the application local this does nothing. However,
