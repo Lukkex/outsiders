@@ -156,7 +156,17 @@ const EventCreation = () => {
 
     const getArrow = (key) => {
         return sortBy === key ? (sortOrder === "asc" ? "⬆" : "⬇") : "↕";
-      };
+    };
+    
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        console.log("date: " + date);
+        console.log("dateString: " + dateString);
+        var month = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"][date.getMonth()];
+
+        return (month + " " + date.getDay() + ", " + date.getFullYear()); 
+    }
 
     return (
         <div>
@@ -218,6 +228,7 @@ const EventCreation = () => {
                                 <th onClick={() => handleSort("date")} style={{ cursor: "pointer" }}>
                                     Date {getArrow("date")}</th>
                                 <th>Time</th>
+                                <th>Head Count</th>
                                 <th>RSVPs</th>
                             </tr>
                         </thead>
@@ -225,8 +236,11 @@ const EventCreation = () => {
                             {filteredEvents.map((event, index) => (
                                 <tr key={index}>
                                     <td>{event.location}</td>
-                                    <td>{event.date}</td>
+                                    <td>{formatDate(event.date)}</td>
                                     <td>{event.time}</td>
+                                    
+                                    {/* ### Pretty sure we might have to re-move the lat 2 <td> elements outside the filtered events map and into a new one for user querying*/}
+                                    <td> {/*event.rsvp.length*/} </td>
                                     <td>
                                         <details>
                                             <summary>View RSVP List</summary>
