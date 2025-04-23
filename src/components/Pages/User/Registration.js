@@ -66,32 +66,37 @@ function Registration() {
         { id: 7, fileKey:"CDCR_2189.pdf", sigpage: 0, sigloc: {x: 40, y: 375, width:81, height:27}, name: "CDCR 2189 - Incarcerated or Paroled Relative or Associate", prisons: ["Folsom State Prison"], requiresYes: true },
     ];
 
-    const fillSignature = async (file, canvas, sigloc, sigpage) => {
+    const fillSignature = async (file, canvas, sigloc, sigpage) => { //Changed it so that an Admin can't change downloaded forms from dashboard -Christian
         const pdfUrl = URL.createObjectURL(file);
     
-            // Load existing PDF
-            const existingPdfBytes = await fetch([pdfUrl]).then(res => res.arrayBuffer());
-            const pdfDoc = await PDFDocument.load(existingPdfBytes);
-            const page = pdfDoc.getPages()[sigpage];
+        // Load existing PDF
+        const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
     
-            // Convert signature to embedded image
-            const signatureImage = await pdfDoc.embedPng(canvas);
-            const { width, height } = page.getSize();
+        // Flatten form fields to make PDF non-editable
+        const form = pdfDoc.getForm();
+        form.flatten();
     
-            // Draw signature on a specific position
-            page.drawImage(signatureImage, sigloc);
-
-            const updatedPdfBytes = await pdfDoc.save();
-
-            /*
-            const updatedPdfBlob = new Blob([updatedPdfBytes], { type: "application/pdf" });
-            const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
-            setPreviewFileTest(updatedPdfUrl);
-            setShowPreview(true);
-            while (showPreview) {}
-            */
-
-            return updatedPdfBytes;
+        const page = pdfDoc.getPages()[sigpage];
+    
+        // Convert signature to embedded image
+        const signatureImage = await pdfDoc.embedPng(canvas);
+        const { width, height } = page.getSize();
+    
+        // Draw signature on a specific position
+        page.drawImage(signatureImage, sigloc);
+    
+        const updatedPdfBytes = await pdfDoc.save();
+    
+        /*
+        const updatedPdfBlob = new Blob([updatedPdfBytes], { type: "application/pdf" });
+        const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
+        setPreviewFileTest(updatedPdfUrl);
+        setShowPreview(true);
+        while (showPreview) {}
+        */
+    
+        return updatedPdfBytes;
     }
 
     const downloadForm = async (fileKey) => {
@@ -153,14 +158,46 @@ function Registration() {
                 const formattedDate = getFormattedDate(); // Generate date for folder structure
                 const filePath = `uploads/${user.email}/${formattedDate}/${filename}.pdf`; // Organize by date
                 
-                const result = await uploadData({
-                    path: filePath, 
+                // This part is to get the names from the forms -Christian
+                let firstName = '-';
+                let lastName = '-';
+
+                if (inputValue && inputValue.trim() !== '') {
+                 const parts = inputValue.trim().split(' ');
+                 firstName = parts[0];
+                 lastName = parts.slice(1).join(' ') || '-';
+                }
+                
+                const metadata = {
+                    firstName,
+                    lastName,
+                    email: user.email
+                  };
+
+                 console.log("Uploading with metadata:", metadata);
+                  
+                const privateResult = await uploadData({
+                    path: filePath,
                     data: file,
-                    contentType: 'application/pdf'
-                }).result;
-    
+                    contentType: 'application/pdf',
+                    options: {
+                      accessLevel: 'private',
+                      metadata
+                    }
+                  }).result;
+                  
+                const publicResult = await uploadData({ //Uploads to a second folder that allows me to pull to the dashboard -Christian
+                    path: `public/${filePath}`,
+                    data: file,
+                    contentType: 'application/pdf',
+                    options: {
+                      accessLevel: 'public',
+                      metadata
+                    }
+                  }).result;
+                
                 console.log(`File uploaded: ${filename}`);
-                return result;
+                return { privateResult, publicResult };
                 
             });
     

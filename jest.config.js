@@ -5,7 +5,7 @@ module.exports = {
   },
   moduleFileExtensions: ['js', 'jsx'],
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // ignore CSS files
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', //ignore CSS files
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   reporters: ['default']
