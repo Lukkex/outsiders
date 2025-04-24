@@ -4,7 +4,7 @@ export async function getSubmittedFormsFromS3() {
   const allForms = [];
 
   try {
-    console.log('📂 Listing all from public/uploads/ (recursive)');
+    console.log('Listing all from public/uploads/ (recursive)');
     let nextToken = null;
     let allItems = [];
 
@@ -25,7 +25,7 @@ export async function getSubmittedFormsFromS3() {
         /^uploads\/[^/]+\/\d{4}_\d{2}_\d{2}\/[^/]+\.pdf$/.test(item.key)
     );
 
-    console.log('📄 Raw keys:', pdfItems.map(i => i.key));
+    console.log('Raw keys:', pdfItems.map(i => i.key));
 
     for (const item of pdfItems) {
       const parts = item.key.split('/');
@@ -38,17 +38,19 @@ export async function getSubmittedFormsFromS3() {
       let metadataEmail = email;
 
       try {
+        // ✅ Correct access level and unmodified key
         const { metadata } = await getProperties({
           path: item.key,
-          options: { accessLevel: 'public' },
+          options: { accessLevel: 'private' },
         });
-        console.log(`📬 Metadata for ${item.key}:`, metadata);
+
+        console.log(`Private metadata for ${item.key}:`, metadata);
 
         firstName = metadata?.firstName || '';
         lastName = metadata?.lastName || '';
         metadataEmail = metadata?.email || email;
       } catch (err) {
-        console.warn('⚠️ No metadata found for', item.key, err);
+        console.warn('No metadata found for', item.key, err);
       }
 
       let formCode = '';

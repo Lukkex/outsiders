@@ -159,14 +159,10 @@ function Registration() {
                 const filePath = `uploads/${user.email}/${formattedDate}/${filename}.pdf`; // Organize by date
                 
                 // This part is to get the names from the forms -Christian
-                let firstName = '-';
-                let lastName = '-';
+                const attributes = await getCurrentUserInfo();
 
-                if (inputValue && inputValue.trim() !== '') {
-                 const parts = inputValue.trim().split(' ');
-                 firstName = parts[0];
-                 lastName = parts.slice(1).join(' ') || '-';
-                }
+                const firstName = attributes.given_name || '-';
+                const lastName = attributes.family_name || '-';
                 
                 const metadata = {
                     firstName,
@@ -445,13 +441,13 @@ function Registration() {
                                 <p>By signing below, you agree to the terms listed on the selected forms. Your signature will be applied to the selected forms.</p>
                                 <br></br>
                                 <t className="font-semibold">E-Signature: </t>
-                                <input 
+                                <input // here to line 450 is not needed, can get rid of
                                     type="text" 
                                     variant="outlined"
                                     value={inputValue} 
                                     onChange={handleInputChange} 
                                     placeholder="Enter Full Name" 
-                                    />
+                                    />   
                                     <t className="font-nobold"></t>
                                     <t className="font-semibold">Signature: </t>
                                     <SignaturePad ref={sigCanvas} penColor='Black'
