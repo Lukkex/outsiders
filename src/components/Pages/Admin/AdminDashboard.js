@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { getSubmittedFormsFromS3 } from '../../../services/getSubmittedFormsFromS3';
-import { getUrl, uploadData } from 'aws-amplify/storage';
-import { getCurrentUser } from 'aws-amplify/auth';
+import { getUrl } from 'aws-amplify/storage';
 import '../../Stylesheets/AdminDashboard.css';
 import SiteContainer from '../../../utils/SiteContainer.js';
-import { useNavigate } from 'react-router-dom';
+
+function capitalizeName(name) {
+    return name
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
 
 function AdminDashboard() {
     const [forms, setForms] = useState([]);
     const [filteredForms, setFilteredForms] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchForms() {
             const allForms = await getSubmittedFormsFromS3();
-            setForms(allForms);
-            setFilteredForms(allForms);
+            const formatted = allForms.map(form => ({
+                ...form,
+                firstName: capitalizeName(form.firstName || ''),
+                lastName: capitalizeName(form.lastName || '')
+            }));
+            setForms(formatted);
+            setFilteredForms(formatted);
         }
         fetchForms();
     }, []);
@@ -80,12 +90,12 @@ function AdminDashboard() {
                     <table>
                         <thead>
                             <tr>
-                                <th>FORM CODE</th>
-                                <th>EVENT</th>
-                                <th>FIRST NAME</th>
-                                <th>LAST NAME</th>
-                                <th>EMAIL</th>
-                                <th>SUBMISSION DATE</th>
+                                <th style={{ width: '15%' }}>FORM CODE</th>
+                                <th style={{ width: '20%' }}>EVENT</th>
+                                <th style={{ width: '10%', paddingLeft: '30px' }}>FIRST NAME</th>
+                                <th style={{ width: '10%' }}>LAST NAME</th>
+                                <th style={{ width: '25%' }}>EMAIL</th>
+                                <th style={{ width: '20%' }}>SUBMISSION DATE</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,10 +115,21 @@ function AdminDashboard() {
                                             </a>
                                         </td>
                                         <td>{form.prison || '-'}</td>
-                                        <td>{form.firstName || '-'}</td>
+                                        <td style={{ paddingLeft: '30px' }}>{form.firstName || '-'}</td>
                                         <td>{form.lastName || '-'}</td>
                                         <td>{form.email}</td>
-                                        <td>{form.submittedAt ? new Date(form.submittedAt).toLocaleString() : '-'}</td>
+                                        <td>
+                                            {form.submittedAt
+                                                ? new Date(form.submittedAt).toLocaleString('en-US', {
+                                                    month: 'numeric',
+                                                    day: 'numeric',
+                                                    year: 'numeric',
+                                                    hour: 'numeric',
+                                                    minute: '2-digit',
+                                                    hour12: true
+                                                })
+                                                : '-'}
+                                        </td>
                                     </tr>
                                 ))
                             ) : (

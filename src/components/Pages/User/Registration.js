@@ -10,6 +10,14 @@ import { getCurrentUserInfo, getUserRole } from '../../../services/authConfig';
 import { Link } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 
+function capitalizeName(name) {
+    return name
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
 function getFormattedDate() {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -123,88 +131,97 @@ function Registration() {
     };
 
     const uploadFiles = async () => {
-        
+
         if (selectedForms.length === 0) {
             alert("No forms selected for upload.");
             return;
         }
-
+    
         try {
             var signatureDataUrl;
-
+    
             if (!sigCanvas.current.isEmpty()) {
                 // Get signature as base64 image
                 signatureDataUrl = sigCanvas.current.getCanvas().toDataURL("image/png");
             } else {
                 console.error("Signature data not found");
             }
-
+    
             const user = await getCurrentUserInfo();
-
+    
             const uploadPromises = selectedForms.map(async (formId) => {
                 var file = fileMap[formId];
-                const filename = getFormNameById(formId);
+                const rawFirst = user.given_name || '';
+                const rawLast = user.family_name || '';
+    
+                const capitalizedFirst = rawFirst.charAt(0).toUpperCase() + rawFirst.slice(1).toLowerCase();
+                const capitalizedLast = rawLast.charAt(0).toUpperCase() + rawLast.slice(1).toLowerCase();
+    
+                const safeFirst = capitalizedFirst.replace(/[^a-z0-9]/gi, '');
+                const safeLast = capitalizedLast.replace(/[^a-z0-9]/gi, '');
+                const filename = `${getFormNameById(formId)} - ${safeFirst}_${safeLast}`;                
                 const signatureLocation = getSignatureLocationById(formId);
                 const signaturePage = getSignaturePageById(formId);
     
                 if (!file) {
                     throw new Error(`No file selected for form ID: ${formId}`);
                 }
-
+    
                 file = await fillSignature(file, signatureDataUrl, signatureLocation, signaturePage);
-
+    
                 //end of file formatting, start of file upload
-                
+    
                 const formattedDate = getFormattedDate(); // Generate date for folder structure
                 const filePath = `uploads/${user.email}/${formattedDate}/${filename}.pdf`; // Organize by date
-                
+    
                 // This part is to get the names from the forms -Christian
                 const attributes = await getCurrentUserInfo();
-
-                const firstName = attributes.given_name || '-';
-                const lastName = attributes.family_name || '-';
-                
+    
+                const firstName = capitalizedFirst || '-';
+                const lastName = capitalizedLast || '-';
+    
                 const metadata = {
                     firstName,
                     lastName,
                     email: user.email
-                  };
-
-                 console.log("Uploading with metadata:", metadata);
-                  
+                };
+    
+                console.log("Uploading with metadata:", metadata);
+    
                 const privateResult = await uploadData({
                     path: filePath,
                     data: file,
                     contentType: 'application/pdf',
                     options: {
-                      accessLevel: 'private',
-                      metadata
+                        accessLevel: 'private',
+                        metadata
                     }
-                  }).result;
-                  
+                }).result;
+    
                 const publicResult = await uploadData({ //Uploads to a second folder that allows me to pull to the dashboard -Christian
                     path: `public/${filePath}`,
                     data: file,
                     contentType: 'application/pdf',
                     options: {
-                      accessLevel: 'public',
-                      metadata
+                        accessLevel: 'public',
+                        metadata
                     }
-                  }).result;
-                
+                }).result;
+    
                 console.log(`File uploaded: ${filename}`);
                 return { privateResult, publicResult };
-                
+    
             });
     
             await Promise.all(uploadPromises);
             setIsSubmitting(false);
-
+    
         } catch (error) {
             console.error("Upload failed:", error);
             alert("Error uploading files. Please try again.");
         }
     };
+    
 
     const handlePrisonChange = (event) => {
         const value = event.target.value;

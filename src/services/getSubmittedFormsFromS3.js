@@ -1,4 +1,4 @@
-import { list, getProperties } from '@aws-amplify/storage';
+import { list, getUrl } from '@aws-amplify/storage';
 
 export async function getSubmittedFormsFromS3() {
   const allForms = [];
@@ -33,28 +33,37 @@ export async function getSubmittedFormsFromS3() {
       const date = parts[2];
       const filename = parts[3];
 
+      const nameWithoutExtension = filename.replace('.pdf', '');
+
       let firstName = '';
       let lastName = '';
       let metadataEmail = email;
 
       try {
-        // ✅ Correct access level and unmodified key
-        const { metadata } = await getProperties({
+        const { url } = await getUrl({
           path: item.key,
-          options: { accessLevel: 'private' },
+          options: { accessLevel: 'public', expiresIn: 60 }
         });
 
-        console.log(`Private metadata for ${item.key}:`, metadata);
+        const headRes = await fetch(url, { method: 'HEAD' });
 
-        firstName = metadata?.firstName || '';
-        lastName = metadata?.lastName || '';
-        metadataEmail = metadata?.email || email;
+        firstName = headRes.headers.get('x-amz-meta-firstname') || '';
+        lastName = headRes.headers.get('x-amz-meta-lastname') || '';
+        metadataEmail = headRes.headers.get('x-amz-meta-email') || email;
+
+        console.log(`Fetched metadata from HEAD:`, { firstName, lastName, metadataEmail });
       } catch (err) {
-        console.warn('No metadata found for', item.key, err);
+        console.warn('HEAD fetch failed for', item.key, err);
+      }
+
+      //Metadata from s3 is protected and forbidden to touch, so I added names to the pdf name itself and parsed from there
+      const nameMatch = nameWithoutExtension.match(/ - ([a-zA-Z0-9]+)_([a-zA-Z0-9]+)$/);
+      if (nameMatch) {
+        firstName = firstName || nameMatch[1];
+        lastName = lastName || nameMatch[2];
       }
 
       let formCode = '';
-      const nameWithoutExtension = filename.replace('.pdf', '');
       const dashIndex = nameWithoutExtension.indexOf(' - ');
       if (dashIndex !== -1) {
         formCode = nameWithoutExtension.slice(0, dashIndex).trim();
@@ -62,7 +71,6 @@ export async function getSubmittedFormsFromS3() {
         formCode = nameWithoutExtension.split(' ')[0].trim();
       }
 
-      // Special naming logic for Part A and B of CDCR 2301
       if (filename.includes('Part A')) formCode = 'CDCR 2301 (A)';
       if (filename.includes('Part B')) formCode = 'CDCR 2301 (B)';
 
@@ -88,28 +96,6 @@ export async function getSubmittedFormsFromS3() {
     return allForms;
   } catch (err) {
     console.error('Error fetching forms from S3:', err);
-    return [];
-  }
-}
-
-export async function filterSubmittedForms(prison, player) {
-  try {
-    const allForms = await getSubmittedFormsFromS3();
-    let filtered = allForms;
-
-    if (prison) {
-      filtered = filtered.filter(form => form.prison === prison);
-    }
-
-    if (player) {
-      filtered = filtered.filter(form =>
-        `${form.firstName} ${form.lastName}`.toLowerCase().includes(player.toLowerCase())
-      );
-    }
-
-    return filtered;
-  } catch (err) {
-    console.error("Error filtering forms:", err);
     return [];
   }
 }
