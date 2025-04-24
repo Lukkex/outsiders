@@ -53,7 +53,7 @@ h1 {
   border: 1px solid rgb(116, 116, 116); 
   height: 80px; /* Fallback in case browser support fails */
   height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
-  width: 24.8vw;
+  width: 25vw;
   min-height: 80px;
   display: flex;
   justify-content: center;
