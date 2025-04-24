@@ -71,7 +71,6 @@ function AdminDashboard() {
         <SiteContainer content={
             <div>
                 <div className="admin-dashboard">
-                    <h1 className="dashboard-title">ADMIN DASHBOARD - VIEW SUBMITTED FORMS</h1>
 
                     <div className="filters">
                         <input
