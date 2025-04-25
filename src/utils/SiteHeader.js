@@ -12,7 +12,7 @@ function SiteHeader() {
     const schedLink = userInfo?.role.includes("admin") ? "/adminscheduling" : "/scheduling";
     const homeLink = userInfo?.role.includes("admin") ? "/admindashboard" : "/";
     //const schedTitle = userInfo?.role.includes("admin") ? "FORMS" : "REGISTRATION";
-    const homeTitle = userInfo?.role.includes("admin") ? "ADMIN DASH" : "HOME";
+    const homeTitle = userInfo?.role.includes("admin") ? "ADMIN" : "HOME";
 
     return (
         <div>
