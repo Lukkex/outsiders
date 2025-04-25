@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../Stylesheets/App.css'; // Global styles
 import '../../Stylesheets/Registration.css'; // Registration-specific styles
 import '../../Stylesheets/SignUp.css';
@@ -47,6 +47,36 @@ function Registration() {
     const handleInputChange = (event) => {
     setInputValue(event.target.value);
     }
+
+    /*
+    useEffect(() => {
+        const fetchPrisons = async () => {
+            const user = await getCurrentUserInfo();
+            let prisons = JSON.parse(localStorage.getItem(`userPrisons_${user.sub}`)) || [];
+            if (prisons.length === 0){}
+            else {
+                setSelectedPrisons(prisons);
+                setStep(2);
+            }
+        };
+    
+        fetchPrisons();
+    }, []);
+    */
+
+    useEffect(() => {
+        // Get forms related to selected prisons
+        let relevantForms = forms.filter((form) =>
+            form.prisons.some((prison) => selectedPrisons.includes(prison))
+        );
+    
+        // Remove the special form if "Yes" isn't selected
+        if (!(selectedPrisons.includes("Folsom State Prison") && needsSpecialForm === true)) {
+            relevantForms = relevantForms.filter((form) => !form.requiresYes);
+        }
+    
+        setSelectedForms(relevantForms.map((form) => form.id));
+    }, [selectedPrisons, needsSpecialForm]);
     
     const getFormNameById = (formId) => {
         const form = forms.find((form) => form.id === formId);
@@ -225,21 +255,16 @@ function Registration() {
 
     const handlePrisonChange = (event) => {
         const value = event.target.value;
-        setSelectedPrisons((prev) =>
-            prev.includes(value) ? prev.filter((prison) => prison !== value) : [...prev, value]
-        );
-
+        const updatedPrisons = selectedPrisons.includes(value)
+            ? selectedPrisons.filter((prison) => prison !== value)
+            : [...selectedPrisons, value];
+    
+        setSelectedPrisons(updatedPrisons);
+    
         // Reset special question if Folsom is unchecked
         if (value === "Folsom State Prison" && selectedPrisons.includes(value)) {
             setNeedsSpecialForm(null);
         }
-    };
-
-    const handleFormChange = (event) => {
-        const value = parseInt(event.target.value);
-        setSelectedForms((prev) =>
-            prev.includes(value) ? prev.filter((form) => form !== value) : [...prev, value]
-        );
     };
 
     const handleNext = () => {
@@ -251,19 +276,29 @@ function Registration() {
             alert("Please answer the required question.");
             return;
         }
-        if (step === 1 && !selectedPrisons.includes("Folsom State Prison")) {
-            setStep(step + 2);
+        if (step === 2 && needsSpecialForm !== null) {
+            setStep(step + 2)
             return;
         }
+        if (step === 1 && !selectedPrisons.includes("Folsom State Prison")) {
+            setStep(step + 3);
+            return;
+        }
+        /*
         if (step === 3 && selectedForms.length === 0) {
             alert("Please select at least one form.");
             return;
         }
+        */
         setStep(step + 1);
     };
 
     const handleBack = () => {
-        if (step === 3 && !selectedPrisons.includes("Folsom State Prison")) {
+        if (step === 4 && !selectedPrisons.includes("Folsom State Prison")) {
+            setStep(step - 3);
+            return;
+        }
+        if (step === 4 && selectedPrisons.includes("Folsom State Prison")) {
             setStep(step - 2);
             return;
         }
@@ -331,12 +366,14 @@ function Registration() {
             <div>
                 <div className = "site-header-break" />
                 <div className="signup-container flex justify-start">
-                    <h1 className="font-semibold text-center">Registration</h1>
+                    <h1 className="font-semibold text-center">Form Registration</h1>
                     <br />
                     <div className="form-container">
                         {step === 1 && (
                             <div>
-                                <h2 className="font-semibold">Select Prison(s)</h2>
+                                <h2 className="font-semibold">Select Prisons</h2>
+                                <br></br>
+                                <h3>Select prisons that you intend to play at this year. You will not be able to attend events at a prison that you have not filled out forms for.</h3>
                                 <br></br>
                                 {prisons.map((prison, index) => (
                                     <div key={index} className="checkbox-container">
@@ -346,7 +383,7 @@ function Registration() {
                                             onChange={handlePrisonChange}
                                             checked={selectedPrisons.includes(prison)}
                                         />
-                                        <label>{prison}</label>
+                                        <label>{" " + prison}</label>
                                     </div>
                                 ))}
                             </div>
@@ -356,7 +393,7 @@ function Registration() {
                         {step === 2 && isFolsomSelected && (
                             <div>
                                 <h2 className="font-semibold">Notice</h2>
-                                <h3>In accordance with the California Department of Corrections and Rehabilitation (CDCR) California Code of Regulations, Title 15 Section 3406, and Department Operations Manual Section 33010.25.1, CDCR 2189 must be completed each time an employee becomes aware of a relative or person with whom the employee has/had a personal or business relationship who has been committed or transferred to the jurisdiction of CDCR. Do you know anyone who has been incarcerated or is on parole in the CDCR system?</h3>
+                                <h3>In accordance with the California Department of Corrections and Rehabilitation (CDCR) California Code of Regulations, Title 15 Section 3406, and Department Operations Manual Section 33010.25.1, CDCR 2189 must be completed each time an individual becomes aware of a relative or person with whom the individual has/had a personal or business relationship who has been committed or transferred to the jurisdiction of CDCR.<br/><br/>Do you know anyone who has been incarcerated or is on parole in the CDCR system?</h3>
                                 <br></br>
                                 <label>
                                     <input
@@ -396,7 +433,7 @@ function Registration() {
                                                 onChange={handleFormChange}
                                                 checked={selectedForms.includes(form.id)}
                                             />
-                                            <label>{form.name}</label>
+                                            <label>{" " + form.name}</label>
                                         </div>
                                     ))
                                 ) : (
@@ -408,9 +445,6 @@ function Registration() {
                         {step === 4 && (
                             <div>
                                 <h2 className="font-semibold">Review & Submit</h2>
-                                <p>
-                                    <h2 className="font-semibold">Selected Forms</h2>
-                                </p>
                                 <div className="flex justify-end relative">
                                     <div className="group relative">
                                         <span className="text-gray-500 cursor-pointer text-lg">🛈</span>
@@ -468,7 +502,7 @@ function Registration() {
                                     <t className="font-nobold"></t>
                                     <t className="font-semibold">Signature: </t>
                                     <SignaturePad ref={sigCanvas} penColor='Black'
-                                    canvasProps={{width: 360, height: 120, className: 'sigCanvas'}}
+                                    canvasProps={{width: 340, height: 120, className: 'sigCanvas border border-black'}}
                                     />
                                 <button className="rounded-button mt-3" onClick={handleClear}>
                                     Clear Signature

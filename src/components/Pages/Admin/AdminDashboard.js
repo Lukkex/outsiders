@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getSubmittedFormsFromS3 } from '../../../services/getSubmittedFormsFromS3';
-import { getUrl } from 'aws-amplify/storage';
+import { getUrl, uploadData } from 'aws-amplify/storage';
 import '../../Stylesheets/AdminDashboard.css';
 import SiteContainer from '../../../utils/SiteContainer.js';
 
@@ -16,6 +16,9 @@ function AdminDashboard() {
     const [forms, setForms] = useState([]);
     const [filteredForms, setFilteredForms] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [uploadModalOpen, setUploadModalOpen] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [uploadMessage, setUploadMessage] = useState('');
 
     useEffect(() => {
         async function fetchForms() {
@@ -56,14 +59,41 @@ function AdminDashboard() {
 
     const handleFormDownload = async (s3Key) => {
         try {
-            const result = await getUrl({
-                path: s3Key,
-                options: { expiresIn: 300 }
-            });
+            const result = await getUrl({ path: s3Key, options: { expiresIn: 300 } });
             window.open(result.url, '_blank');
         } catch (error) {
             console.error("Error getting file URL:", error);
             alert("Could not retrieve the form. Please try again.");
+        }
+    };
+
+    const handleFileSelect = (event) => {
+        const files = Array.from(event.target.files);
+        const validFiles = files.filter(file => file.type === 'application/pdf');
+
+        if (validFiles.length !== files.length) {
+            alert('Only PDF files are allowed.');
+        }
+
+        setSelectedFiles(validFiles);
+    };
+
+    const handleUpload = async () => {
+        try {
+            for (const file of selectedFiles) {
+                const key = `formtemplates/${file.name}`;
+                await uploadData({
+                    path: key,
+                    data: file,
+                    contentType: 'application/pdf'
+                }).result;
+            }
+            setUploadModalOpen(false);
+            setUploadMessage(`${selectedFiles.length} file(s) uploaded successfully.`);
+            setSelectedFiles([]);
+        } catch (error) {
+            console.error('Upload failed:', error);
+            alert('Upload failed. Please try again.');
         }
     };
 
@@ -72,19 +102,38 @@ function AdminDashboard() {
             <div>
                 <div className="admin-dashboard">
 
-                    <div className="filters">
-                        <input
-                            type="text"
-                            placeholder="Search by name, form code, date, or email"
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            value={searchTerm}
-                            className="mr-2"
-                        />
-                        <button onClick={handleSearch}>Filter</button>
-                        <button onClick={handleSort}>Sort by Most Recent</button>
-                        <button onClick={() => { setFilteredForms(forms); setSearchTerm(''); }}>Clear</button>
+                    <div className="filters flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="text"
+                                placeholder="Search by name, form code, date, or email"
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                value={searchTerm}
+                                className="px-3 py-2 border rounded w-80"
+                            />
+                            <button onClick={handleSearch} className="bg-sky-700 text-white px-3 py-2 rounded shadow">Filter</button>
+                            <button onClick={handleSort} className="bg-sky-700 text-white px-3 py-2 rounded shadow">Sort by Most Recent</button>
+                            <button onClick={() => { setFilteredForms(forms); setSearchTerm(''); }} className="bg-sky-700 text-white px-3 py-2 rounded shadow">Clear</button>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setUploadModalOpen(true)}
+                                className="bg-sky-700 text-white px-3 py-2 rounded shadow"
+                            >
+                                Upload Files
+                            </button>
+                            <button
+                                onClick={() => window.location.href = '/viewplayers'}
+                                className="bg-sky-800 text-white px-3 py-2 rounded shadow"
+                            >
+                                View Players
+                            </button>
+                        </div>
                     </div>
+
+                    {uploadMessage && <p className="mt-2 text-green-700 font-medium">{uploadMessage}</p>}
 
                     <table>
                         <thead>
@@ -139,6 +188,32 @@ function AdminDashboard() {
                         </tbody>
                     </table>
                 </div>
+
+                {uploadModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                        <div className="bg-white p-6 rounded-lg w-1/2 relative">
+                            <button onClick={() => setUploadModalOpen(false)} className="absolute top-2 right-2 text-lg">✖</button>
+                            <h2 className="text-xl font-bold mb-4">Upload PDF Files</h2>
+                            <input
+                                type="file"
+                                accept="application/pdf"
+                                multiple
+                                onChange={handleFileSelect}
+                                className="mb-4"
+                            />
+                            {selectedFiles.length > 0 && (
+                                <ul className="mb-4 list-disc list-inside">
+                                    {selectedFiles.map((file, index) => (
+                                        <li key={index}>{file.name}</li>
+                                    ))}
+                                </ul>
+                            )}
+                            <button onClick={handleUpload} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         } />
     );

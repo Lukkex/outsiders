@@ -262,6 +262,33 @@
         }
       }
     },
+    "apiAdminQueries": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/AdminQueries-cloudformation-template.json",
+        "Parameters": {
+          "authoutsiders782de14cUserPoolId": {
+            "Fn::GetAtt": [
+              "authoutsiders782de14c",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "functionAdminQueriesc939b8b6Arn": {
+            "Fn::GetAtt": [
+              "functionAdminQueriesc939b8b6",
+              "Outputs.Arn"
+            ]
+          },
+          "functionAdminQueriesc939b8b6Name": {
+            "Fn::GetAtt": [
+              "functionAdminQueriesc939b8b6",
+              "Outputs.Name"
+            ]
+          },
+          "env": "dev"
+        }
+      }
+    },
     "authoutsiders782de14c": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -315,6 +342,10 @@
           "dependsOn": "[object Object]",
           "permissions": "{\"policyName\":\"AddToGroupCognito\",\"trigger\":\"PostConfirmation\",\"effect\":\"Allow\",\"actions\":[\"cognito-idp:AdminAddUserToGroup\",\"cognito-idp:GetGroup\",\"cognito-idp:CreateGroup\"],\"resource\":{\"paramType\":\"!GetAtt\",\"keys\":[\"UserPool\",\"Arn\"]}}",
           "authTriggerConnections": "{\"triggerType\":\"PostConfirmation\",\"lambdaFunctionName\":\"outsiders782de14cPostConfirmation\"}",
+          "adminQueryGroup": "Admins",
+          "parentStack": {
+            "Ref": "AWS::StackId"
+          },
           "env": "dev"
         }
       }
@@ -369,6 +400,23 @@
           "GROUP": "basic_users",
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
           "s3Key": "amplify-builds/outsidersbd449033PostConfirmation-68446b43485172483355-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "functionAdminQueriesc939b8b6": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/AdminQueriesc939b8b6-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
+          "s3Key": "amplify-builds/AdminQueriesc939b8b6-5642733157774d362b44-build.zip",
+          "authoutsiders782de14cUserPoolId": {
+            "Fn::GetAtt": [
+              "authoutsiders782de14c",
+              "Outputs.UserPoolId"
+            ]
+          },
           "env": "dev"
         }
       }
