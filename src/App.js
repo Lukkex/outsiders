@@ -23,10 +23,10 @@ import CustomRegistrationPage from './components/Pages/CustomRegistrationPage';
 import CustomSignUpConfirmation from './components/Pages/CustomSignUpConfirmation';
 import MFASetup from './components/Pages/User/MFASetup';
 import UserAccountDeletion from './components/Pages/User/UserAccountDeletion';
+import ViewPlayers from './components/Pages/Admin/ViewPlayers';
 
 import '@aws-amplify/ui-react/styles.css';
 
-// ✅ Inject Storage config into Amplify setup
 Amplify.configure({
   ...awsExports,
   Storage: {
@@ -58,6 +58,7 @@ function App() {
           <Route path="/setup-mfa" element={<MFASetup />} />
           <Route path="/confirm-signup" element={<CustomSignUpConfirmation />} />
           <Route path="/useraccountdeletion" element={<UserAccountDeletion />} />
+          <Route path="/viewplayers" element={<ViewPlayers />} />
         </Routes>
       </Router>
     </UserProvider>

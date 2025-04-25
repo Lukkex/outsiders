@@ -19,6 +19,8 @@ function AdminDashboard() {
     const [uploadModalOpen, setUploadModalOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [uploadMessage, setUploadMessage] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const formsPerPage = 15;
 
     useEffect(() => {
         async function fetchForms() {
@@ -45,6 +47,7 @@ function AdminDashboard() {
             `${form.firstName} ${form.lastName} ${form.email} ${form.formCode} ${form.submittedAt}`.toLowerCase().includes(term)
         );
         setFilteredForms(filtered);
+        setCurrentPage(1);
     };
 
     const handleSort = () => {
@@ -97,11 +100,15 @@ function AdminDashboard() {
         }
     };
 
+    const indexOfLastForm = currentPage * formsPerPage;
+    const indexOfFirstForm = indexOfLastForm - formsPerPage;
+    const currentForms = filteredForms.slice(indexOfFirstForm, indexOfLastForm);
+    const totalPages = Math.ceil(filteredForms.length / formsPerPage);
+
     return (
         <SiteContainer content={
             <div>
                 <div className="admin-dashboard">
-
                     <div className="filters flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <input
@@ -126,7 +133,7 @@ function AdminDashboard() {
                             </button>
                             <button
                                 onClick={() => window.location.href = '/viewplayers'}
-                                className="bg-sky-800 text-white px-3 py-2 rounded shadow"
+                                className="bg-sky-700 text-white px-3 py-2 rounded shadow"
                             >
                                 View Players
                             </button>
@@ -140,15 +147,15 @@ function AdminDashboard() {
                             <tr>
                                 <th style={{ width: '15%' }}>FORM CODE</th>
                                 <th style={{ width: '20%' }}>EVENT</th>
-                                <th style={{ width: '10%', paddingLeft: '30px' }}>FIRST NAME</th>
-                                <th style={{ width: '10%' }}>LAST NAME</th>
+                                <th style={{ width: '10%', paddingLeft: '30px' }}>FIRST</th>
+                                <th style={{ width: '10%' }}>LAST</th>
                                 <th style={{ width: '25%' }}>EMAIL</th>
                                 <th style={{ width: '20%' }}>SUBMISSION DATE</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredForms.length > 0 ? (
-                                filteredForms.map((form, index) => (
+                            {currentForms.length > 0 ? (
+                                currentForms.map((form, index) => (
                                     <tr key={index}>
                                         <td>
                                             <a
@@ -187,6 +194,24 @@ function AdminDashboard() {
                             )}
                         </tbody>
                     </table>
+
+                    <div className="flex justify-center items-center mt-4 gap-2 w-full">
+                    <button
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            className="bg-sky-700 text-white px-3 py-1 rounded shadow"
+                            disabled={currentPage === 1}
+                        >
+                            &larr;
+                        </button>
+                        <span className="px-4 py-1">Page {currentPage} of {totalPages}</span>
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            className="bg-sky-700 text-white px-3 py-1 rounded shadow"
+                            disabled={currentPage === totalPages}
+                        >
+                            &rarr;
+                        </button>
+                    </div>
                 </div>
 
                 {uploadModalOpen && (
