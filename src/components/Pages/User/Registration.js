@@ -176,14 +176,14 @@ function Registration() {
 
         const updatedPdfBytes = await pdfDoc.save();
 
+        if (signatureTest == true) {
+            const updatedPdfBlob = new Blob([updatedPdfBytes], { type: "application/pdf" });
+            const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
+            setPreviewFile(updatedPdfUrl);
+            setShowPreview(true);
+            while (showPreview) {}
+        }  
         
-        const updatedPdfBlob = new Blob([updatedPdfBytes], { type: "application/pdf" });
-        const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
-        setPreviewFile(updatedPdfUrl);
-        setShowPreview(true);
-        while (showPreview) {}
-        
-
         return updatedPdfBytes;
     }
 
