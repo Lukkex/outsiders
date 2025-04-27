@@ -77,9 +77,15 @@ h1 {
 /** SITE FOOTER **/
 .site-footer {
   width: 100%;
-  height: 80px; /* Fallback in case browser support fails */
-  height: 2vh; /* Auto adjusts height of buttons based on browser-view height */
+  height: 60px; 
   min-height: 50px;
+  background-color:#4896ac;
+  z-index: 10;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .site-footer p {
@@ -88,9 +94,10 @@ h1 {
 }
 
 .site-container {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
-
 /** DROPDOWN MENU **/
 .dropdown {
   position: relative;
@@ -250,8 +257,10 @@ h1 {
   .site-footer {
     width: 100%;
     height: 80px; /* Fallback in case browser support fails */
-    height: 10vh; /* Auto adjusts height of buttons based on browser-view height */
     min-height: 40px;
+    background-color:#4896ac;
+    z-index: 10;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -524,7 +524,7 @@ function Registration() {
                             </div>
                         )}
                     </div>
-                    <div className="navigation-buttons">
+                    <div className="navigation-buttons flex justify-center mt-4">
                         {step < 4 && (
                             <button className="rounded-button" onClick={handleNext}>
                                 Next
