@@ -10,6 +10,14 @@ import { getCurrentUserInfo, getUserRole } from '../../../services/authConfig';
 import { Link } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 
+function capitalizeName(name) {
+    return name
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
 function getFormattedDate() {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -96,32 +104,37 @@ function Registration() {
         { id: 7, fileKey:"CDCR_2189.pdf", sigpage: 0, sigloc: {x: 40, y: 375, width:81, height:27}, name: "CDCR 2189 - Incarcerated or Paroled Relative or Associate", prisons: ["Folsom State Prison"], requiresYes: true },
     ];
 
-    const fillSignature = async (file, canvas, sigloc, sigpage) => {
+    const fillSignature = async (file, canvas, sigloc, sigpage) => { //Changed it so that an Admin can't change downloaded forms from dashboard -Christian
         const pdfUrl = URL.createObjectURL(file);
     
-            // Load existing PDF
-            const existingPdfBytes = await fetch([pdfUrl]).then(res => res.arrayBuffer());
-            const pdfDoc = await PDFDocument.load(existingPdfBytes);
-            const page = pdfDoc.getPages()[sigpage];
+        // Load existing PDF
+        const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
     
-            // Convert signature to embedded image
-            const signatureImage = await pdfDoc.embedPng(canvas);
-            const { width, height } = page.getSize();
+        // Flatten form fields to make PDF non-editable
+        const form = pdfDoc.getForm();
+        form.flatten();
     
-            // Draw signature on a specific position
-            page.drawImage(signatureImage, sigloc);
-
-            const updatedPdfBytes = await pdfDoc.save();
-
-            /*
-            const updatedPdfBlob = new Blob([updatedPdfBytes], { type: "application/pdf" });
-            const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
-            setPreviewFileTest(updatedPdfUrl);
-            setShowPreview(true);
-            while (showPreview) {}
-            */
-
-            return updatedPdfBytes;
+        const page = pdfDoc.getPages()[sigpage];
+    
+        // Convert signature to embedded image
+        const signatureImage = await pdfDoc.embedPng(canvas);
+        const { width, height } = page.getSize();
+    
+        // Draw signature on a specific position
+        page.drawImage(signatureImage, sigloc);
+    
+        const updatedPdfBytes = await pdfDoc.save();
+    
+        /*
+        const updatedPdfBlob = new Blob([updatedPdfBytes], { type: "application/pdf" });
+        const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
+        setPreviewFileTest(updatedPdfUrl);
+        setShowPreview(true);
+        while (showPreview) {}
+        */
+    
+        return updatedPdfBytes;
     }
 
     const downloadForm = async (fileKey) => {
@@ -148,60 +161,97 @@ function Registration() {
     };
 
     const uploadFiles = async () => {
-        
+
         if (selectedForms.length === 0) {
             alert("No forms selected for upload.");
             return;
         }
-
+    
         try {
             var signatureDataUrl;
-
+    
             if (!sigCanvas.current.isEmpty()) {
                 // Get signature as base64 image
                 signatureDataUrl = sigCanvas.current.getCanvas().toDataURL("image/png");
             } else {
                 console.error("Signature data not found");
             }
-
-            //const user = await getCurrentUserInfo();
-
+    
+            const user = await getCurrentUserInfo();
+    
             const uploadPromises = selectedForms.map(async (formId) => {
                 var file = fileMap[formId];
-                const filename = getFormNameById(formId);
+                const rawFirst = user.given_name || '';
+                const rawLast = user.family_name || '';
+    
+                const capitalizedFirst = rawFirst.charAt(0).toUpperCase() + rawFirst.slice(1).toLowerCase();
+                const capitalizedLast = rawLast.charAt(0).toUpperCase() + rawLast.slice(1).toLowerCase();
+    
+                const safeFirst = capitalizedFirst.replace(/[^a-z0-9]/gi, '');
+                const safeLast = capitalizedLast.replace(/[^a-z0-9]/gi, '');
+                const filename = `${getFormNameById(formId)} - ${safeFirst}_${safeLast}`;                
                 const signatureLocation = getSignatureLocationById(formId);
                 const signaturePage = getSignaturePageById(formId);
     
                 if (!file) {
                     throw new Error(`No file selected for form ID: ${formId}`);
                 }
-
+    
                 file = await fillSignature(file, signatureDataUrl, signatureLocation, signaturePage);
-
+    
                 //end of file formatting, start of file upload
-                
+    
                 const formattedDate = getFormattedDate(); // Generate date for folder structure
                 const filePath = `uploads/${user.email}/${formattedDate}/${filename}.pdf`; // Organize by date
-                
-                const result = await uploadData({
-                    path: filePath, 
+    
+                // This part is to get the names from the forms -Christian
+                const attributes = await getCurrentUserInfo();
+    
+                const firstName = capitalizedFirst || '-';
+                const lastName = capitalizedLast || '-';
+    
+                const metadata = {
+                    firstName,
+                    lastName,
+                    email: user.email
+                };
+    
+                console.log("Uploading with metadata:", metadata);
+    
+                const privateResult = await uploadData({
+                    path: filePath,
                     data: file,
-                    contentType: 'application/pdf'
+                    contentType: 'application/pdf',
+                    options: {
+                        accessLevel: 'private',
+                        metadata
+                    }
+                }).result;
+    
+                const publicResult = await uploadData({ //Uploads to a second folder that allows me to pull to the dashboard -Christian
+                    path: `public/${filePath}`,
+                    data: file,
+                    contentType: 'application/pdf',
+                    options: {
+                        accessLevel: 'public',
+                        metadata
+                    }
                 }).result;
     
                 console.log(`File uploaded: ${filename}`);
-                return result;
-                
+                return { privateResult, publicResult };
+    
             });
     
             await Promise.all(uploadPromises);
             setIsSubmitting(false);
-
+    
         } catch (error) {
             console.error("Upload failed:", error);
             alert("Error uploading files. Please try again.");
         }
     };
+    
 
     const handlePrisonChange = (event) => {
         const value = event.target.value;
@@ -441,6 +491,15 @@ function Registration() {
                                 <br></br>
                                 <p>By signing below, you agree to the terms listed on the selected forms. Your signature will be applied to the selected forms.</p>
                                 <br></br>
+                                <t className="font-semibold">E-Signature: </t>
+                                <input // here to line 450 is not needed, can get rid of
+                                    type="text" 
+                                    variant="outlined"
+                                    value={inputValue} 
+                                    onChange={handleInputChange} 
+                                    placeholder="Enter Full Name" 
+                                    />   
+                                    <t className="font-nobold"></t>
                                     <t className="font-semibold">Signature: </t>
                                     <SignaturePad ref={sigCanvas} penColor='Black'
                                     canvasProps={{width: 340, height: 120, className: 'sigCanvas border border-black'}}
@@ -465,7 +524,7 @@ function Registration() {
                             </div>
                         )}
                     </div>
-                    <div className="navigation-buttons">
+                    <div className="navigation-buttons flex justify-center mt-4">
                         {step < 4 && (
                             <button className="rounded-button" onClick={handleNext}>
                                 Next

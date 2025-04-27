@@ -110,9 +110,7 @@ function AccountInfo() {
                             <span>Enable multi-factor authentication <Link to="/setup-mfa" className="mfa-link">here</Link> to improve your account security</span>
                         )}
                     </p>
-                    
-                    <p><strong>Upcoming Dates:</strong> {upcomingDates.length > 0 ? upcomingDates.join(', ') : "No upcoming dates"}</p>
-                        <p><strong>Preferred Prisons:</strong></p>
+                
     
                     {isEditing ? (
                             <form onSubmit={handleSave} className="edit-form">

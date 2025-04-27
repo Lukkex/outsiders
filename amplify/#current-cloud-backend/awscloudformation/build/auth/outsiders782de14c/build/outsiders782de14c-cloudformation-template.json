@@ -126,12 +126,6 @@
     },
     "authTriggerConnections": {
       "Type": "CommaDelimitedList"
-    },
-    "adminQueryGroup": {
-      "Type": "String"
-    },
-    "parentStack": {
-      "Type": "String"
     }
   },
   "Conditions": {
