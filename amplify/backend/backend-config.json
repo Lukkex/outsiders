@@ -1,27 +1,5 @@
 {
   "api": {
-    "AdminQueries": {
-      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "outsiders782de14c"
-        },
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "AdminQueriesc939b8b6"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "outsiders": {
       "dependsOn": [
         {
@@ -45,6 +23,20 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync"
+    },
+    "userdataapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "eventsFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -88,15 +80,20 @@
     }
   },
   "function": {
-    "AdminQueriesc939b8b6": {
+    "eventsFunction": {
       "build": true,
       "dependsOn": [
         {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
           "attributes": [
-            "UserPoolId"
+            "Name",
+            "Arn"
           ],
-          "category": "auth",
-          "resourceName": "outsiders782de14c"
+          "category": "storage",
+          "resourceName": "eventsTable"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -137,6 +134,22 @@
         {
           "category": "function",
           "resourceName": "AdminQueriesc939b8b6"
+        }
+      ]
+    },
+    "AMPLIFY_function_eventsFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "eventsFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_eventsFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "eventsFunction"
         }
       ]
     },
@@ -222,6 +235,10 @@
     }
   },
   "storage": {
+    "eventsTable": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
     "files": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
