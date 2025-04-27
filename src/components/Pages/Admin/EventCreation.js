@@ -160,12 +160,13 @@ const EventCreation = () => {
     
     function formatDate(dateString) {
         const date = new Date(dateString);
-        console.log("date: " + date);
-        console.log("dateString: " + dateString);
+        //console.log("date: " + date);
+        //console.log("dateString: " + dateString);
+        //console.log("date.getDay(): " + date.getDay());
         var month = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"][date.getMonth()];
 
-        return (month + " " + date.getDay() + ", " + date.getFullYear()); 
+        return (month + " " + date.getDate() + ", " + date.getFullYear()); 
     }
 
     return (
