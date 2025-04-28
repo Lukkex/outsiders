@@ -98,11 +98,12 @@ function AccountInfo() {
                 <div className="profile-container">
                     <h1 className="font-semibold">Account Information</h1>
                     <div className="user-details">
-                        <p><strong>Name:</strong> {userInfo.name || "Unknown User"}</p>
-                        <p><strong>Email:</strong> {userInfo.email || "Unknown"}</p>
-                        <p><strong>Role:</strong> {userInfo.role || "Unknown"}</p>
+                        <p><strong>Name:</strong> {userInfo.name || "Unknown User"}</p><br/>
+                        <p><strong>Email:</strong> {userInfo.email || "Unknown"}</p><br/>
+                        <p><strong>Role:</strong> {userInfo.role || "Unknown"}</p><br/>
                         <p><strong>MFA Status:</strong> {mfaStatus}</p>
-                    
+                    <br/>
+                    <br/>
                     <p>
                         {mfaStatus === 'Enabled' ? (
                             <span>(Manage your MFA settings <Link to="/setup-mfa" className="mfa-link">here)</Link></span>
@@ -110,39 +111,7 @@ function AccountInfo() {
                             <span>Enable multi-factor authentication <Link to="/setup-mfa" className="mfa-link">here</Link> to improve your account security</span>
                         )}
                     </p>
-                
-    
-                    {isEditing ? (
-                            <form onSubmit={handleSave} className="edit-form">
-                                {["San Quentin State Prison", "Folsom State Prison"].map(prison => (
-                                    <label key={prison} className="checkbox-label">
-                                        <input
-                                            type="checkbox"
-                                            checked={preferredPrisons.includes(prison)}
-                                            onChange={() => {
-                                                setPreferredPrisons(prev => prev.includes(prison)
-                                                    ? prev.filter(p => p !== prison)
-                                                    : [...prev, prison]);
-                                            }}
-                                        />
-                                        {prison}
-                                    </label>
-                                ))}
-                                <button type="submit" className="rounded-button">Save Preferences</button>
-                            </form>
-                        ) : (
-                            <ul>
-                                {preferredPrisons.length > 0 ? (
-                                    preferredPrisons.map(prison => <li key={prison}>{prison}</li>)
-                                ) : (
-                                    <li>No preferred prisons selected</li>
-                                )}
-                            </ul>
-                        )}
-    
-                    <button type="button" className="rounded-button" onClick={() => setIsEditing(!isEditing)}>
-                            {isEditing ? 'Cancel' : 'Edit'}
-                        </button>
+
                     </div>
                 </div>
             </div>
