@@ -12,7 +12,7 @@ export async function getSubmittedFormsFromS3() {
       path: `uploads`
     });
 
-    console.log(allItems);
+    console.log("AllItems: " + allItems);
 
     const pdfItems = allItems.items.filter(
       item =>
@@ -48,7 +48,7 @@ export async function getSubmittedFormsFromS3() {
 
         console.log(`Fetched metadata from HEAD:`, { firstName, lastName, metadataEmail });
       } catch (err) {
-        console.warn('HEAD fetch failed for', item.key, err);git
+        console.warn('HEAD fetch failed for', item.key, err);
       }
 
       //Metadata from s3 is protected and forbidden to touch, so I added names to the pdf name itself and parsed from there
