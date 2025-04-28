@@ -41,11 +41,29 @@ function Registration() {
     const [pdfBlobMap, setPdfBlobMap] = useState({});
     const [showPreview, setShowPreview] = useState(false);
     const [previewFile, setPreviewFile] = useState('');
-    const [signatureTest, setSignatureTest] = useState(false);
+    const [isDefault, setIsDefault] = useState(Array(7).fill(true));
+    const [wasDefault, setWasDefault] = useState(Array(7).fill(true));
+
+    const updateIsDefault = (index, value) => {
+        setIsDefault(prev => {
+          const updated = [...prev];
+          updated[index] = value;
+          return updated;
+        });
+    };
+
+    const updateWasDefault = (index, value) => {
+        setWasDefault(prev => {
+          const updated = [...prev];
+          updated[index] = value;
+          return updated;
+        });
+    };
 
     const fetchAndCachePdfBlob = async (formId) => {
         if (pdfBlobMap[formId]) return pdfBlobMap[formId];
-      
+        
+        updateWasDefault(currentFormId - 1, false);
         const url = await downloadForm(getFileKeyById(formId));
         const response = await fetch(url);
         const blob = await response.blob();
@@ -147,7 +165,7 @@ function Registration() {
 
     const prisons = ["Folsom State Prison", "San Quentin State Prison"];
     const forms = [
-        { id: 1, fileKey:"CDCR_2301_A.pdf", sigpage: 1, sigloc: {x: 60, y: 393, width:60, height:21}, name: "CDCR 2301 - Policy Information for Volunteers (Part A)", prisons: ["Folsom State Prison", "San Quentin State Prison"] },
+        { id: 1, fileKey:"CDCR_2301_A.pdf", sigpage: 1, sigloc: {x: 60, y: 394, width:57, height:20}, name: "CDCR 2301 - Policy Information for Volunteers (Part A)", prisons: ["Folsom State Prison", "San Quentin State Prison"] },
         { id: 2, fileKey:"CDCR_2301_B.pdf", sigpage: 0, sigloc: {x: 25, y: 206, width:68, height:24}, name: "CDCR 2301 - Policy Information for Volunteers (Part B)", prisons: ["Folsom State Prison"] },
         { id: 3, fileKey:"CDCR_2311.pdf", sigpage: 0, sigloc: {x: 167, y: 69, width:71, height:25}, name: "CDCR 2311 - Background Security Clearance Application", prisons: ["Folsom State Prison", "San Quentin State Prison"] },
         { id: 4, fileKey:"CDCR_2311_A.pdf", sigpage: 0, sigloc: null, name: "CDCR 2311-A - Criminal History Security Screening Form", prisons: [] },
@@ -156,10 +174,7 @@ function Registration() {
         { id: 7, fileKey:"CDCR_2189.pdf", sigpage: 0, sigloc: {x: 38, y: 378, width:77, height:27}, name: "CDCR 2189 - Incarcerated or Paroled Relative or Associate", prisons: ["Folsom State Prison"], requiresYes: true },
     ];
 
-    const fillSignature = async (file, canvas, sigloc, sigpage) => {
-        if (sigloc===null) {
-            return file;
-        }
+    const fillSignature = async (file, canvas, sigloc, sigpage, preview) => {
         
         const pdfUrl = URL.createObjectURL(file);
     
@@ -168,15 +183,17 @@ function Registration() {
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
         const page = pdfDoc.getPages()[sigpage];
 
+        if (canvas != null && sigloc != null) {
+            // Convert signature to embedded image
+            const signatureImage = await pdfDoc.embedPng(canvas);
+
+            // Draw signature on a specific position
+            page.drawImage(signatureImage, sigloc);
+        }
         // Convert signature to embedded image
-        const signatureImage = await pdfDoc.embedPng(canvas);
-
-        // Draw signature on a specific position
-        page.drawImage(signatureImage, sigloc);
-
         const updatedPdfBytes = await pdfDoc.save();
 
-        if (signatureTest == true) {
+        if (preview == true) {
             const updatedPdfBlob = new Blob([updatedPdfBytes], { type: "application/pdf" });
             const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
             setPreviewFile(updatedPdfUrl);
@@ -216,7 +233,7 @@ function Registration() {
                         });
                         //console.log('signed URL: ', getUrlResult.url);
                         //console.log('URL expires at: ', getUrlResult.expiresAt);
-        
+                        updateIsDefault(currentFormId - 1, false);
                         setFileUrl(getUrlResult.url); // Set the file URL to display in the iframe
                         //setShowModal(true); // Show the modal
                         //window.open(getUrlResult.url);
@@ -293,7 +310,7 @@ function Registration() {
                     throw new Error(`No file selected for form ID: ${formId}`);
                 }
     
-                file = await fillSignature(file, signatureDataUrl, signatureLocation, signaturePage);
+                file = await fillSignature(file, signatureDataUrl, signatureLocation, signaturePage, false);
     
                 //end of file formatting, start of file upload
     
@@ -321,7 +338,7 @@ function Registration() {
         } catch (error) {
             console.error("Upload failed:", error);
             setIsSubmitting(false);
-            alert("Error uploading files. Are the correct forms attached?");
+            alert("Error uploading files. Are the correct forms attached? Did you sign in the designated area?");
         }
     };
     
@@ -406,7 +423,7 @@ function Registration() {
             // Get signature as base64 image
             signatureDataUrl = sigCanvas.current.getCanvas().toDataURL("image/png");
         } else {
-            console.error("Signature data not found");
+            signatureDataUrl = null;
         }
 
             var file = fileMap[currentFormId];
@@ -417,7 +434,7 @@ function Registration() {
                 throw new Error(`No file selected for form ID: ${currentFormId}`);
             }
 
-            file = await fillSignature(file, signatureDataUrl, signatureLocation, signaturePage);
+            file = await fillSignature(file, signatureDataUrl, signatureLocation, signaturePage, true);
         
     }
 
@@ -453,6 +470,25 @@ function Registration() {
         */
 
     };
+
+    const handleReset = async (fileKey) => {
+        const getUrlResult = await getUrl({
+            path: `formtemplates/${fileKey}`,
+            // Alternatively, path: ({identityId}) => `protected/${identityId}/album/2024/1.jpg`
+            options: {
+            validateObjectExistence: false,  // Check if object exists before creating a URL
+            expiresIn: 30, // validity of the URL, in seconds. defaults to 900 (15 minutes) and maxes at 3600 (1 hour)
+            useAccelerateEndpoint: false // Whether to use accelerate endpoint
+            },
+        });
+        //console.log('signed URL: ', getUrlResult.url);
+        //console.log('URL expires at: ', getUrlResult.expiresAt);
+        updateIsDefault(currentFormId - 1, true);
+        setFileUrl(getUrlResult.url); // Set the file URL to display in the iframe
+        //setShowModal(true); // Show the modal
+        //window.open(getUrlResult.url);
+        return getUrlResult.url;
+    }
 
     return (
         <SiteContainer content = {
@@ -554,14 +590,14 @@ function Registration() {
                             {/* Navigation Controls */}
                             <div className="flex justify-between items-center">
                             <button className="px-1 py-0.5 text-sm border rounded"
-                                onClick={() => setCurrentPreviewIndex((i) => Math.max(i - 1, 0))}
+                                onClick={() => { setCurrentPreviewIndex((i) => Math.max(i - 1, 0)); if (wasDefault[currentFormId - 1] == false) updateIsDefault(currentFormId - 1, false);}}
                                 disabled={currentPreviewIndex === 0}
                             >
                                 ←
                             </button>
                             <span>{`Form ${currentPreviewIndex + 1} of ${selectedForms.length}`}</span>
                             <button className="px-1 py-0.5 text-sm border rounded"
-                                onClick={() => setCurrentPreviewIndex((i) => Math.min(i + 1, selectedForms.length - 1))}
+                                onClick={() => { setCurrentPreviewIndex((i) => Math.min(i + 1, selectedForms.length - 1)); if (wasDefault[currentFormId - 1] == false) updateIsDefault(currentFormId - 1, false);}}
                                 disabled={currentPreviewIndex === selectedForms.length - 1}
                             >
                                 →
@@ -594,19 +630,25 @@ function Registration() {
                                     />
                                     <button
                                         type="button"
-                                        className={`rounded-button ${fileMap[currentFormId] ? 'uploaded' : ''}`}
+                                        className={`rounded-button mt-3 ${fileMap[currentFormId] ? 'uploaded' : ''}`}
                                         onClick={() => fileInputsRef.current[currentFormId]?.click()}
                                         >
                                         {fileMap[currentFormId] ? "Update Form" : "Attach Form"}
                                     </button>
-                                    <br></br><br></br>
-                                    {signatureTest ? (<button
+                                    {fileMap[currentFormId] ? (<button
                                         type="button"
-                                        className="rounded-button"
+                                        className="rounded-button mt-3"
                                         onClick={() => handlePreview()}
                                         >
-                                        Preview Form
+                                        Preview Attached Form
                                     </button>) : ''}
+                                    {isDefault[currentFormId - 1] ? '' : (<button
+                                        type="button"
+                                        className="rounded-button mt-3"
+                                        onClick={() => handleReset(getFileKeyById(currentFormId))}
+                                        >
+                                        Switch to Blank Form
+                                    </button>)}
                                 </div>
                                 <br></br>
                                 <p className='font-semibold'>Notice:</p>
@@ -661,12 +703,12 @@ function Registration() {
                     )}
                     {showPreview && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                        <div className="bg-white p-7 rounded-lg w-3/4 h-3/4 relative">
+                        <div className="bg-white pt-10 px-4 pb-4 rounded-lg w-3/4 h-3/4 relative">
                             <button 
                                 onClick={() => setShowPreview(false)} 
-                                className="absolute top-1 right-1"
+                                className="absolute top-2 right-3 font-semibold text-gray-700"
                             >
-                                ✖
+                                close
                             </button>
                             <iframe 
                                 src={previewFile} 
