@@ -10,6 +10,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../../Stylesheets/Scheduling.module.css';
 import { fetchAuthSession } from '@aws-amplify/auth';
 const API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/events';
+const USER_EVENT_API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/user-events';
 
 const getAuthHeader = async () => {
     const session = await fetchAuthSession();
@@ -32,9 +33,12 @@ const EventCreation = () => {
     
     //##local list of created events
     const [events, setEvents] = useState([]);
+    const [formatMap, setFormatMap] = useState({});
     //sort tracking variables
     const [sortBy, setSortBy] = useState(null);
     const [sortOrder, setSortOrder] = useState("asc");
+    const [rsvpData, setRsvpData] = useState({}); // New state for RSVP data
+    const [allRsvps, setAllRsvps] = useState([]);
 
     const createEvent = async (eventData) => {
         try {
@@ -59,27 +63,82 @@ const EventCreation = () => {
         }
     };
     
+    const fetchRsvpData = async (eventId) => {
+        try {
+          // (1) Fetch all RSVP records (no query string)
+          const headers  = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
+          const response = await fetch(`${USER_EVENT_API_URL}?userID=dummy`, {
+            method: 'GET',
+            headers
+          });
+          if (!response.ok) throw new Error('Failed to fetch RSVP data');
+      
+          const allRsvps = await response.json();
+      
+          // (2) Client-side filter by eventId
+          return allRsvps.filter(rsvp => rsvp.eventId === eventId);
+        } catch (err) {
+          console.error('Error fetching RSVP data:', err);
+          return [];
+        }
+      };
+
     const fetchEvents = async () => {
         try {
             const headers = {
                 'Content-Type': 'application/json',
                 ...(await getAuthHeader()),
             };
-            //console.log('Fetch headers:', headers);
-    
+
             const response = await fetch(API_URL, {
                 method: 'GET',
                 headers
             });
-    
-            if(!response.ok) throw new Error('Failed to fetch events');
-            const data = await response.json();
-            console.log("Fetched events:", data);
-            setEvents(data);
-        }catch (error) {
+
+            if (!response.ok) throw new Error('Failed to fetch events');
+            const eventsFromAPI = await response.json();
+            console.log('Fetched events:', eventsFromAPI);
+
+            // format map
+            const formatMap = {};
+            const now = new Date();
+            const futureEvents = eventsFromAPI
+                .map(ev => {
+                    const [y, m, d] = ev.date.split('-').map(Number);
+                    const [hh, mm] = ev.time.split(':').map(Number);
+                    const dt = new Date(y, m - 1, d, hh, mm);
+                    const composite = `${ev.location}-${ev.date}-${ev.time}`;
+                    formatMap[ev.eventID] = composite;
+                    return { ...ev, when: dt.getTime() };
+                })
+                .filter(ev => ev.when >= now.getTime());
+
+            setEvents(futureEvents);
+            setFormatMap(formatMap);
+
+            // Fetch RSVP data for each event
+            const rsvpPromises = futureEvents.map(async (event) => {
+                const eventId = event.id || `${event.location}-${event.date}-${event.time}`;
+                console.log('Processing event:', eventId);
+                const rsvps = await fetchRsvpData(eventId);
+                return [eventId, rsvps];
+            });
+
+            const rsvpResults = await Promise.all(rsvpPromises);
+            console.log('All RSVP results:', rsvpResults);
+            const rsvpMap = Object.fromEntries(rsvpResults);
+            console.log('RSVP map:', rsvpMap);
+            setRsvpData(rsvpMap);
+        } catch (error) {
             console.error('Error fetching events:', error);
         }
-    }
+    };
+
+    const fetchAllRsvps = async () => {
+        const response = await fetch(USER_EVENT_API_URL, { method: 'GET', headers });
+        const all = await response.json();
+        setAllRsvps(all);
+    };
 
     //updates eventData variable (the event youre making)
     const handleChange = (e) => {
@@ -146,12 +205,14 @@ const EventCreation = () => {
         return sortOrder === "asc" ? comparison : -comparison;
     });
 
-    const dayCutoff = new Date();
-    const timeCutoff = new Date((dayCutoff).getTime() - 2 * 60 * 60 * 1000);
+    const now = new Date();
     const filteredEvents = sortedEvents.filter(event => {
-        const eventDateTime = new Date(`${event.date}T${event.time}`);
-        //console.log('Event DateTime', eventDateTime);
-        return eventDateTime >= timeCutoff;
+        const [year, month, day] = event.date.split('-');
+        const [hour, minute] = event.time.split(':');
+        const eventDateTime = new Date(
+            Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute)
+        );
+        return eventDateTime >= now;
     });
 
     const getArrow = (key) => {
@@ -159,14 +220,13 @@ const EventCreation = () => {
     };
     
     function formatDate(dateString) {
-        const date = new Date(dateString);
-        //console.log("date: " + date);
-        //console.log("dateString: " + dateString);
-        //console.log("date.getDay(): " + date.getDay());
-        var month = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"][date.getMonth()];
-
-        return (month + " " + date.getDate() + ", " + date.getFullYear()); 
+        const [year, month, day] = dateString.split('-');
+        const date = new Date(Number(year), Number(month) - 1, Number(day));
+        var monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        return (monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
     }
 
     return (
@@ -229,33 +289,40 @@ const EventCreation = () => {
                                 <th onClick={() => handleSort("date")} style={{ cursor: "pointer" }}>
                                     Date {getArrow("date")}</th>
                                 <th>Time</th>
-                                <th>Head Count</th>
-                                <th>RSVPs</th>
+                                <th>RSVP Count</th>
+                                <th>RSVP List</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredEvents.map((event, index) => (
-                                <tr key={index}>
-                                    <td>{event.location}</td>
-                                    <td>{formatDate(event.date)}</td>
-                                    <td>{event.time}</td>
-                                    
-                                    {/* ### Pretty sure we might have to re-move the lat 2 <td> elements outside the filtered events map and into a new one for user querying*/}
-                                    <td> {/*event.rsvp.length*/} </td>
-                                    <td>
-                                        <details>
-                                            <summary>View RSVP List</summary>
-                                            <ul>
-                                                {/*event.rsvp.length > 0 ? (
-                                                    event.rsvp.map((user,i) => <li key={i}>{user}</li>)
-                                                ) : ( 
-                                                    <li>No RSVPs</li>
-                                                )*/}
-                                            </ul>
-                                        </details>
-                                    </td>
-                                </tr>
-                            ))}
+                            {filteredEvents.map((event, index) => {
+                                const eventId = event.id || `${event.location}-${event.date}-${event.time}`;
+                                const rsvps = rsvpData[eventId] || [];
+                                console.log(`Rendering event ${eventId} with RSVPs:`, rsvps);
+                                return (
+                                    <tr key={index}>
+                                        <td>{event.location}</td>
+                                        <td>{formatDate(event.date)}</td>
+                                        <td>{event.time}</td>
+                                        <td>{rsvps.length}</td>
+                                        <td>
+                                            <details>
+                                                <summary>View RSVP List ({rsvps.length})</summary>
+                                                <ul className={styles.rsvpList}>
+                                                    {rsvps.length > 0 ? (
+                                                        rsvps.map((rsvp, i) => (
+                                                            <li key={i} className={styles.rsvpItem}>
+                                                                {rsvp.userID}
+                                                            </li>
+                                                        ))
+                                                    ) : (
+                                                        <li>No RSVPs</li>
+                                                    )}
+                                                </ul>
+                                            </details>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 ) : (
