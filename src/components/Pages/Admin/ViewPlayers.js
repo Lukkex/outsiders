@@ -1,5 +1,3 @@
-// ViewPlayers.js
-
 import React, { useState, useEffect } from "react";
 import {
   fetchAllUsers,
@@ -13,14 +11,12 @@ import SiteContainer from "../../../utils/SiteContainer.js";
 
 function ViewPlayers() {
   const [players, setPlayers] = useState([]);
-  const [prisonFilter, setPrisonFilter] = useState("");
   const [currentUserEmail, setCurrentUserEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [modal, setModal] = useState({
-    open: false,
-    type: null, // "promote" or "delete"
-    player: null,
-  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [modal, setModal] = useState({ open: false, type: null, player: null });
+  const playersPerPage = 15;
 
   useEffect(() => {
     async function fetchPlayers() {
@@ -36,201 +32,157 @@ function ViewPlayers() {
     fetchPlayers();
   }, []);
 
-  const handleFilterChange = (event) => {
-    setPrisonFilter(event.target.value);
-  };
+  const handleSearch = () => setCurrentPage(1);
 
-  const handlePromote = async (player) => {
-    const confirm = window.confirm(
-      `Are you sure you want to promote ${player.given_name} ${player.family_name} to Admin?`
-    );
-    if (!confirm) return;
+  const filteredPlayers = players.filter(player =>
+    `${player.given_name} ${player.family_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    try {
-      setLoading(true);
-      await promoteUser(player.username);
-      const updatedPlayers = players.map((p) =>
-        p.username === player.username ? { ...p, groups: [...p.groups, "admin"] } : p
-      );
-      setPlayers(updatedPlayers);
-    } catch (error) {
-      console.error("Promote User Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDemote = async (player) => {
-    try {
-      setLoading(true);
-      await demoteUser(player.username);
-      const updatedPlayers = players.map((p) =>
-        p.username === player.username ? { ...p, groups: p.groups.filter((g) => g !== "admin") } : p
-      );
-      setPlayers(updatedPlayers);
-    } catch (error) {
-      console.error("Demote User Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (player) => {
-    const confirm = window.confirm(
-      `Are you sure you want to delete ${player.given_name} ${player.family_name}? This action cannot be undone.`
-    );
-    if (!confirm) return;
-
-    try {
-      setLoading(true);
-      await deleteUser(player.username);
-      const updatedPlayers = players.filter((p) => p.username !== player.username);
-      setPlayers(updatedPlayers);
-    } catch (error) {
-      console.error("Delete User Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const openModal = (type, player) => {
-    setModal({ open: true, type, player });
-  };
-
-  const closeModal = () => {
-    setModal({ open: false, type: null, player: null });
-  };
+  const indexOfLastPlayer = currentPage * playersPerPage;
+  const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
+  const currentPlayers = filteredPlayers.slice(indexOfFirstPlayer, indexOfLastPlayer);
+  const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
 
   const handleModalConfirm = async () => {
     if (!modal.player) return;
     setLoading(true);
     if (modal.type === "promote") {
       await promoteUser(modal.player.username);
-      setPlayers(players.map((p) =>
+      setPlayers(players.map(p =>
         p.username === modal.player.username ? { ...p, groups: [...p.groups, "admin"] } : p
       ));
     } else if (modal.type === "delete") {
       await deleteUser(modal.player.username);
-      setPlayers(players.filter((p) => p.username !== modal.player.username));
+      setPlayers(players.filter(p => p.username !== modal.player.username));
     }
     setLoading(false);
     closeModal();
   };
 
-  const filteredPlayers = prisonFilter
-    ? players.filter(
-        (player) =>
-          Array.isArray(player.preferred_prisons) &&
-          player.preferred_prisons.includes(prisonFilter)
-      )
-    : players;
+  const closeModal = () => setModal({ open: false, type: null, player: null });
 
   return (
-    <SiteContainer
-      content={
-        <div>
-          <div className="admin-dashboard">
-            <h1 className="dashboard-title">VIEW PLAYERS</h1>
+    <SiteContainer content={
+      <div>
+        <div className="admin-dashboard">
+          <h1 className="dashboard-title text-center mb-6">VIEW PLAYERS</h1>
 
-            <div className="filters">
-              <select onChange={handleFilterChange} value={prisonFilter}>
-                <option value="">All Prisons</option>
-                <option value="Folsom">Folsom</option>
-                <option value="San Quentin">San Quentin</option>
-              </select>
-            </div>
+          <div className="filters mb-4 flex justify-start">
+            <input
+              type="text"
+              placeholder="Search by name"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSearch()}
+              className="px-3 py-2 border rounded w-80"
+            />
+          </div>
 
-            <table className="player-table">
-              <thead>
-                <tr>
-                  <th>PLAYER NAME</th>
-                  <th>PREFERRED PRISONS</th>
-                  <th>REGISTRATION DATE</th>
-                  <th>ROLE</th>
-                  <th>ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredPlayers.length > 0 ? (
-                  filteredPlayers.map((player, index) => (
-                    <tr key={index}>
-                      <td>{`${player.given_name} ${player.family_name}`}</td>
-                      <td>{player.preferred_prisons.join(', ') || "Unknown"}</td>
-                      <td>{new Date(player.created_at).toLocaleString()}</td>
-                      <td>
-                        {player.groups && player.groups.includes("admin")
-                          ? "Admin"
-                          : "Basic User"}
-                      </td>
-                      <td className="action-buttons">
-                        {player.email === currentUserEmail ? (
-                          <span style={{ color: '#888' }}>N/A</span>
-                        ) : (
-                          <>
-                            {player.groups && player.groups.includes("admin") ? (
-                              <button
-                                onClick={() => handleDemote(player)}
-                                className="demote-button"
-                                disabled={loading}
-                              >
-                                Demote
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => openModal("promote", player)}
-                                className="promote-button"
-                                disabled={loading}
-                              >
-                                Promote
-                              </button>
-                            )}
+          <table className="player-table">
+            <thead>
+              <tr>
+                <th>PLAYER NAME</th>
+                <th>REGISTRATION DATE</th>
+                <th>ROLE</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentPlayers.length > 0 ? (
+                currentPlayers.map((player, index) => (
+                  <tr key={index}>
+                    <td>{`${player.given_name} ${player.family_name}`}</td>
+                    <td>{new Date(player.created_at).toLocaleString()}</td>
+                    <td>
+                      {player.groups && player.groups.includes("admin") ? "Admin" : "Basic User"}
+                    </td>
+                    <td>
+                      {player.email === currentUserEmail ? (
+                        <span style={{ color: '#888' }}>N/A</span>
+                      ) : (
+                        <>
+                          {player.groups && player.groups.includes("admin") ? (
                             <button
-                              onClick={() => openModal("delete", player)}
-                              className="delete-button"
+                              onClick={() => demoteUser(player.username)}
+                              className="demote-button"
                               disabled={loading}
                             >
-                              Delete
+                              Demote
                             </button>
-                          </>
-                        )}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5">No players found</td>
+                          ) : (
+                            <button
+                              onClick={() => setModal({ open: true, type: "promote", player })}
+                              className="promote-button"
+                              disabled={loading}
+                            >
+                              Promote
+                            </button>
+                          )}
+                          <button
+                            onClick={() => setModal({ open: true, type: "delete", player })}
+                            className="delete-button"
+                            disabled={loading}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4">No players found</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+
+          <div className="flex justify-center mt-4 gap-2">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              className="bg-sky-700 text-white px-3 py-1 rounded shadow"
+              disabled={currentPage === 1}
+            >
+              &larr;
+            </button>
+            <span className="px-4 py-1">Page {currentPage} of {totalPages || 1}</span>
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              className="bg-sky-700 text-white px-3 py-1 rounded shadow"
+              disabled={currentPage === totalPages}
+            >
+              &rarr;
+            </button>
           </div>
-          {modal.open && (
-            <div className="modal-backdrop">
-              <div className="modal-content">
-                <h3>
-                  {modal.type === "promote"
-                    ? `Promote ${modal.player.given_name} ${modal.player.family_name} to Admin?`
-                    : `Delete ${modal.player.given_name} ${modal.player.family_name}?`}
-                </h3>
-                <p>
-                  {modal.type === "promote"
-                    ? "Are you sure you want to promote this user to Admin?"
-                    : "Are you sure you want to delete this user? This action cannot be undone."}
-                </p>
-                <div className="modal-actions">
-                  <button onClick={handleModalConfirm} disabled={loading} className="promote-button">
-                    Confirm
-                  </button>
-                  <button onClick={closeModal} className="delete-button" disabled={loading}>
-                    Cancel
-                  </button>
-                </div>
+        </div>
+
+        {modal.open && (
+          <div className="modal-backdrop">
+            <div className="modal-content">
+              <h3>
+                {modal.type === "promote"
+                  ? `Promote ${modal.player.given_name} ${modal.player.family_name} to Admin?`
+                  : `Delete ${modal.player.given_name} ${modal.player.family_name}?`}
+              </h3>
+              <p>
+                {modal.type === "promote"
+                  ? "Are you sure you want to promote this user to Admin?"
+                  : "Are you sure you want to delete this user? This action cannot be undone."}
+              </p>
+              <div className="modal-actions">
+                <button onClick={handleModalConfirm} disabled={loading} className="promote-button">
+                  Confirm
+                </button>
+                <button onClick={closeModal} className="delete-button" disabled={loading}>
+                  Cancel
+                </button>
               </div>
             </div>
-          )}
-        </div>
-      }
-    />
+          </div>
+        )}
+      </div>
+    } />
   );
 }
 

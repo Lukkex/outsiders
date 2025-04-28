@@ -10,6 +10,14 @@ import { getCurrentUserInfo, getUserRole } from '../../../services/authConfig';
 import { Link } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 
+function capitalizeName(name) {
+    return name
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
 function getFormattedDate() {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -267,15 +275,15 @@ function Registration() {
     };
 
     const uploadFiles = async () => {
-        
+
         if (selectedForms.length === 0) {
             alert("No forms selected for upload.");
             return;
         }
-
+    
         try {
             var signatureDataUrl;
-
+    
             if (!sigCanvas.current.isEmpty()) {
                 // Get signature as base64 image
                 signatureDataUrl = sigCanvas.current.getCanvas().toDataURL("image/png");
@@ -292,11 +300,11 @@ function Registration() {
                 if (!file) {
                     throw new Error(`No file selected for form ID: ${formId}`);
                 }
-
+    
                 file = await fillSignature(file, signatureDataUrl, signatureLocation, signaturePage);
-
+    
                 //end of file formatting, start of file upload
-                
+    
                 const formattedDate = getFormattedDate(); // Generate date for folder structure
                 const filePath = `uploads/${user.email}/${formattedDate}/${filename} - ${user.given_name}_${user.family_name}`; // Organize by date
                 
@@ -324,6 +332,7 @@ function Registration() {
             alert("Error uploading files. Are the correct forms attached?");
         }
     };
+    
 
     const handlePrisonChange = (event) => {
         const value = event.target.value;
@@ -639,7 +648,7 @@ function Registration() {
                             </div>
                         )}
                     </div>
-                    <div className="navigation-buttons">
+                    <div className="navigation-buttons flex justify-center mt-4">
                         {step < 4 && (
                             <button className="rounded-button mt-3" onClick={handleNext}>
                                 Next

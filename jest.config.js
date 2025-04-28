@@ -1,12 +1,12 @@
-// jest.config.js
 module.exports = {
-    testEnvironment: 'jsdom',
-    moduleNameMapper: {
-      // Mock CSS imports
-      '\\.css$': 'identity-obj-proxy',
-    },
-    transform: {
-      // Use babel-jest for js, jsx
-      '^.+\\.[jt]sx?$': 'babel-jest',
-    },
-  };  
+  testEnvironment: 'jsdom',
+  transform: {
+    '^.+\\.[jt]sx?$': 'babel-jest',
+  },
+  moduleFileExtensions: ['js', 'jsx'],
+  moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', //ignore CSS files
+  },
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  reporters: ['default']
+};

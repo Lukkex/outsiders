@@ -199,6 +199,27 @@
         }
       }
     },
+    "APIGatewayAuthStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
+        "Parameters": {
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "env": "dev",
+          "userdataapi": {
+            "Fn::GetAtt": [
+              "apiuserdataapi",
+              "Outputs.ApiId"
+            ]
+          }
+        }
+      }
+    },
     "AuthTriggerCustomLambdaStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -262,27 +283,21 @@
         }
       }
     },
-    "apiAdminQueries": {
+    "apiuserdataapi": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/AdminQueries-cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/api/userdataapi-cloudformation-template.json",
         "Parameters": {
-          "authoutsiders782de14cUserPoolId": {
+          "functioneventsFunctionName": {
             "Fn::GetAtt": [
-              "authoutsiders782de14c",
-              "Outputs.UserPoolId"
-            ]
-          },
-          "functionAdminQueriesc939b8b6Arn": {
-            "Fn::GetAtt": [
-              "functionAdminQueriesc939b8b6",
-              "Outputs.Arn"
-            ]
-          },
-          "functionAdminQueriesc939b8b6Name": {
-            "Fn::GetAtt": [
-              "functionAdminQueriesc939b8b6",
+              "functioneventsFunction",
               "Outputs.Name"
+            ]
+          },
+          "functioneventsFunctionArn": {
+            "Fn::GetAtt": [
+              "functioneventsFunction",
+              "Outputs.Arn"
             ]
           },
           "env": "dev"
@@ -342,10 +357,6 @@
           "dependsOn": "[object Object]",
           "permissions": "{\"policyName\":\"AddToGroupCognito\",\"trigger\":\"PostConfirmation\",\"effect\":\"Allow\",\"actions\":[\"cognito-idp:AdminAddUserToGroup\",\"cognito-idp:GetGroup\",\"cognito-idp:CreateGroup\"],\"resource\":{\"paramType\":\"!GetAtt\",\"keys\":[\"UserPool\",\"Arn\"]}}",
           "authTriggerConnections": "{\"triggerType\":\"PostConfirmation\",\"lambdaFunctionName\":\"outsiders782de14cPostConfirmation\"}",
-          "adminQueryGroup": "Admins",
-          "parentStack": {
-            "Ref": "AWS::StackId"
-          },
           "env": "dev"
         }
       }
@@ -404,17 +415,23 @@
         }
       }
     },
-    "functionAdminQueriesc939b8b6": {
+    "functioneventsFunction": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/AdminQueriesc939b8b6-cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/function/eventsFunction-cloudformation-template.json",
         "Parameters": {
           "deploymentBucketName": "amplify-outsiders-dev-37233-deployment",
-          "s3Key": "amplify-builds/AdminQueriesc939b8b6-5642733157774d362b44-build.zip",
-          "authoutsiders782de14cUserPoolId": {
+          "s3Key": "amplify-builds/eventsFunction-6944482f65336b596b5a-build.zip",
+          "storageeventsTableName": {
             "Fn::GetAtt": [
-              "authoutsiders782de14c",
-              "Outputs.UserPoolId"
+              "storageeventsTable",
+              "Outputs.Name"
+            ]
+          },
+          "storageeventsTableArn": {
+            "Fn::GetAtt": [
+              "storageeventsTable",
+              "Outputs.Arn"
             ]
           },
           "env": "dev"
@@ -450,6 +467,18 @@
           "s3PermissionsAuthenticatedUploads": "s3:PutObject",
           "s3PermissionsGuestPublic": "DISALLOW",
           "s3PermissionsGuestUploads": "DISALLOW",
+          "env": "dev"
+        }
+      }
+    },
+    "storageeventsTable": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-outsiders-dev-37233-deployment/amplify-cfn-templates/storage/eventsTable-cloudformation-template.json",
+        "Parameters": {
+          "tableName": "eventsTable",
+          "partitionKeyName": "eventId",
+          "partitionKeyType": "S",
           "env": "dev"
         }
       }
