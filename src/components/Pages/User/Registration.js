@@ -648,15 +648,15 @@ function Registration() {
                             </div>
                         )}
                     </div>
-                    <div className="navigation-buttons flex justify-center mt-4">
-                        {step < 4 && (
-                            <button className="rounded-button mt-3" onClick={handleNext}>
-                                Next
-                            </button>
-                        )}
+                    <div className="navigation-buttons flex justify-center gap-4 mt-4">
                         {step > 1 && step < 5 && (
                             <button className="rounded-button mt-3" onClick={handleBack}>
                                 Back
+                            </button>
+                        )}
+                        {step < 4 && (
+                            <button className="rounded-button mt-3" onClick={handleNext}>
+                                Next
                             </button>
                         )}
                     </div>
