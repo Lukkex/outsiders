@@ -8,27 +8,22 @@ export async function getSubmittedFormsFromS3() {
     let nextToken = null;
     let allItems = [];
 
-    do {
-      const { items, nextToken: newToken } = await list('uploads/', {
-        level: 'public',
-        pageSize: 1000,
-        nextToken,
-      });
+    allItems = await list({
+      path: `uploads`
+    });
 
-      allItems = allItems.concat(items);
-      nextToken = newToken;
-    } while (nextToken);
+    console.log("AllItems: " + allItems);
 
-    const pdfItems = allItems.filter(
+    const pdfItems = allItems.items.filter(
       item =>
-        item.key.endsWith('.pdf') &&
-        /^uploads\/[^/]+\/\d{4}_\d{2}_\d{2}\/[^/]+\.pdf$/.test(item.key)
+        item.path.endsWith('.pdf')
     );
 
-    console.log('Raw keys:', pdfItems.map(i => i.key));
+    console.log(pdfItems);
+    console.log('Raw keys:', pdfItems.map(i => i.path));
 
     for (const item of pdfItems) {
-      const parts = item.key.split('/');
+      const parts = item.path.split('/');
       const email = parts[1];
       const date = parts[2];
       const filename = parts[3];
@@ -41,10 +36,11 @@ export async function getSubmittedFormsFromS3() {
 
       try {
         const { url } = await getUrl({
-          path: item.key,
+          path: item.path,
           options: { accessLevel: 'public', expiresIn: 60 }
         });
 
+        /*
         const headRes = await fetch(url, { method: 'HEAD' });
 
         firstName = headRes.headers.get('x-amz-meta-firstname') || '';
@@ -52,6 +48,7 @@ export async function getSubmittedFormsFromS3() {
         metadataEmail = headRes.headers.get('x-amz-meta-email') || email;
 
         console.log(`Fetched metadata from HEAD:`, { firstName, lastName, metadataEmail });
+        */
       } catch (err) {
         console.warn('HEAD fetch failed for', item.key, err);
       }
@@ -80,7 +77,7 @@ export async function getSubmittedFormsFromS3() {
         filename,
         formID: nameWithoutExtension,
         formCode,
-        s3Key: item.key,
+        s3Key: item.path,
         firstName,
         lastName,
         prison: '',

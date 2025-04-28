@@ -181,7 +181,6 @@ h1 {
 }
 
 .navigation-buttons button {
-  margin: 10px;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -203,6 +202,15 @@ h1 {
   font-size: 1rem;
   margin-top: 10px;
   transition: 0.3s ease-in-out;
+}
+
+.rounded-button.uploaded {
+  background-color: #4CAF50; /* Green background when uploaded */
+  color: white; /* White text on green */
+}
+
+.rounded-button.uploaded:hover {
+  background-color: #45A049; /* Darker green on hover */
 }
 
 .Deletion {

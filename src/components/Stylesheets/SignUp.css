@@ -34,6 +34,16 @@ h1 {
     margin: 0 auto;
 }
 
+.form-container.wide {
+    background-color: white;
+    border: 2px solid#4896ac;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 840px;
+    margin: 0 auto;
+}
+
 .form-input {
     display: block;
     width: 95%;
