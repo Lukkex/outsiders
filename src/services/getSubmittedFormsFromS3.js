@@ -36,10 +36,11 @@ export async function getSubmittedFormsFromS3() {
 
       try {
         const { url } = await getUrl({
-          path: item.key,
+          path: item.path,
           options: { accessLevel: 'public', expiresIn: 60 }
         });
 
+        /*
         const headRes = await fetch(url, { method: 'HEAD' });
 
         firstName = headRes.headers.get('x-amz-meta-firstname') || '';
@@ -47,6 +48,7 @@ export async function getSubmittedFormsFromS3() {
         metadataEmail = headRes.headers.get('x-amz-meta-email') || email;
 
         console.log(`Fetched metadata from HEAD:`, { firstName, lastName, metadataEmail });
+        */
       } catch (err) {
         console.warn('HEAD fetch failed for', item.key, err);
       }
@@ -75,7 +77,7 @@ export async function getSubmittedFormsFromS3() {
         filename,
         formID: nameWithoutExtension,
         formCode,
-        s3Key: item.key,
+        s3Key: item.path,
         firstName,
         lastName,
         prison: '',
