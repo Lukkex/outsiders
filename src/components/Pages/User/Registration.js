@@ -10,14 +10,6 @@ import { getCurrentUserInfo, getUserRole } from '../../../services/authConfig';
 import { Link } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 
-function capitalizeName(name) {
-    return name
-        .toLowerCase()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-}
-
 function getFormattedDate() {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -212,7 +204,7 @@ function Registration() {
             if (userFiles.items.length > 0) {
                 for (let i=0;i<userFiles.items.length;i++) {
                     //console.log(userFiles.items[i].path);
-                    if (userFiles.items[i].path.indexOf(fileKey) > -1){
+                    if (userFiles.items[i].path.indexOf(fileKey.replace(/\.pdf$/, "")) > -1){
                         const getUrlResult = await getUrl({
                             path: userFiles.items[i].path,
                             // Alternatively, path: ({identityId}) => `protected/${identityId}/album/2024/1.jpg`
@@ -293,7 +285,7 @@ function Registration() {
 
             const uploadPromises = selectedForms.map(async (formId) => {
                 var file = fileMap[formId];
-                const filename = getFileKeyById(formId);
+                const filename = getFileKeyById(formId).replace(/\.pdf$/, "");
                 const signatureLocation = getSignatureLocationById(formId);
                 const signaturePage = getSignaturePageById(formId);
     
@@ -306,7 +298,7 @@ function Registration() {
                 //end of file formatting, start of file upload
     
                 const formattedDate = getFormattedDate(); // Generate date for folder structure
-                const filePath = `uploads/${user.email}/${formattedDate}/${filename} - ${user.given_name}_${user.family_name}`; // Organize by date
+                const filePath = `uploads/${user.email}/${formattedDate}/${filename} - ${user.given_name}_${user.family_name}.pdf`; // Organize by date
                 
                 const result = await uploadData({
                     path: filePath, 

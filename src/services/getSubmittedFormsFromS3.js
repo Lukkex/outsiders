@@ -8,27 +8,22 @@ export async function getSubmittedFormsFromS3() {
     let nextToken = null;
     let allItems = [];
 
-    do {
-      const { items, nextToken: newToken } = await list('uploads/', {
-        level: 'public',
-        pageSize: 1000,
-        nextToken,
-      });
+    allItems = await list({
+      path: `uploads`
+    });
 
-      allItems = allItems.concat(items);
-      nextToken = newToken;
-    } while (nextToken);
+    console.log(allItems);
 
-    const pdfItems = allItems.filter(
+    const pdfItems = allItems.items.filter(
       item =>
-        item.key.endsWith('.pdf') &&
-        /^uploads\/[^/]+\/\d{4}_\d{2}_\d{2}\/[^/]+\.pdf$/.test(item.key)
+        item.path.endsWith('.pdf')
     );
 
-    console.log('Raw keys:', pdfItems.map(i => i.key));
+    console.log(pdfItems);
+    console.log('Raw keys:', pdfItems.map(i => i.path));
 
     for (const item of pdfItems) {
-      const parts = item.key.split('/');
+      const parts = item.path.split('/');
       const email = parts[1];
       const date = parts[2];
       const filename = parts[3];
@@ -53,7 +48,7 @@ export async function getSubmittedFormsFromS3() {
 
         console.log(`Fetched metadata from HEAD:`, { firstName, lastName, metadataEmail });
       } catch (err) {
-        console.warn('HEAD fetch failed for', item.key, err);
+        console.warn('HEAD fetch failed for', item.key, err);git
       }
 
       //Metadata from s3 is protected and forbidden to touch, so I added names to the pdf name itself and parsed from there
