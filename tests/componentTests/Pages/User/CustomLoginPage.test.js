@@ -1,38 +1,107 @@
-
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import CustomLoginPage from '../../../../src/components/Pages/CustomLoginPage';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import CustomLoginPage from '../../../src/components/Pages/CustomLoginPage';
 import { MemoryRouter } from 'react-router-dom';
-import { UserProvider } from '../../../../src/context/UserContext';
+import { useUser } from '../../../../src/context/UserContext';
+
+// Mock AWS Amplify Auth
+jest.mock('@aws-amplify/auth', () => ({
+  signIn: jest.fn(),
+  confirmSignIn: jest.fn(),
+  signOut: jest.fn(),
+  resetPassword: jest.fn(),
+  confirmResetPassword: jest.fn()
+}));
+
+// Mock useNavigate
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate
+}));
+
+// Mock useUser
+jest.mock('../../../../src/context/UserContext', () => ({
+  useUser: jest.fn()
+}));
+
 
 describe('CustomLoginPage', () => {
-  test('renders login form', () => {
-    render(<MemoryRouter>
-      <UserProvider>
-      <CustomLoginPage onLogin={jest.fn()} />
-      </UserProvider>
-      </MemoryRouter>);
-
-    expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
-    //expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+  beforeEach(() => {
+    useUser.mockReturnValue({ refreshUserData: jest.fn() });
   });
 
-  test('submits the form with email and password', () => {
-    const mockOnLogin = jest.fn();
-    render(<CustomLoginPage onLogin={mockOnLogin} />);
+  it('renders login form fields', () => {
+    render(
+      <MemoryRouter>
+        <CustomLoginPage />
+      </MemoryRouter>
+    );
 
-    fireEvent.change(screen.getByPlaceholderText(/email/i), {
-      target: { value: 'outsidersdevteam@outlook.com' },
-    });
-    fireEvent.change(screen.getByPlaceholderText(/password/i), {
-      target: { value: 'password' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
+  });
 
-    expect(mockOnLogin).toHaveBeenCalledWith({
-      email: 'outsidersdevteam@outlook.com',
-      password: 'password',
+  it('submits the login form successfully', async () => {
+    const mockSignInOutput = {
+      nextStep: { signInStep: 'DONE' }
+    };
+
+    const { signIn } = require('@aws-amplify/auth');
+    const { signOut } = require('@aws-amplify/auth');
+    signIn.mockResolvedValue(mockSignInOutput);
+    signOut.mockResolvedValue({});
+
+    const mockRefresh = jest.fn();
+    useUser.mockReturnValue({ refreshUserData: mockRefresh });
+
+    render(
+      <MemoryRouter>
+        <CustomLoginPage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'test@example.com' }
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'password123' }
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(signIn).toHaveBeenCalledWith({
+        username: 'test@example.com',
+        password: 'password123'
+      });
+      expect(mockRefresh).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith('/');
+    });
+  });
+
+  it('displays error message on failed login', async () => {
+    const { signIn } = require('@aws-amplify/auth');
+    signIn.mockRejectedValue(new Error('Login failed'));
+
+    render(
+      <MemoryRouter>
+        <CustomLoginPage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'wrong@example.com' }
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'wrongpass' }
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/login failed/i)).toBeInTheDocument();
     });
   });
 });
