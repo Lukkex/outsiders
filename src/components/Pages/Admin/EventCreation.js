@@ -39,6 +39,7 @@ const EventCreation = () => {
     const [sortOrder, setSortOrder] = useState("asc");
     const [rsvpData, setRsvpData] = useState({}); // New state for RSVP data
     const [allRsvps, setAllRsvps] = useState([]);
+    const [userNames, setUserNames] = useState({});
 
     const createEvent = async (eventData) => {
         try {
@@ -65,23 +66,20 @@ const EventCreation = () => {
     
     const fetchRsvpData = async (eventId) => {
         try {
-          // (1) Fetch all RSVP records (no query string)
-          const headers  = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
-          const response = await fetch(`${USER_EVENT_API_URL}?userID=dummy`, {
-            method: 'GET',
-            headers
-          });
-          if (!response.ok) throw new Error('Failed to fetch RSVP data');
-      
-          const allRsvps = await response.json();
-      
-          // (2) Client-side filter by eventId
-          return allRsvps.filter(rsvp => rsvp.eventId === eventId);
+            const headers = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
+            // Use GET with eventId as a query param
+            const response = await fetch(`${USER_EVENT_API_URL}?eventId=${encodeURIComponent(eventId)}`, {
+                method: 'GET',
+                headers
+            });
+            if (!response.ok) throw new Error('Failed to fetch RSVP data');
+            const rsvps = await response.json();
+            return rsvps;
         } catch (err) {
-          console.error('Error fetching RSVP data:', err);
-          return [];
+            console.error('Error fetching RSVP data:', err);
+            return [];
         }
-      };
+    };
 
     const fetchEvents = async () => {
         try {
@@ -118,7 +116,7 @@ const EventCreation = () => {
 
             // Fetch RSVP data for each event
             const rsvpPromises = futureEvents.map(async (event) => {
-                const eventId = event.id || `${event.location}-${event.date}-${event.time}`;
+                const eventId = event.eventID;
                 console.log('Processing event:', eventId);
                 const rsvps = await fetchRsvpData(eventId);
                 return [eventId, rsvps];
@@ -129,6 +127,37 @@ const EventCreation = () => {
             const rsvpMap = Object.fromEntries(rsvpResults);
             console.log('RSVP map:', rsvpMap);
             setRsvpData(rsvpMap);
+
+            // After fetching all RSVPs for all events:
+            const allUserIDs = Array.from(new Set(
+                Object.values(rsvpMap).flat().map(rsvp => rsvp.userID)
+            ));
+
+            if (allUserIDs.length > 0) {
+                const lookupHeaders = {
+                    'Content-Type': 'application/json',
+                    ...(await getAuthHeader())
+                };
+                const lookupResp = await fetch('https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/get-user-names', {
+                    method: 'POST',
+                    headers: lookupHeaders,
+                    body: JSON.stringify({ userIDs: allUserIDs })
+                });
+
+                if (!lookupResp.ok) {
+                    console.error('Name lookup failed:', lookupResp.status, await lookupResp.text());
+                } else {
+                    const userInfos = await lookupResp.json();
+                    console.log('UserInfos:', userInfos);
+                    if (Array.isArray(userInfos)) {
+                        const idToName = {};
+                        userInfos.forEach(u => { idToName[u.userID] = u.name; });
+                        setUserNames(idToName);
+                    } else {
+                        console.error('Expected array from name lookup but got:', userInfos);
+                    }
+                }
+            }
         } catch (error) {
             console.error('Error fetching events:', error);
         }
@@ -190,6 +219,28 @@ const EventCreation = () => {
             setSortOrder("asc");
         }
     }
+
+    const handleAdminRemoveRsvp = async (userID, eventId) => {
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(await getAuthHeader())
+            };
+            const response = await fetch(USER_EVENT_API_URL, {
+                method: 'DELETE',
+                headers,
+                body: JSON.stringify({ userID, eventId })
+            });
+            if (!response.ok) {
+                console.error('Failed to remove RSVP:', response.status, await response.text());
+            } else {
+                // Refresh events and RSVPs
+                await fetchEvents();
+            }
+        } catch (err) {
+            console.error('Error removing RSVP:', err);
+        }
+    };
 
     useEffect(() => {
         fetchEvents();
@@ -295,7 +346,7 @@ const EventCreation = () => {
                         </thead>
                         <tbody>
                             {filteredEvents.map((event, index) => {
-                                const eventId = event.id || `${event.location}-${event.date}-${event.time}`;
+                                const eventId = event.eventID;
                                 const rsvps = rsvpData[eventId] || [];
                                 console.log(`Rendering event ${eventId} with RSVPs:`, rsvps);
                                 return (
@@ -311,7 +362,14 @@ const EventCreation = () => {
                                                     {rsvps.length > 0 ? (
                                                         rsvps.map((rsvp, i) => (
                                                             <li key={i} className={styles.rsvpItem}>
-                                                                {rsvp.userID}
+                                                                {userNames[rsvp.userID] || rsvp.userID}
+                                                                <button
+                                                                    style={{ marginLeft: '1em', color: 'red', cursor: 'pointer' }}
+                                                                    onClick={() => handleAdminRemoveRsvp(rsvp.userID, eventId)}
+                                                                    title="Remove RSVP"
+                                                                >
+                                                                    Remove
+                                                                </button>
                                                             </li>
                                                         ))
                                                     ) : (

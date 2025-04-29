@@ -223,12 +223,12 @@ function Scheduling() {
 
         // Split events into RSVP'd and not RSVP'd
         const rsvpEvents = upcomingEvents.filter(event => {
-            const eventId = event.id || `${event.location}-${event.date}-${event.time}`;
+            const eventId = event.eventID;
             return userEvents.has(eventId);
         });
 
         const availableEvents = upcomingEvents.filter(event => {
-            const eventId = event.id || `${event.location}-${event.date}-${event.time}`;
+            const eventId = event.eventID;
             return !userEvents.has(eventId);
         });
 
@@ -248,24 +248,21 @@ function Scheduling() {
                         </thead>
                         <tbody>
                             {rsvpEvents.length > 0 ? (
-                                rsvpEvents.map((event) => {
-                                    const eventId = event.id || `${event.location}-${event.date}-${event.time}`;
-                                    return (
-                                        <tr key={eventId} className={styles.rsvpRow}>
-                                            <td>{event.location}</td>
-                                            <td>{formatDate(event.date)}</td>
-                                            <td>{event.time}</td>
-                                            <td>
-                                                <button 
-                                                    onClick={() => handleUnenroll(eventId)}
-                                                    className={styles.unenrollButton}
-                                                >
-                                                    Cancel RSVP
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
+                                rsvpEvents.map((event) => (
+                                    <tr key={event.eventID} className={styles.rsvpRow}>
+                                        <td>{event.location}</td>
+                                        <td>{formatDate(event.date)}</td>
+                                        <td>{event.time}</td>
+                                        <td>
+                                            <button 
+                                                onClick={() => handleUnenroll(event.eventID)}
+                                                className={styles.unenrollButton}
+                                            >
+                                                Cancel RSVP
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
                             ) : (
                                 <tr>
                                     <td colSpan="4" style={{ textAlign: 'center' }}>
@@ -291,16 +288,15 @@ function Scheduling() {
                         </thead>
                         <tbody>
                             {availableEvents.map((event) => {
-                                const eventId = event.id || `${event.location}-${event.date}-${event.time}`;
-                                const isSelected = selectedEvents.has(eventId);
+                                const isSelected = selectedEvents.has(event.eventID);
                                 return (
-                                    <tr key={eventId}>
+                                    <tr key={event.eventID}>
                                         <td>{event.location}</td>
                                         <td>{formatDate(event.date)}</td>
                                         <td>{event.time}</td>
                                         <td>
                                             <button 
-                                                onClick={() => handleEventSelection(eventId)}
+                                                onClick={() => handleEventSelection(event.eventID)}
                                                 className={`${styles.rsvpButton} ${isSelected ? styles.selectedButton : ''}`}
                                             >
                                                 {isSelected ? 'Selected' : 'RSVP'}
