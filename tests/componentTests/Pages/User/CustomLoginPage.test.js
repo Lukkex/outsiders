@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import CustomLoginPage from './components/Pages/CustomLoginPage';
+import CustomLoginPage from '../../../../src/components/Pages/CustomLoginPage';
 import { MemoryRouter } from 'react-router-dom';
-import { UserProvider } from '../src/context/UserContext';
+import { UserProvider } from '../../../../src/context/UserContext';
 
 describe('CustomLoginPage', () => {
   test('renders login form', () => {
