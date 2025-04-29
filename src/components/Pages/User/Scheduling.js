@@ -1,119 +1,201 @@
-import '../../Stylesheets/App.css'; //global styles
+/*
+* Notes: - NOT LINKED TO BACKEND, USING DUMMY DATA OR NONE AT ALL.
+* TODO: - send eventData to DynamoDB
+*       - fetch locations, RSVPs, and user info from DynamoDB
+*       - events need to auto delete when the date is passed
+*       - delete created events functionality
+*/
+import '../../Stylesheets/App.css';
 import styles from '../../Stylesheets/Scheduling.module.css';
-import {useState , useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import SiteContainer from '../../../utils/SiteContainer.js';
+import { fetchAuthSession } from '@aws-amplify/auth';
 
-// Meeting dummy data simulating backend tables
-const dummyMeetingTimes = [
-  { meetId: 1, date: '2024-03-20', location: 'Folsom State Prison' },
-  { meetId: 2, date: '2024-03-21', location: 'San Quentin State Prison' },
-  { meetId: 3, date: '2024-03-22', location: 'Folsom State Prison' }
-];
+const API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/user-events';
+const EVENTS_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/events';
 
 function Scheduling() {
-    const [shScheduling, setShScheduling] = useState(false);
+  const [shScheduling, setShScheduling] = useState(true);
+  const [selectedMeetings, setSelectedMeetings] = useState(new Set());
+  const [meetingTimes, setMeetingTimes] = useState([]);
+  const [showSaved, setShowSaved] = useState(false);
+  const [showNoSelection, setShowNoSelection] = useState(false);
+  const [locationFilter, setLocationFilter] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
-    // Storing the meetingIds, meeting times, selected meetings, and setting flags for temporary messages
-    const [selectedMeetings, setSelectedMeetings] = useState(new Set());
-    const [meetingTimes, setMeetingTimes] = useState([]);
-    const [showSaved, setShowSaved] = useState(false);
-    const [showNoSelection, setShowNoSelection] = useState(false);
+  const availableLocations = ["Folsom", "San Quentin"];
 
-    // Simulate call to fetch meeting times
-    useEffect(() => {
-        // In real implementation fetch from backend
-        setMeetingTimes(dummyMeetingTimes);
-    }, []);
+  const fetchMeetings = async () => {
+    const res = await fetch(EVENTS_URL);
+    const allEvents = await res.json();
+    const now = new Date();
 
-    // Add/remove meetingids from selected meetings
-    const toggleMeeting = (meetId) => {
-        setSelectedMeetings(prev => {
-            const newSelection = new Set(prev);
-            if (newSelection.has(meetId)) {
-                newSelection.delete(meetId);
-            } else {
-                newSelection.add(meetId);
-            }
-            return newSelection;
-        });
+    const futureEvents = allEvents.filter(ev => {
+      const evDateTime = new Date(`${ev.date}T${ev.time}`);
+      return evDateTime >= now;
+    });
+
+    setMeetingTimes(futureEvents);
+  };
+
+  const getAuthHeader = async () => {
+    const session = await fetchAuthSession();
+    return {
+      Authorization: session.tokens?.accessToken?.toString() ?? '',
     };
+  };
 
-    const handleSave = () => {
-        if (selectedMeetings.size === 0) {
-            setShowNoSelection(true);
-            setTimeout(() => setShowNoSelection(false), 2000);
-            return;
-        }
-        console.log('Saving selected meetings:', Array.from(selectedMeetings));
-        setShowSaved(true);
-        setTimeout(() => setShowSaved(false), 2000);
-    };
+  // Generate a unique key for each event
+  const getEventKey = (event) => `${event.location}_${event.date}_${event.time}`;
 
-    const hideComponent = (component) => {
-        switch (component) {
-            case "shScheduling":
-                setShScheduling(prevShScheduling => !prevShScheduling);
-                break;
-            default:
-                return;
-        }
-    };
-    
-    // Returns table of available meeting times, allowing for user selection
-    function Schedule() {
-        return (
-        <div className={styles.tableContainer}>
-            <table className={styles.scheduleTable}>
-                <caption classname={styles.scheduleTableHeader}>Select Available Dates</caption>
-                <thead>
-                    <tr>
-                        <th>Location</th>
-                        <th>Date</th>
-                        <th>Availability</th>
-                    </tr>
-                </thead> 
-                <tbody>
-                    {meetingTimes.map(({ meetId, location, date }) => (
-                        <tr key={meetId}>
-                            <td>{location}</td>
-                            <td>{new Date(date).toLocaleDateString()}</td>
-                            <td>
-                                <input 
-                                    type="checkbox"
-                                    checked={selectedMeetings.has(meetId)}
-                                    onChange={() => toggleMeeting(meetId)}
-                                />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <button onClick={handleSave} className={styles.saveButton}>
-                Confirm Selection
-            </button>
-            {showSaved && <div className={styles.savedMessage}>Dates saved!</div>}
-            {showNoSelection && <div className={styles.errorMessage}>Please select at least one date</div>}
-        </div>
-        );
+  const toggleMeeting = (key) => {
+    setSelectedMeetings(prev => {
+      const updated = new Set(prev);
+      if (updated.has(key)) {
+        updated.delete(key);
+      } else {
+        updated.add(key);
+      }
+      return updated;
+    });
+  };
+
+  const handleSave = async () => {
+    if (selectedMeetings.size === 0) {
+      setShowNoSelection(true);
+      setTimeout(() => setShowNoSelection(false), 2000);
+      return;
     }
 
-    return (
-        <SiteContainer content = {
-            <div>
-                <br></br>
-                <br></br>
-                <br></br>
-                <div className={styles.alertContainer}>
-                    <h1>Please Complete Registration to Continue.</h1>
-                    <button onClick={() => hideComponent("shScheduling")} className={styles.toggleButton}>[debug] Toggle Registration </button>
-                </div>
-                <br></br>
-                <br></br>
-                {shScheduling && <Schedule />}
-                <br></br>
+    const headers = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
+
+    await Promise.all([...selectedMeetings].map(key => {
+      const [location, date, time] = key.split('_');
+      return fetch(API_URL, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ location, date, time })
+      });
+    }));
+
+    setShowSaved(true);
+    setTimeout(() => setShowSaved(false), 2000);
+  };
+
+  const handleClear = () => {
+    setLocationFilter('');
+    setSortOrder('asc');
+  };
+
+  useEffect(() => { fetchMeetings(); }, []);
+
+  const filteredMeetings = meetingTimes
+    .filter(({ location }) => {
+      return locationFilter ? location === locationFilter : true;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(`${a.date}T${a.time}`);
+      const dateB = new Date(`${b.date}T${b.time}`);
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
+  const toggleSortOrder = () => {
+    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', { timeZone: 'UTC' });
+  };
+
+  return (
+    <SiteContainer content={
+      <div>
+        <br /><br />
+        <div className={styles.alertContainer}>
+          <h1>Please RSVP to available events below.</h1>
+        </div>
+        <br /><br />
+
+        {shScheduling && (
+          <div className={styles.tableContainer}>
+
+            {/* Filters */}
+            <div className="flex gap-2 mb-6 items-center justify-start">
+              <select
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                className="px-3 py-2 border rounded w-64"
+              >
+                <option value="">All Locations</option>
+                {availableLocations.map(loc => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
+              </select>
+
+              <button
+                onClick={toggleSortOrder}
+                className={styles.dashboardButton}
+              >
+                Sort by {sortOrder === 'asc' ? 'Most Recent' : 'Oldest'}
+              </button>
+
+              <button
+                onClick={handleClear}
+                className={styles.dashboardButton}
+              >
+                Clear
+              </button>
             </div>
-        }/>
-    );
+
+            {/* Table */}
+            <table className={styles.scheduleTable}>
+              <caption className={styles.scheduleTableHeader}>Select Available Dates</caption>
+              <thead>
+                <tr>
+                  <th>Location</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>RSVP</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredMeetings.map((event) => {
+                  const key = getEventKey(event);
+                  return (
+                    <tr key={key}>
+                      <td>{event.location}</td>
+                      <td>{formatDate(event.date)}</td>
+                      <td>{event.time}</td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedMeetings.has(key)}
+                          onChange={() => toggleMeeting(key)}
+                          className="accent-sky-700"
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={handleSave}
+                className={styles.saveButton}
+              >
+                Confirm Selection
+              </button>
+            </div>
+
+            {showSaved && <div className={styles.savedMessage}>Dates saved!</div>}
+            {showNoSelection && <div className={styles.errorMessage}>Please select at least one date</div>}
+          </div>
+        )}
+      </div>
+    } />
+  );
 }
 
 export default Scheduling;

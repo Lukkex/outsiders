@@ -11,16 +11,20 @@ const AdminScheduling = () => {
     return (
         <SiteContainer content = {
             <div className="admin-scheduling-page">
-                <nav>
-                    <ul>
-                        <li onClick={() => setActiveSection('event')}>
-                            Event Creation
-                        </li>
-                        <li onClick={() => setActiveSection('user')}>
-                            User Search & RSVP
-                        </li>
-                    </ul>
-                </nav>
+               <div className={styles.topButtonContainer}>
+                    <button
+                        className={styles.topButton}
+                        onClick={() => setActiveSection('event')}
+                    >
+                        Event Creation
+                    </button>
+                    <button
+                        className={styles.topButton}
+                        onClick={() => setActiveSection('user')}
+                    >
+                        User Search & RSVP
+                    </button>
+                </div>
                 <main className="admin-main-content">
                     {activeSection === 'event' && <EventCreation />}
                     {activeSection === 'user' && <UserSearch />}

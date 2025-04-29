@@ -121,9 +121,7 @@ const UserSearch = () => {
 
     return (
     <div>
-        <h2>User Search & RSVP Management</h2>
         <div className={styles.tableContainer}>
-            <h2>User List</h2>
             <label htmlFor="search">Search User by Name: </label>
             <input //searchbar. Queries first/last/both
             type="text"
@@ -131,6 +129,7 @@ const UserSearch = () => {
             placeholder="search"
             value={searchQuery}
             onChange={handleChange}
+            className={styles.searchInput}
             />
             <Table className={styles.reactTable} data={data} pagination={pagination} tree={tree}>
                 {(tableList) => (
