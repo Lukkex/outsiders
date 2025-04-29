@@ -234,10 +234,11 @@ function Scheduling() {
 
         return (
             <div>
+                <br></br>
                 {/* RSVP'd Events Section */}
                 <div className={styles.tableContainer}>
                     <table className={styles.scheduleTable}>
-                        <caption className={styles.scheduleTableHeader}>Your RSVP'd Events</caption>
+                        <caption className={styles.scheduleTableHeader}>Your Events</caption>
                         <thead>
                             <tr>
                                 <th>Location</th>
@@ -340,6 +341,7 @@ function Scheduling() {
                         </div>
                     )}
                 </div>
+                <br></br>
             </div>
         );
     };
