@@ -227,3 +227,247 @@
         font-size: 4vw;
     }
 }
+
+.rsvpActions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.confirmButton {
+    background-color: #4896ac;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.confirmButton:hover {
+    background-color: #3f6c77;
+}
+
+.confirmButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.confirmationModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.confirmationContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+}
+
+.confirmationContent h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.confirmationButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancelButton {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.cancelButton:hover {
+    background-color: #c0392b;
+}
+
+.rsvpCheckbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #4896ac;
+}
+
+.enrolledStatus {
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.unenrollButton {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.unenrollButton:hover {
+    background-color: #c0392b;
+}
+
+.enrolledRow {
+    background-color: #f0f9ff;
+}
+
+.notEnrolledStatus {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.enrollButton {
+    background-color: #4896ac;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.enrollButton:hover {
+    background-color: #3f6c77;
+}
+
+.rsvpSummary {
+    background-color: white;
+    border: 2px solid #4896ac;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rsvpSummary h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.rsvpList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+.rsvpItem {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.rsvpItem:last-child {
+    border-bottom: none;
+}
+
+.rsvpItem:hover {
+    background-color: #e9ecef;
+}
+
+details summary {
+    cursor: pointer;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    color: #4896ac;
+    font-weight: 500;
+}
+
+details summary:hover {
+    background-color: #e9ecef;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 8px;
+}
+
+.noRsvps {
+    color: #666;
+    font-style: italic;
+}
+
+.rsvpRow {
+    background-color: #f0f9ff;
+}
+
+.rsvpStatus {
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.notRsvpStatus {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.rsvpButton {
+    background-color: #4896ac;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.rsvpButton:hover {
+    background-color: #3f6c77;
+}
+
+.selectedButton {
+    background-color: #2ecc71;
+    box-shadow: 0 0 0 2px #27ae60;
+    transform: scale(1.05);
+}
+
+.selectedButton:hover {
+    background-color: #27ae60;
+}
