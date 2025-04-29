@@ -93,6 +93,25 @@ function Registration() {
     };
 
     useEffect(() => {
+        if (showPreview) {
+            const handleKeyDown = (event) => {
+                if (event.key === "Escape") {
+                    setShowPreview(false);
+                    if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur();
+                    }
+                }
+            };
+            document.addEventListener("keydown", handleKeyDown);
+
+            // Clean up the event listener when preview closes
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+            };
+        }
+    }, [showPreview]);
+
+    useEffect(() => {
         const fetchUrl = async () => {
           const url = await getCachedFormUrl(currentFormId);
           setFileUrl(url);
@@ -183,7 +202,7 @@ function Registration() {
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
         const page = pdfDoc.getPages()[sigpage];
 
-        if (canvas != null && sigloc != null) {
+        if (canvas != null && sigloc != null && page != null) {
             // Convert signature to embedded image
             const signatureImage = await pdfDoc.embedPng(canvas);
 
@@ -198,7 +217,6 @@ function Registration() {
             const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
             setPreviewFile(updatedPdfUrl);
             setShowPreview(true);
-            while (showPreview) {}
         }  
         
         return updatedPdfBytes;
@@ -219,7 +237,7 @@ function Registration() {
             }
 
             if (userFiles.items.length > 0) {
-                for (let i=0;i<userFiles.items.length;i++) {
+                for (let i=userFiles.items.length - 1; i >= 0; i--) {
                     //console.log(userFiles.items[i].path);
                     if (userFiles.items[i].path.indexOf(fileKey.replace(/\.pdf$/, "")) > -1){
                         const getUrlResult = await getUrl({
@@ -633,7 +651,7 @@ function Registration() {
                                         className={`rounded-button mt-3 ${fileMap[currentFormId] ? 'uploaded' : ''}`}
                                         onClick={() => fileInputsRef.current[currentFormId]?.click()}
                                         >
-                                        {fileMap[currentFormId] ? "Update Form" : "Attach Form"}
+                                        {fileMap[currentFormId] ? "Change Attachment" : "Attach Form"}
                                     </button>
                                     {fileMap[currentFormId] ? (<button
                                         type="button"
@@ -642,7 +660,7 @@ function Registration() {
                                         >
                                         Preview Attached Form
                                     </button>) : ''}
-                                    {isDefault[currentFormId - 1] ? '' : (<button
+                                    {isDefault[currentFormId - 1] || fileMap[currentFormId] ? '' : (<button
                                         type="button"
                                         className="rounded-button mt-3"
                                         onClick={() => handleReset(getFileKeyById(currentFormId))}
