@@ -116,10 +116,8 @@ function Scheduling() {
     };
 
     const handleConfirmSelection = () => {
-        if (selectedEvents.size === 0) {
-            setError('Please select at least one event to RSVP');
-            return;
-        }
+        //if (selectedEvents.size === 0) { setError('Please select at least one event to RSVP'); return; }
+        console.log("confirmation");
         setShowConfirmation(true);
     };
 
@@ -160,7 +158,6 @@ function Scheduling() {
             
             // Clear selection and close modal
             setSelectedEvents(new Set());
-            setShowConfirmation(false);
             setError(null);
         } catch (err) {
             console.error('Error confirming RSVPs:', err);
@@ -191,7 +188,7 @@ function Scheduling() {
                 throw new Error('Failed to unenroll from event');
             }
 
-            // Refresh user events
+            setShowConfirmation(false);
             await fetchUserEvents();
         } catch (err) {
             console.error('Error unenrolling from event:', err);
@@ -255,7 +252,7 @@ function Scheduling() {
                                         <td>{event.time}</td>
                                         <td>
                                             <button 
-                                                onClick={() => handleUnenroll(event.eventID)}
+                                                onClick={handleConfirmSelection} 
                                                 className={styles.unenrollButton}
                                             >
                                                 Cancel RSVP
@@ -310,7 +307,7 @@ function Scheduling() {
                     {selectedEvents.size > 0 && (
                         <div className={styles.rsvpActions}>
                             <button 
-                                onClick={handleConfirmSelection}
+                                onClick={handleConfirmRSVP}
                                 className={styles.confirmButton}
                             >
                                 Confirm RSVPs ({selectedEvents.size})
@@ -318,26 +315,28 @@ function Scheduling() {
                         </div>
                     )}
                     {showConfirmation && (
-                        <div className={styles.confirmationModal}>
-                            <div className={styles.confirmationContent}>
-                                <h3>Confirm RSVPs</h3>
-                                <p>You are about to RSVP for {selectedEvents.size} event(s).</p>
-                                <div className={styles.confirmationButtons}>
-                                    <button 
-                                        onClick={handleConfirmRSVP}
-                                        className={styles.confirmButton}
-                                    >
-                                        Confirm
-                                    </button>
-                                    <button 
-                                        onClick={() => setShowConfirmation(false)}
-                                        className={styles.cancelButton}
-                                    >
-                                        Cancel
-                                    </button>
+                        rsvpEvents.map((event) => (
+                            <div className={styles.confirmationModal}>
+                                <div className={styles.confirmationContent}>
+                                    <h3>Are you sure?</h3>
+                                    <p>You are about to cancel this reservation.</p>
+                                    <div className={styles.confirmationButtons}>
+                                        <button 
+                                            onClick={() => handleUnenroll(event.eventID)} 
+                                            className={styles.cancelButton}
+                                        >
+                                            Cancel Reservation
+                                        </button>
+                                        <button 
+                                            onClick={() => setShowConfirmation(false)}
+                                            className={styles.confirmButton}
+                                        >
+                                            Back
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        ))
                     )}
                 </div>
                 <br></br>
