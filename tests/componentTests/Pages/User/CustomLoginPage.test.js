@@ -1,10 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import CustomLoginPage from '../../../src/components/Pages/CustomLoginPage';
+import CustomLoginPage from '../../../../src/components/Pages/CustomLoginPage.js';
 import { MemoryRouter } from 'react-router-dom';
 import { useUser } from '../../../../src/context/UserContext';
 
-// Mock AWS Amplify Auth
 jest.mock('@aws-amplify/auth', () => ({
   signIn: jest.fn(),
   confirmSignIn: jest.fn(),
@@ -13,14 +12,13 @@ jest.mock('@aws-amplify/auth', () => ({
   confirmResetPassword: jest.fn()
 }));
 
-// Mock useNavigate
+
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate
 }));
 
-// Mock useUser
 jest.mock('../../../../src/context/UserContext', () => ({
   useUser: jest.fn()
 }));
@@ -63,18 +61,18 @@ describe('CustomLoginPage', () => {
     );
 
     fireEvent.change(screen.getByLabelText(/email/i), {
-      target: { value: 'test@example.com' }
+      target: { value: 'outsidersdevteam@outlook.com' }
     });
     fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: 'password123' }
+      target: { value: 'password' }
     });
 
     fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
       expect(signIn).toHaveBeenCalledWith({
-        username: 'test@example.com',
-        password: 'password123'
+        username: 'outsidersdevteam@outlook.com',
+        password: 'password'
       });
       expect(mockRefresh).toHaveBeenCalled();
       expect(mockNavigate).toHaveBeenCalledWith('/');

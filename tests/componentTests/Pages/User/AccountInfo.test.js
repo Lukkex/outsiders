@@ -29,4 +29,3 @@ describe (AccountInfo, () => {
         expect(titleValue).toBe("Account Information");
     });
 });
-
