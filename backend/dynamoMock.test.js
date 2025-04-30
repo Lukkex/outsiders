@@ -1,6 +1,6 @@
 const { mockClient } = require ('aws-sdk-client-mock');
 const { GetItemCommand, PutItemCommand, ScanCommand, UpdateItemCommand, DeleteItemCommand } = require ('@aws-sdk/client-dynamodb');
-const { dynamoDB } = require ('./awsConfig');
+const { dynamoDB } = require ('./awsConfig.js');
 const dbservice = require ("./awsServices/dynamoDB.js");
 
 const mock = mockClient(dynamoDB);
@@ -9,6 +9,8 @@ beforeEach (() => {
     mock.reset();
 });
 
+
+//Mocks
 test("checkUserExist, if exists return ture", async () => {
     mock.on(GetItemCommand).resolves({
         Item: {userID: {S: '123' } }
@@ -49,3 +51,4 @@ test("addUserToTable", async () => {
     const result = await dbservice.addUserToTable(userID,firstName,lastName,email);
     expect(result).toEqual(response);
 })
+
