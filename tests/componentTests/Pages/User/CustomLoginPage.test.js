@@ -53,13 +53,14 @@ describe('CustomLoginPage', () => {
 
     const mockRefresh = jest.fn();
     useUser.mockReturnValue({ refreshUserData: mockRefresh });
-
+// render page
     render(
       <MemoryRouter>
         <CustomLoginPage />
       </MemoryRouter>
     );
 
+    // mock login
     fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'outsidersdevteam@outlook.com' }
     });
