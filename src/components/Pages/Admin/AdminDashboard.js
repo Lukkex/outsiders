@@ -4,6 +4,7 @@ import { getUrl, uploadData } from 'aws-amplify/storage';
 import '../../Stylesheets/AdminDashboard.css';
 import SiteContainer from '../../../utils/SiteContainer.js';
 
+
 function capitalizeName(name) {
     return name
         .toLowerCase()
@@ -17,24 +18,30 @@ function AdminDashboard() {
     const [filteredForms, setFilteredForms] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [uploadModalOpen, setUploadModalOpen] = useState(false);
+    const [eventsModalOpen, setEventsModalOpen] = usesState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [uploadMessage, setUploadMessage] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [events, setEvents] = useState([]);
+    const [userEvents, setUserEvents] = useState([]);
+    const [players, setPlayers] = useState([]);
+    const [eventsForForms, setEventsForForms] = useState([{
+        email: '',
+        locations: [],
+        eventNameTime: []
+    }]);
     const formsPerPage = 15;
 
-    useEffect(() => {
-        async function fetchForms() {
-            const allForms = await getSubmittedFormsFromS3();
-            const formatted = allForms.map(form => ({
-                ...form,
-                firstName: capitalizeName(form.firstName || ''),
-                lastName: capitalizeName(form.lastName || '')
-            }));
-            setForms(formatted);
-            setFilteredForms(formatted);
-        }
-        fetchForms();
-    }, []);
+    async function fetchForms() {
+        const allForms = await getSubmittedFormsFromS3();
+        const formatted = allForms.map(form => ({
+            ...form,
+            firstName: capitalizeName(form.firstName || ''),
+            lastName: capitalizeName(form.lastName || '')
+        }));
+        setForms(formatted);
+        setFilteredForms(formatted);
+    }
 
     const handleSearch = () => {
         const term = searchTerm.trim().toLowerCase();
@@ -99,6 +106,109 @@ function AdminDashboard() {
             alert('Upload failed. Please try again.');
         }
     };
+
+    useEffect(() => {
+        fetchForms();
+        fetchUserEvents();
+        fetchEvents();
+        fetchPlayers();
+    }, []);
+
+    //where mine starts
+    const getAuthHeader = async () => {
+        const session = await fetchAuthSession();
+        const token = session.tokens?.idToken?.toString();
+        return {
+            Authorization: token ? `Bearer ${token}` : '',
+        };
+    };
+    
+    const fetchUserEvents = async () => {
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(await getAuthHeader()),
+            };
+            //console.log('Fetch headers:', headers);
+    
+            const response = await fetch(API_URL_userEvents, {
+                method: 'GET',
+                headers
+            });
+    
+            if(!response.ok) throw new Error('Failed to fetch events');
+            const data = await response.json();
+            console.log("Fetched events:", data);
+            setUserEvents(data);
+        }catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    }
+    
+    const fetchEvents = async () => {
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(await getAuthHeader()),
+            };
+            
+    
+            const response = await fetch(API_URL_events, {
+                method: 'GET',
+                headers
+            });
+    
+            if(!response.ok) throw new Error('Failed to fetch events');
+            const data = await response.json();
+            console.log("Fetched events:", data);
+            setEvents(data);
+        }catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    }
+    
+    const fetchPlayers = async () => {
+        try {
+            const users = await fetchAllUsers();
+            setPlayers(users);
+        } catch (error) {
+            console.error("Fetch Players Error:", error);
+        }
+    }
+    
+                                        
+    //I now have arrays of all the events, the people, and the rsvps
+    
+    const filteredEvents = events.filter(event => {
+        const eventDateTime = new Date(`${event.date}T${event.time}`);
+        return eventDateTime >= timeCutoff;
+    });
+    
+    //events are now current
+    function findPlayersEvents(){
+        if (players.length > 0) {
+            players.forEach(player => {
+                const locations = [];
+                const nameTimeDay = [];
+                const usersEventIDs = userEvents.filter(event => event.userID === player.username);
+    
+                if (usersEventIDs.length > 0) {
+                    usersEventIDs.forEach(usEvent => {
+                        const attendedEvent = filteredEvents.find(event => event.eventID === usEvent.eventId);
+                        if(!locations.includes(attendedEvent.location))
+                            locations.push(attendedEvent.location);
+                        nameTimeDay.push('<b>' + attendedEvent.location + '</b>' + ': ' + attendedEvent.date + ', ' + attendedEvent.time); //(ex: Folsom: 2025-06-10, 13:35)
+                    });
+                }
+    
+                setEventsForForms(prevState => [
+                    ...prevState,
+                    { email: player.email, locations: locations, eventNameTime: nameTimeDay }
+                ]);
+    
+            });
+        }
+    }
 
     const indexOfLastForm = currentPage * formsPerPage;
     const indexOfFirstForm = indexOfLastForm - formsPerPage;
@@ -169,7 +279,12 @@ function AdminDashboard() {
                                                 {form.formCode || form.fileName}
                                             </a>
                                         </td>
-                                        <td>{form.prison || '-'}</td>
+                                        <td>
+                                            <li>
+                                                
+                                            </li>
+                                            {eventsForForms.locations || '-'}
+                                        </td>
                                         <td style={{ paddingLeft: '30px' }}>{form.firstName || '-'}</td>
                                         <td>{form.lastName || '-'}</td>
                                         <td>{form.email}</td>
@@ -239,6 +354,25 @@ function AdminDashboard() {
                         </div>
                     </div>
                 )}
+                
+                {eventsModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                        <div className="bg-white p-6 rounded-lg w-1/2 relative">
+                            <button onClick={() => setEventsModalOpen(false)} className="absolute top-2 right-2 text-lg">✖</button>
+                            <h2 className="text-xl font-bold mb-4">RSVPd Events</h2>
+                           
+                            
+                                <ul className="list-disc list-inside">
+                                {itemsArray.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            )}
+                            <button onClick={handleUpload} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+                )}
+
             </div>
         } />
     );
