@@ -47,15 +47,25 @@ const EventCreation = () => {
     };
 
     const deleteEvent = async (eventID) => {
-        console.log("Deleting event ID:", eventID); 
+        console.log("Deleting event ID:", eventID);
         try {
             const headers = { ...(await getAuthHeader()) };
-            const response = await fetch(`${API_URL}/${eventID}`, {
+            const response = await fetch(API_URL, {
                 method: 'DELETE',
                 headers,
+                body: `{\"eventID\": \"${eventID}\"}`
             });
             if (!response.ok) throw new Error('Failed to delete event');
             console.log("Event deleted successfully");
+
+            console.log("Deleting rsvps for eventID:", eventID);
+            const response2 = await fetch(USER_EVENT_API_URL, {
+                method: 'DELETE',
+                headers,
+                body: `{\"eventID\": \"${eventID}\"}`
+            });
+            if (!response2.ok && response2.status !== 404) throw new Error('Failed to delete event');
+            if (response2.status == 404) { console.log("No RSVPs found, Event has still been deleted.") }
             await fetchEvents();
             setEventToDelete(null); 
         } catch (err) {
@@ -234,7 +244,6 @@ const EventCreation = () => {
                             className="px-2 py-1 border rounded w-full"
                         />
                     </div>
-                    <div></div><div></div><div></div><div></div>
                 </div>
 
                 {paginatedEvents.length > 0 ? (
@@ -296,21 +305,21 @@ const EventCreation = () => {
             </div>
 
             {eventToDelete && (
-    <div className={styles.confirmationModal}>
-        <div className={styles.confirmationContent}>
-            <h3>Are you sure you want to delete this event?</h3>
-            <div className={styles.confirmationButtons}>
-                <button className={styles.confirmButton} onClick={() => setEventToDelete(null)}>Cancel</button>
-                <button
-                    className={styles.cancelButton}
-                    onClick={() => deleteEvent(eventToDelete)}
-                >
-                    Delete
-                </button>
-            </div>
-        </div>
-    </div>
-)}
+                <div className={styles.confirmationModal}>
+                    <div className={styles.confirmationContent}>
+                        <h3>Are you sure you want to delete this event?</h3>
+                        <div className={styles.confirmationButtons}>
+                            <button className={styles.confirmButton} onClick={() => setEventToDelete(null)}>Cancel</button>
+                            <button
+                                className={styles.cancelButton}
+                                onClick={() => deleteEvent(eventToDelete)}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );
