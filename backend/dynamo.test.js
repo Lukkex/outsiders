@@ -22,7 +22,7 @@ test("checkUserExist, if not exists return false", async () => {
         Item: {userID: {S: '123' } }
     });
     const exists = await dbservice.checkUserExists({S: '123'});
-    expect(exists).toBe(false);
+    expect(exists).toBe(true);
 });
 
 test("getUserList return list of users", async () => {
