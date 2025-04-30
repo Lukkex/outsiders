@@ -6,7 +6,7 @@ import SiteContainer from '../../../utils/SiteContainer.js';
 import SignaturePad from 'react-signature-canvas'
 import { useRef } from 'react';
 import { uploadData, getUrl, list } from 'aws-amplify/storage';
-import { getCurrentUserInfo, getUserRole } from '../../../services/authConfig';
+import { getCurrentUserInfo } from '../../../services/authConfig';
 import { Link } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 
@@ -35,7 +35,6 @@ function Registration() {
     const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
     const currentFormId = selectedForms[currentPreviewIndex];
     const [fileMap, setFileMap] = useState({}); // Stores selected files for each form
-    const [formCache, setFormCache] = useState({});
     const [user, setUser] = useState(null);
     const fileInputsRef = useRef({});
     const [pdfBlobMap, setPdfBlobMap] = useState({});
@@ -60,10 +59,12 @@ function Registration() {
         });
     };
 
-    const fetchAndCachePdfBlob = async (formId) => {
-        if (pdfBlobMap[formId]) return pdfBlobMap[formId];
+    const fetchAndCachePdfBlob = async (formId, resetCall) => {
+        if (pdfBlobMap[formId] && resetCall == false) return pdfBlobMap[formId];
         
-        updateWasDefault(currentFormId - 1, false);
+        if (wasDefault[formId - 1] == false) {
+            updateIsDefault(currentFormId - 1, false);
+        }
         const url = await downloadForm(getFileKeyById(formId));
         const response = await fetch(url);
         const blob = await response.blob();
@@ -82,52 +83,36 @@ function Registration() {
         }
     }, [user]);
 
-    const getCachedFormUrl = async (formId) => {
-        if (formCache[formId]) {
-          return formCache[formId];
-        } else {
-          const url = await downloadForm(getFileKeyById(formId));
-          setFormCache((prev) => ({ ...prev, [formId]: url }));
-          return url;
-        }
-    };
-
+    /*
     useEffect(() => {
-        const fetchUrl = async () => {
-          const url = await getCachedFormUrl(currentFormId);
-          setFileUrl(url);
-        };
-      
-        if (currentFormId) {
-          fetchUrl();
+        if (showPreview) {
+            const handleKeyDown = (event) => {
+                if (event.key === "Escape") {
+                    setShowPreview(false);
+                    if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur();
+                    }
+                }
+            };
+            document.addEventListener("keydown", handleKeyDown);
+
+            // Clean up the event listener when preview closes
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+            };
         }
-    }, [currentFormId]);
+    }, [showPreview]);
+    */
 
     useEffect(() => {
         const loadBlob = async () => {
-          const blob = await fetchAndCachePdfBlob(currentFormId);
+          const blob = await fetchAndCachePdfBlob(currentFormId, false);
           const objectUrl = URL.createObjectURL(blob);
           setFileUrl(objectUrl);
         };
       
         if (currentFormId) loadBlob();
       }, [currentFormId]);
-    
-    /*
-    useEffect(() => {
-        const fetchPrisons = async () => {
-            const user = await getCurrentUserInfo();
-            let prisons = JSON.parse(localStorage.getItem(`userPrisons_${user.sub}`)) || [];
-            if (prisons.length === 0){}
-            else {
-                setSelectedPrisons(prisons);
-                setStep(2);
-            }
-        };
-    
-        fetchPrisons();
-    }, []);
-    */
 
     useEffect(() => {
         // Get forms related to selected prisons
@@ -146,11 +131,6 @@ function Registration() {
     const getFileKeyById = (formId) => {
         const form = forms.find((form) => form.id === formId);
         return form ? form.fileKey : "Unknown Form";
-    };
-    
-    const getFormNameById = (formId) => {
-        const form = forms.find((form) => form.id === formId);
-        return form ? form.name : "Unknown Form";
     };
 
     const getSignatureLocationById = (formId) => {
@@ -183,7 +163,7 @@ function Registration() {
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
         const page = pdfDoc.getPages()[sigpage];
 
-        if (canvas != null && sigloc != null) {
+        if (canvas != null && sigloc != null && page != null) {
             // Convert signature to embedded image
             const signatureImage = await pdfDoc.embedPng(canvas);
 
@@ -198,7 +178,6 @@ function Registration() {
             const updatedPdfUrl = URL.createObjectURL(updatedPdfBlob);
             setPreviewFile(updatedPdfUrl);
             setShowPreview(true);
-            while (showPreview) {}
         }  
         
         return updatedPdfBytes;
@@ -219,7 +198,7 @@ function Registration() {
             }
 
             if (userFiles.items.length > 0) {
-                for (let i=0;i<userFiles.items.length;i++) {
+                for (let i=userFiles.items.length - 1; i >= 0; i--) {
                     //console.log(userFiles.items[i].path);
                     if (userFiles.items[i].path.indexOf(fileKey.replace(/\.pdf$/, "")) > -1){
                         const getUrlResult = await getUrl({
@@ -233,8 +212,9 @@ function Registration() {
                         });
                         //console.log('signed URL: ', getUrlResult.url);
                         //console.log('URL expires at: ', getUrlResult.expiresAt);
+                        updateWasDefault(currentFormId - 1, false);
                         updateIsDefault(currentFormId - 1, false);
-                        setFileUrl(getUrlResult.url); // Set the file URL to display in the iframe
+                        //setFileUrl(getUrlResult.url); // Set the file URL to display in the iframe
                         //setShowModal(true); // Show the modal
                         //window.open(getUrlResult.url);
                         return getUrlResult.url;
@@ -253,7 +233,7 @@ function Registration() {
                 //console.log('signed URL: ', getUrlResult.url);
                 //console.log('URL expires at: ', getUrlResult.expiresAt);
 
-                setFileUrl(getUrlResult.url); // Set the file URL to display in the iframe
+                //setFileUrl(getUrlResult.url); // Set the file URL to display in the iframe
                 //setShowModal(true); // Show the modal
                 //window.open(getUrlResult.url);
                 return getUrlResult.url;
@@ -272,7 +252,7 @@ function Registration() {
                 //console.log('signed URL: ', getUrlResult.url);
                 //console.log('URL expires at: ', getUrlResult.expiresAt);
 
-                setFileUrl(getUrlResult.url); // Set the file URL to display in the iframe
+                //setFileUrl(getUrlResult.url); // Set the file URL to display in the iframe
                 //setShowModal(true); // Show the modal
                 //window.open(getUrlResult.url);
                 return getUrlResult.url;
@@ -334,6 +314,7 @@ function Registration() {
             await Promise.all(uploadPromises);
             setIsSubmitting(false);
             setStep(step + 1);
+            window.scrollTo({top: 0, behavior: 'instant'});
 
         } catch (error) {
             console.error("Upload failed:", error);
@@ -383,14 +364,16 @@ function Registration() {
         setStep(step + 1);
     };
 
-    const handleBack = () => {
+    const handleBack = async () => {
         setCurrentPreviewIndex(0);
         if (step === 4 && !selectedPrisons.includes("Folsom State Prison")) {
             setStep(step - 3);
+            window.scrollTo({top: 0, behavior: 'instant'});
             return;
         }
         if (step === 4 && selectedPrisons.includes("Folsom State Prison")) {
             setStep(step - 2);
+            window.scrollTo({top: 0, behavior: 'instant'});
             return;
         }
         if (step > 1) setStep(step - 1);
@@ -413,9 +396,16 @@ function Registration() {
         const file = event.target.files[0]; // Get the selected file
         if (file) {
             setFileMap((prev) => ({ ...prev, [formId]: file }));
+            event.target.value = '';
+            const blob = new Blob([file], { type: "application/pdf" });
+            setPdfBlobMap((prev) => ({ ...prev, [formId]: blob }));
+            const objectUrl = URL.createObjectURL(blob);
+            setFileUrl(objectUrl);
+            updateIsDefault(currentFormId - 1, false);
         }
     };
 
+    /*
     const handlePreview = async () => {
         var signatureDataUrl;
 
@@ -437,6 +427,7 @@ function Registration() {
             file = await fillSignature(file, signatureDataUrl, signatureLocation, signaturePage, true);
         
     }
+    */
 
     const handleSubmit = async () => {
         if (isSubmitting) return;
@@ -454,24 +445,25 @@ function Registration() {
                 setIsSubmitting(true);
                 await uploadFiles();
         }
-        /*
-        try {
-            await Promise.all(
-                selectedForms.map((formId) => {
-                    const file = fileMap[formId];
-                    return uploadFileToS3(file, `uploads/${file.name}`); // Adjust the S3 path as needed
-                })
-            );
-            alert("Files uploaded successfully!");
-        } catch (error) {
-            console.error("Upload failed:", error);
-            alert("Error uploading files. Please try again.");
-        }
-        */
-
     };
 
     const handleReset = async (fileKey) => {
+        if (fileMap[currentFormId]) {
+            setPdfBlobMap((prev) => {
+                if (!(currentFormId in prev)) return { ...prev }; // No change if formId not present
+                const { [currentFormId]: _, ...rest } = prev;
+                return rest;
+            });
+            const blob = await fetchAndCachePdfBlob(currentFormId, true);
+            const objectUrl = URL.createObjectURL(blob);
+            setFileUrl(objectUrl);
+            setFileMap((prev) => {
+                if (!(currentFormId in prev)) return { ...prev }; // No change if formId not present
+                const { [currentFormId]: _, ...rest } = prev;
+                return rest;
+            });
+            return objectUrl;
+        }
         const getUrlResult = await getUrl({
             path: `formtemplates/${fileKey}`,
             // Alternatively, path: ({identityId}) => `protected/${identityId}/album/2024/1.jpg`
@@ -633,21 +625,21 @@ function Registration() {
                                         className={`rounded-button mt-3 ${fileMap[currentFormId] ? 'uploaded' : ''}`}
                                         onClick={() => fileInputsRef.current[currentFormId]?.click()}
                                         >
-                                        {fileMap[currentFormId] ? "Update Form" : "Attach Form"}
+                                        {fileMap[currentFormId] ? "Change Attachment" : "Attach Form"}
                                     </button>
-                                    {fileMap[currentFormId] ? (<button
+                                    {/*fileMap[currentFormId] ? (<button
                                         type="button"
                                         className="rounded-button mt-3"
                                         onClick={() => handlePreview()}
                                         >
                                         Preview Attached Form
-                                    </button>) : ''}
-                                    {isDefault[currentFormId - 1] ? '' : (<button
+                                    </button>) : ''*/}
+                                    {isDefault[currentFormId - 1] /*|| fileMap[currentFormId]*/ ? '' : (<button
                                         type="button"
                                         className="rounded-button mt-3"
                                         onClick={() => handleReset(getFileKeyById(currentFormId))}
                                         >
-                                        Switch to Blank Form
+                                        {fileMap[currentFormId] ? "Switch to Previous Form" : "Switch to Blank Form"}
                                     </button>)}
                                 </div>
                                 <br></br>
