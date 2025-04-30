@@ -93,17 +93,16 @@ function Scheduling() {
         fetchUserEvents();
     }, []);
 
-    const formatDate = (dateString) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return dateString;
-        
-        const month = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"][date.getMonth()];
-        
-        return `${month} ${date.getDate()}, ${date.getFullYear()}`;
-    };
-
+    function formatDate(dateString) {
+        const [year, month, day] = dateString.split('-');
+        const date = new Date(Number(year), Number(month) - 1, Number(day));
+        var monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        return (monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
+    }
+    
     const handleEventSelection = (eventId) => {
         setSelectedEvents(prev => {
             const newSelection = new Set(prev);
