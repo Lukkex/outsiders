@@ -135,7 +135,7 @@ function AdminDashboard() {
                                 onClick={() => window.location.href = '/viewplayers'}
                                 className="bg-sky-700 text-white px-3 py-2 rounded shadow"
                             >
-                                View Players
+                                View Users
                             </button>
                         </div>
                     </div>
