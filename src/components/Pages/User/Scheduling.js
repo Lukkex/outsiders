@@ -1,7 +1,7 @@
 import '../../Stylesheets/App.css'; //global styles
 import styles from '../../Stylesheets/Scheduling.module.css';
 import { useState, useEffect } from 'react';
-import SiteContainer from '../../../utils/SiteContainer.js';
+import SiteHeader from '../../../utils/SiteHeader.js';
 import { fetchAuthSession } from '@aws-amplify/auth';
 
 const API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/events';
@@ -345,11 +345,10 @@ function Scheduling() {
     };
 
     return (
-        <SiteContainer content={
             <div>
+                <SiteHeader/>
                 {renderEvents()}
             </div>
-        }/>
     );
 }
 

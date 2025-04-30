@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../Stylesheets/App.css'; // Global styles
 import '../../Stylesheets/Registration.css'; // Registration-specific styles
 import '../../Stylesheets/SignUp.css';
-import SiteContainer from '../../../utils/SiteContainer.js';
+import SiteHeader from '../../../utils/SiteHeader.js';
 import SignaturePad from 'react-signature-canvas'
 import { useRef } from 'react';
 import { uploadData, getUrl, list } from 'aws-amplify/storage';
@@ -499,8 +499,8 @@ function Registration() {
     }
 
     return (
-        <SiteContainer content = {
             <div>
+                <SiteHeader/>
                 <div className = "site-header-break" />
                 <div className="signup-container flex justify-start">
                     <h1 className="font-semibold text-center">Form Registration</h1>
@@ -789,8 +789,7 @@ function Registration() {
                 <br/>
                 <br/>
                 <br/>
-            </div>
-        }/>
+            </div> 
     );
 }
 
