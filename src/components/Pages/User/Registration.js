@@ -42,6 +42,19 @@ function Registration() {
     const [previewFile, setPreviewFile] = useState('');
     const [isDefault, setIsDefault] = useState(Array(7).fill(true));
     const [wasDefault, setWasDefault] = useState(Array(7).fill(true));
+    const allFormsAttached = selectedForms.every((formId) => fileMap[formId]);
+    const [nextButtonFlash, setNextButtonFlash] = useState(true);
+
+    useEffect(() => {
+        if (allFormsAttached && step !== 1) {
+            setNextButtonFlash(false);
+            window.scrollTo({top: 500, behavior: 'instant'});
+        } else if (step === 1) {
+            window.scrollTo({top: 0, behavior: 'instant'});
+        } else {
+            window.scrollTo({top: 200, behavior: 'instant'});
+        }
+    }, [allFormsAttached])
 
     const updateIsDefault = (index, value) => {
         setIsDefault(prev => {
@@ -71,7 +84,7 @@ function Registration() {
       
         setPdfBlobMap((prev) => ({ ...prev, [formId]: blob }));
         return blob;
-      };
+    };
 
     useEffect(() => {
         const grabUser = async () => {
@@ -112,7 +125,7 @@ function Registration() {
         };
       
         if (currentFormId) loadBlob();
-      }, [currentFormId]);
+    }, [currentFormId]);
 
     useEffect(() => {
         // Get forms related to selected prisons
@@ -349,10 +362,12 @@ function Registration() {
         }
         if (step === 2 && needsSpecialForm !== null) {
             setStep(step + 2)
+            window.scrollTo({top: 200, behavior: 'instant'});
             return;
         }
         if (step === 1 && !selectedPrisons.includes("Folsom State Prison")) {
             setStep(step + 3);
+            window.scrollTo({top: 200, behavior: 'instant'});
             return;
         }
         /*
@@ -402,6 +417,7 @@ function Registration() {
             const objectUrl = URL.createObjectURL(blob);
             setFileUrl(objectUrl);
             updateIsDefault(currentFormId - 1, false);
+            setNextButtonFlash(true);
         }
     };
 
@@ -439,7 +455,7 @@ function Registration() {
             alert("Please select a file for each form before submitting.");
             return;
         }if (sigCanvas.current.isEmpty()) {
-            alert("Please enter your full name and sign before submitting.");
+            alert("Please sign in the designated box before submitting.");
             return;
         } else {
                 setIsSubmitting(true);
@@ -565,35 +581,80 @@ function Registration() {
 
                         {step === 4 && (
                         <div>
-                            <h2 className="font-semibold">Review & Submit</h2>
-
-                            <div className="flex justify-end relative">
+                            <div className="flex justify-between items-center w-full mb-4">
+                                <h2 className="font-semibold">Review & Submit</h2>
                                 <div className="group relative">
-                                    <div className="flex items-center space-x-1">
-                                        <span className="text-gray-500 cursor-pointer text-md">Help </span>
-                                        <span className="text-gray-500 cursor-pointer text-2xl">🛈</span>
+                                    <div className="flex items-center space-x-1 cursor-pointer">
+                                    <span className="text-gray-500 text-md">Help</span>
+                                    <span className="text-gray-500 text-2xl">🛈</span>
                                     </div>
-                                    <div className="hidden group-hover:block absolute right-0 bg-gray-800 text-white text-xs rounded p-2 w-56 shadow-lg">
-                                        After filling in the required fields for a form, download the form with your changes. Double check that the downloaded form has the correct information. You may then upload the completed form from your device. Make sure that all forms have been attached before submitting. You may then sign in the designated space below, and upon submission your signature will be applied to your uploaded forms.
+                                    <div className="hidden group-hover:block absolute right-0 bg-gray-800 text-white text-xs rounded p-2 w-56 shadow-lg z-10">
+                                    After filling in the required fields for a form, download the form with your changes. You may then upload the completed form from your device. Double check that the forms contain correct information after you attach them. After all forms are attached, ou may then sign in the designated space below, and upon submission your signature will be applied to your uploaded forms.
                                     </div>
                                 </div>
                             </div>
-
+                            <br></br>
+                            <div className="group relative">
+                                <div className="flex items-center space-x-1 gap-x-4">
+                                    <p className="text-2xl">•</p> <p>After filling out a form, download it with your changes via the internal PDF viewer.</p>
+                                </div>
+                            </div>
+                            <div className="group relative">
+                                <div className="flex items-center space-x-1 gap-x-4">
+                                    <p className="text-2xl">•</p> <p>You may then attach the form from your downloads folder using the "Attach Form" button.</p>
+                                </div>
+                            </div>
+                            <div className="group relative">
+                                <div className="flex items-center space-x-1 gap-x-4">
+                                    <p className="text-2xl">•</p> <p>After this is complete, you may move on to the next form.</p>
+                                </div>
+                            </div>
+                            <br></br>
+                            <div className="group relative">
+                                <div className="flex items-center space-x-1 gap-x-1">
+                                    <p className='font-semibold'>Please note:</p>
+                                    <p>Do not worry about signing forms for now. This will be taken care of in the final step.</p>
+                                </div>
+                            </div>
+                            <br></br>
                             {/* Navigation Controls */}
-                            <div className="flex justify-between items-center">
-                            <button className="px-1 py-0.5 text-sm border rounded"
-                                onClick={() => { setCurrentPreviewIndex((i) => Math.max(i - 1, 0)); if (wasDefault[currentFormId - 1] == false) updateIsDefault(currentFormId - 1, false);}}
-                                disabled={currentPreviewIndex === 0}
-                            >
-                                ←
-                            </button>
-                            <span>{`Form ${currentPreviewIndex + 1} of ${selectedForms.length}`}</span>
-                            <button className="px-1 py-0.5 text-sm border rounded"
-                                onClick={() => { setCurrentPreviewIndex((i) => Math.min(i + 1, selectedForms.length - 1)); if (wasDefault[currentFormId - 1] == false) updateIsDefault(currentFormId - 1, false);}}
-                                disabled={currentPreviewIndex === selectedForms.length - 1}
-                            >
-                                →
-                            </button>
+                            <div className="flex justify-center items-center gap-x-4">
+                                {currentPreviewIndex === 0 ? <div className="w-[40px]" /> : <button
+                                    className="px-3 py-1 text-base border rounded-lg"
+                                    onClick={() => {
+                                        if (fileMap[currentFormId]) {
+                                            setCurrentPreviewIndex((i) => Math.max(i - 1, 0));
+                                            if (wasDefault[currentFormId - 1] == false) updateIsDefault(currentFormId - 1, false);
+                                            setNextButtonFlash(false);
+                                        } else {
+                                            alert("Please download and attach your form before reviewing previous forms.")
+                                        }
+                                    }}
+                                    disabled={currentPreviewIndex === 0}
+                                >
+                                    ←
+                                </button>}
+
+                                <span>{`Form ${currentPreviewIndex + 1} of ${selectedForms.length}`}</span>
+
+                                {currentPreviewIndex === selectedForms.length - 1 ? <div className="w-[40px]" /> : <button
+                                    className={`px-3 py-1 text-base border rounded-lg
+                                        ${fileMap[currentFormId] && nextButtonFlash ? 'text-white animate-pulse border-transparent' : ''}
+                                    `}
+                                    style={fileMap[currentFormId] && nextButtonFlash ? { backgroundColor: '#4896ac' } : {}}
+                                    onClick={() => {
+                                        if (fileMap[currentFormId]) {
+                                            setCurrentPreviewIndex((i) => Math.min(i + 1, selectedForms.length - 1));
+                                            if (wasDefault[currentFormId - 1] == false) updateIsDefault(currentFormId - 1, false);
+                                            setNextButtonFlash(false);
+                                        } else {
+                                            alert("Please download and attach your form before moving on to the next form.")
+                                        }
+                                    }}
+                                    disabled={currentPreviewIndex === selectedForms.length - 1}
+                                >
+                                    →
+                                </button>}
                             </div>
 
                             {/* PDF Preview */}
@@ -613,19 +674,26 @@ function Registration() {
                                 <br></br>
                                 <div className="navigation-buttons">
                                     <input
-                                        type="file"
-                                        accept="application/pdf"
-                                        onChange={(event) => handleFileChange(currentFormId, event)}
-                                        className="hidden"
-                                        id={`file-upload-${currentFormId}`}
-                                        ref={(el) => fileInputsRef.current[currentFormId] = el} // Need a ref!
+                                    type="file"
+                                    accept="application/pdf"
+                                    onChange={(event) => handleFileChange(currentFormId, event)}
+                                    className="hidden"
+                                    id={`file-upload-${currentFormId}`}
+                                    ref={(el) => fileInputsRef.current[currentFormId] = el}
                                     />
+
                                     <button
-                                        type="button"
-                                        className={`rounded-button mt-3 ${fileMap[currentFormId] ? 'uploaded' : ''}`}
-                                        onClick={() => fileInputsRef.current[currentFormId]?.click()}
-                                        >
-                                        {fileMap[currentFormId] ? "Change Attachment" : "Attach Form"}
+                                    type="button"
+                                    className={`rounded-button mt-3 ${fileMap[currentFormId] ? 'uploaded' : ''}`}
+                                    onClick={() => {
+                                        if (fileMap[currentFormId]) {
+                                        handleReset(getFileKeyById(currentFormId));
+                                        } else {
+                                        fileInputsRef.current[currentFormId]?.click();
+                                        }
+                                    }}
+                                    >
+                                    {fileMap[currentFormId] ? "Remove Attachment" : "Attach Form"}
                                     </button>
                                     {/*fileMap[currentFormId] ? (<button
                                         type="button"
@@ -634,32 +702,36 @@ function Registration() {
                                         >
                                         Preview Attached Form
                                     </button>) : ''*/}
-                                    {isDefault[currentFormId - 1] /*|| fileMap[currentFormId]*/ ? '' : (<button
+                                    {isDefault[currentFormId - 1] || fileMap[currentFormId] ? '' : (<button
                                         type="button"
                                         className="rounded-button mt-3"
                                         onClick={() => handleReset(getFileKeyById(currentFormId))}
                                         >
-                                        {fileMap[currentFormId] ? "Switch to Previous Form" : "Switch to Blank Form"}
+                                        Revert to Default Form
                                     </button>)}
                                 </div>
                                 <br></br>
-                                <p className='font-semibold'>Notice:</p>
-                                <p>By signing below, you agree to the terms listed on these forms. Your signature will be applied to every form upon upload.</p>
-                                <div className='flex flex-col items-center justify-center'>
-                                    <t className="font-semibold">Signature </t>
-                                    <SignaturePad ref={sigCanvas} penColor='Black' backgroundColor='rgba(255, 255, 255, 1)'
-                                    canvasProps={{width: 340, height: 120, className: 'sigCanvas border-2 border-black rounded-md'}}
-                                    />
-                                </div>
-                                <br></br>
-                                <div className="navigation-buttons">
-                                    <button className="rounded-button mt-3" onClick={handleClear}>
-                                        Clear Signature
-                                    </button>
-                                    <button className="rounded-button mt-3" onClick={handleSubmit}>
-                                        Submit
-                                    </button>
-                                </div>
+                                {allFormsAttached && <div>
+                                    <p className='font-semibold'>Notice:</p>
+                                    <p>By signing below, you agree to the terms listed on these forms. Your signature will be applied to every form upon upload.</p>
+                                    <div className='flex flex-col items-center justify-center'>
+                                        <t className="font-semibold">Signature</t>
+                                        <SignaturePad ref={sigCanvas} penColor='Black' backgroundColor='rgba(255, 255, 255, 1)'
+                                        canvasProps={{width: 340, height: 120, className: 'sigCanvas border-2 border-black rounded-md'}}
+                                        />
+                                        <div className="navigation-buttons w-[344px]">
+                                            <button className="rounded-button mt-1" onClick={handleClear}>
+                                                Clear Signature
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <br></br>
+                                    <div className="navigation-buttons">
+                                        <button className="rounded-button mt-3 green" onClick={handleSubmit}>
+                                            Submit and Upload Forms
+                                        </button>
+                                    </div>
+                                </div>}
                             </div>
                         )}
 
@@ -669,7 +741,7 @@ function Registration() {
                                 <br></br>
                                 <h3>Your forms have been uploaded successfully. You may now return to the home page, or exit the application.</h3>
                                 <br></br>
-                                <Link to="/"><button className="rounded-button cyan-gradient">HOME</button></Link>
+                                <Link to="/"><button className="rounded-button">HOME</button></Link>
                                 <br></br>
                             </div>
                         )}
