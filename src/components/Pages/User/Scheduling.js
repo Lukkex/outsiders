@@ -106,6 +106,12 @@ function Scheduling() {
         }
     };
 
+    const handleConfirmSelection = () => {
+        //if (selectedEvents.size === 0) { setError('Please select at least one event to RSVP'); return; }
+        console.log("confirmation");
+        setShowConfirmation(true);
+    };
+
     const handleUnenroll = async (eventId) => {
         try {
             const session = await fetchAuthSession();
@@ -116,6 +122,7 @@ function Scheduling() {
                 headers,
                 body: JSON.stringify({ userID, eventId })
             });
+            setShowConfirmation(false);
             await fetchUserEvents();
             await fetchEvents();
         } catch {
@@ -158,7 +165,7 @@ function Scheduling() {
                                 <td>{event.location}</td>
                                 <td>{formatDate(event.date)}</td>
                                 <td>{event.time}</td>
-                                <td><button onClick={() => handleUnenroll(event.eventID)} className={styles.unenrollButton}>Cancel RSVP</button></td>
+                                <td><button onClick={handleConfirmSelection} className={styles.unenrollButton}>Cancel RSVP</button></td>
                             </tr>
                         ))}
                         {rsvpEvents.length === 0 && (
@@ -240,6 +247,30 @@ function Scheduling() {
                         <button onClick={handleConfirmRSVP} className={styles.confirmButton}>Confirm RSVPs ({selectedEvents.size})</button>
                     </div>
                 )}
+                {showConfirmation && (
+                        rsvpEvents.map((event) => (
+                            <div className={styles.confirmationModal}>
+                                <div className={styles.confirmationContent}>
+                                    <h3>Are you sure?</h3>
+                                    <p>You are about to cancel this reservation.</p>
+                                    <div className={styles.confirmationButtons}>
+                                        <button 
+                                            onClick={() => handleUnenroll(event.eventID)} 
+                                            className={styles.cancelButton}
+                                        >
+                                            Cancel Reservation
+                                        </button>
+                                        <button 
+                                            onClick={() => setShowConfirmation(false)}
+                                            className={styles.confirmButton}
+                                        >
+                                            Back
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )}
             </div>
         </div>
     );
