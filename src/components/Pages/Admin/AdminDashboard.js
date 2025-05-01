@@ -3,6 +3,9 @@ import { getSubmittedFormsFromS3 } from '../../../services/getSubmittedFormsFrom
 import { getUrl, uploadData } from 'aws-amplify/storage';
 import '../../Stylesheets/AdminDashboard.css';
 import SiteContainer from '../../../utils/SiteContainer.js';
+import { fetchAuthSession } from '@aws-amplify/auth';
+const API_URL= 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/events';
+const USER_EVENT_API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/user-events';
 
 
 function capitalizeName(name) {
@@ -13,24 +16,42 @@ function capitalizeName(name) {
         .join(' ');
 }
 
+const getAuthHeader = async () => {
+    const session = await fetchAuthSession();
+    const token = session.tokens?.idToken?.toString();
+    alert("here in authHeader");
+    return {
+        Authorization: token ? `Bearer ${token}` : '',
+    };
+};
+
 function AdminDashboard() {
     const [forms, setForms] = useState([]);
     const [filteredForms, setFilteredForms] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [uploadModalOpen, setUploadModalOpen] = useState(false);
-    const [eventsModalOpen, setEventsModalOpen] = usesState(false);
+    const [eventsModalOpen, setEventsModalOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [uploadMessage, setUploadMessage] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [events, setEvents] = useState([]);
     const [userEvents, setUserEvents] = useState([]);
     const [players, setPlayers] = useState([]);
+    const [currentEventInfo, setCurrentEventInfo] = useState([]);
     const [eventsForForms, setEventsForForms] = useState([{
         email: '',
         locations: [],
         eventNameTime: []
+       
     }]);
+    /*
+    email: greg@gmail.com
+    locations: ['Folsom', 'San Quentin']
+    eventNameTime: ['Folsom: 2025-08-12, 13:35', 'San Quentin: 2025-10-11, 10:30']
+    */
+
     const formsPerPage = 15;
+
 
     async function fetchForms() {
         const allForms = await getSubmittedFormsFromS3();
@@ -108,42 +129,59 @@ function AdminDashboard() {
     };
 
     useEffect(() => {
-        fetchForms();
-        fetchUserEvents();
-        fetchEvents();
-        fetchPlayers();
+        const fetchAllData = async () => {
+            await Promise.all([
+                fetchForms(),
+                fetchEvents(),
+                fetchUserEvents(),
+                fetchPlayers()
+            ]);
+        };
+    
+        fetchAllData();
     }, []);
 
+    useEffect(() => {
+        if (players.length > 0 && userEvents.length > 0 && events.length > 0) {
+            const result = [];
+    
+            players.forEach(player => {
+                const locations = [];
+                const nameTimeDay = [];
+                const usersEventIDs = userEvents.filter(event => event.userID === player.username);
+    
+                usersEventIDs.forEach(usEvent => {
+                    const attendedEvent = events.find(event => event.eventID === usEvent.eventId);
+                    if (!attendedEvent) return;
+    
+                    if (!locations.includes(attendedEvent.location)) {
+                        locations.push(attendedEvent.location);
+                    }
+    
+                    nameTimeDay.push(`${attendedEvent.location}: ${attendedEvent.date}, ${attendedEvent.time}`);
+                });
+    
+                result.push({ email: player.email, locations, eventNameTime: nameTimeDay });
+            });
+    
+            setEventsForForms(result);
+        }
+    }, [players, userEvents, events]);
+
     //where mine starts
-    const getAuthHeader = async () => {
-        const session = await fetchAuthSession();
-        const token = session.tokens?.idToken?.toString();
-        return {
-            Authorization: token ? `Bearer ${token}` : '',
-        };
-    };
     
     const fetchUserEvents = async () => {
         try {
-            const headers = {
-                'Content-Type': 'application/json',
-                ...(await getAuthHeader()),
-            };
-            //console.log('Fetch headers:', headers);
-    
-            const response = await fetch(API_URL_userEvents, {
-                method: 'GET',
-                headers
-            });
-    
-            if(!response.ok) throw new Error('Failed to fetch events');
-            const data = await response.json();
-            console.log("Fetched events:", data);
-            setUserEvents(data);
-        }catch (error) {
-            console.error('Error fetching events:', error);
+            const headers = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
+            const response = await fetch(USER_EVENT_API_URL, { method: 'GET', headers });
+            if (!response.ok) throw new Error('Failed to fetch RSVP data');
+            setUserEvents(response);
+        } catch (err) {
+            alert("fetch userEvents error");
+            console.error('Error fetching RSVP data:', err);
+            return [];
         }
-    }
+    };
     
     const fetchEvents = async () => {
         try {
@@ -153,7 +191,7 @@ function AdminDashboard() {
             };
             
     
-            const response = await fetch(API_URL_events, {
+            const response = await fetch(API_URL, {
                 method: 'GET',
                 headers
             });
@@ -172,19 +210,16 @@ function AdminDashboard() {
             const users = await fetchAllUsers();
             setPlayers(users);
         } catch (error) {
+            alert("fetch players error");
             console.error("Fetch Players Error:", error);
         }
     }
     
                                         
-    //I now have arrays of all the events, the people, and the rsvps
+    //Now have arrays of all the events, the people, and the rsvps
     
-    const filteredEvents = events.filter(event => {
-        const eventDateTime = new Date(`${event.date}T${event.time}`);
-        return eventDateTime >= timeCutoff;
-    });
     
-    //events are now current
+    //sorts through the events, userEvents, and users to form EventsForForms
     function findPlayersEvents(){
         if (players.length > 0) {
             players.forEach(player => {
@@ -194,7 +229,9 @@ function AdminDashboard() {
     
                 if (usersEventIDs.length > 0) {
                     usersEventIDs.forEach(usEvent => {
-                        const attendedEvent = filteredEvents.find(event => event.eventID === usEvent.eventId);
+                        const attendedEvent = events.find(event => event.eventID === usEvent.eventId);
+                        if (attendedEvent.location === "")
+                            alert("No location found found for this user.");
                         if(!locations.includes(attendedEvent.location))
                             locations.push(attendedEvent.location);
                         nameTimeDay.push('<b>' + attendedEvent.location + '</b>' + ': ' + attendedEvent.date + ', ' + attendedEvent.time); //(ex: Folsom: 2025-06-10, 13:35)
@@ -208,6 +245,28 @@ function AdminDashboard() {
     
             });
         }
+    }
+
+    function setUserEventNameTime(email)
+    {
+        alert("Looking for email: " + email);
+        alert("All known userEvents:\n" + userEvents.map(item => item.email).join('\n'));
+        const currentUser = eventsForForms.find(item => item.email === email);
+
+        if (!currentUser) {
+            console.warn("User not found in eventsForForms for email:", email);
+            alert("No event info found for this user.");
+            return;
+        }
+    
+        if (!currentUser.eventNameTime) {
+            console.warn("User found but eventNameTime is missing:", currentUser);
+            alert("Event info is not ready yet.");
+            return;
+        }
+
+        setCurrentEventInfo(currentUser.eventNameTime);
+
     }
 
     const indexOfLastForm = currentPage * formsPerPage;
@@ -280,10 +339,19 @@ function AdminDashboard() {
                                             </a>
                                         </td>
                                         <td>
-                                            <li>
-                                                
-                                            </li>
-                                            {eventsForForms.locations || '-'}
+                                        {form.email  && events.length > 0 && players.length > 0 && userEvents.length > 0 ? (
+                                            <button
+                                                onClick={() => {
+                                                setEventsModalOpen(true);
+                                                setUserEventNameTime(form.email);
+                                                }}
+                                                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                                            >
+                                                {form.email}
+                                            </button>
+                                            ) : (
+                                            '-'
+                                            )}
                                         </td>
                                         <td style={{ paddingLeft: '30px' }}>{form.firstName || '-'}</td>
                                         <td>{form.lastName || '-'}</td>
@@ -354,21 +422,17 @@ function AdminDashboard() {
                         </div>
                     </div>
                 )}
-                
+
                 {eventsModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                         <div className="bg-white p-6 rounded-lg w-1/2 relative">
                             <button onClick={() => setEventsModalOpen(false)} className="absolute top-2 right-2 text-lg">✖</button>
-                            <h2 className="text-xl font-bold mb-4">RSVPd Events</h2>
-                           
-                            
-                                <ul className="list-disc list-inside">
-                                {itemsArray.map((item, index) => (
-                                <li key={index}>{item}</li>
-                            )}
-                            <button onClick={handleUpload} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                                Upload
-                            </button>
+                            <h2 className="text-xl font-bold mb-4">RSVPd Events:</h2>
+                            <ul>
+                                {currentEventInfo.map((event, index) => (
+                                <li key={index}>{event}</li>
+                                ))}
+                            </ul>                   
                         </div>
                     </div>
                 )}
