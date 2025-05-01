@@ -1,31 +1,44 @@
-import React from 'react'
-//import { Test } from 'aws-cdk-lib/aws-synthetics';
-import { describe, test, it, expect} from "jest";
-import AccountInfo from '../../../../src/components/Pages/User/AccountInfo';
-import {render, fireEvent, screen} from '@testing-library/react'
-import '@testing-library/jest-dom'
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import AccountInfo from '../../../../src/components/Pages/User/AccountInfo';
 
-/*
-Test("AccountInfo displays correct details", () => {
-    
-});
-*/
+// 🧪 Mock authConfig services
+jest.mock('../../../../src/services/authConfig', () => ({
+  getCurrentUserInfo: jest.fn(() => Promise.resolve({
+    given_name: 'Jane',
+    family_name: 'Doe',
+    email: 'jane.doe@example.com',
+    sub: 'user-sub-id'
+  })),
+  getUserRole: jest.fn(() => Promise.resolve(['basic_users'])),
+}));
 
-/*
-Test('Loads and displays title', async () => {
-    render(<AccountInfo />)
-})
-*/
+// 🧪 Mock MFA status
+jest.mock('aws-amplify/auth', () => ({
+  fetchMFAPreference: jest.fn(() => Promise.resolve({
+    enabled: [],
+    preferred: null,
+  })),
+}));
 
-describe (AccountInfo, () => {
-    it("Test that 'Account Information' displays at the top", () => {
-        const { getByTestId } = render(
-        <MemoryRouter>
-            <AccountInfo />
-        </MemoryRouter>
-        );
-        const titleValue = getByTestId("title").textContent;
-        expect(titleValue).toBe("Account Information");
-    });
+// 🧪 Mock SiteContainer to simplify test DOM
+jest.mock('../../../../src/utils/SiteContainer', () => ({
+  __esModule: true,
+  default: ({ content }) => <div>{content}</div>,
+}));
+
+describe('AccountInfo component', () => {
+  test('renders "Account Information" heading and user name', async () => {
+    render(
+      <MemoryRouter>
+        <AccountInfo />
+      </MemoryRouter>
+    );
+
+    // ✅ Use `findByText` to await async render
+    expect(await screen.findByText(/Account Information/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Jane Doe/i)).toBeInTheDocument();
+    expect(await screen.findByText(/jane.doe@example.com/i)).toBeInTheDocument();
+  });
 });
