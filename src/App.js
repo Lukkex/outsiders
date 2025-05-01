@@ -25,6 +25,8 @@ import MFASetup from './components/Pages/User/MFASetup';
 import UserAccountDeletion from './components/Pages/User/UserAccountDeletion';
 import ViewPlayers from './components/Pages/Admin/ViewPlayers';
 
+import SiteContainer from './utils/SiteContainer';
+
 import '@aws-amplify/ui-react/styles.css';
 
 Amplify.configure({
@@ -50,9 +52,18 @@ function App() {
           <Route path="/help" element={<SignedOutRoute content={<Help />} />} />
           <Route path="/aboutus" element={<SignedOutRoute content={<AboutUs />} />} />
           <Route path="/registration" element={<SignedOutRoute content={<Registration />} />} />
-          <Route path="/scheduling" element={<SignedOutRoute content={<Scheduling />} />} />
-          <Route path="/admindashboard" element={<PrivateRoute content={<AdminDashboard />} redirectPage="/access-denied" />} />
-          <Route path="/adminscheduling" element={<PrivateRoute content={<AdminScheduling />} redirectPage="/access-denied" />} />
+          <Route
+            path="/scheduling"
+            element={<SignedOutRoute content={<SiteContainer content={<Scheduling />} />} />}
+          />
+          <Route
+            path="/admindashboard"
+            element={<PrivateRoute content={<AdminDashboard />} redirectPage="/access-denied" />}
+          />
+          <Route
+            path="/adminscheduling"
+            element={<PrivateRoute content={<AdminScheduling />} redirectPage="/access-denied" />}
+          />
           <Route path="/accountinfo" element={<SignedOutRoute content={<AccountInfo />} />} />
           <Route path="/changepassword" element={<SignedOutRoute content={<ChangePassword />} />} />
           <Route path="/setup-mfa" element={<MFASetup />} />

@@ -1,4 +1,3 @@
-//EventCreation.js
 /*
 * Notes: - NOT LINKED TO BACKEND, USING DUMMY DATA OR NONE AT ALL.
 * TODO: - send eventData to DynamoDB
@@ -9,6 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../../Stylesheets/Scheduling.module.css';
 import { fetchAuthSession } from '@aws-amplify/auth';
+
 const API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/events';
 const USER_EVENT_API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/user-events';
 
@@ -21,60 +21,64 @@ const getAuthHeader = async () => {
 };
 
 const EventCreation = () => {
-    //## Dummy locations (replace with a fetch from DynamoDB later)
-    const availableLocation = ["Folsom", "San Quentin"];
-
-    //!!individual event data (replace rsvp:'' with proper fetch and input)
-    const [eventData, setEventData] = useState({
-        location: '',
-        date: '',
-        time: ''
-    });
-    
-    //##local list of created events
+    const availableLocation = ['All Locations', 'Folsom', 'San Quentin'];
+    const [eventData, setEventData] = useState({ location: '', date: '', time: '' });
     const [events, setEvents] = useState([]);
     const [formatMap, setFormatMap] = useState({});
-    //sort tracking variables
-    const [sortBy, setSortBy] = useState(null);
-    const [sortOrder, setSortOrder] = useState("asc");
-    const [rsvpData, setRsvpData] = useState({}); // New state for RSVP data
-    const [allRsvps, setAllRsvps] = useState([]);
+    const [rsvpData, setRsvpData] = useState({});
     const [userNames, setUserNames] = useState({});
+    const [eventToDelete, setEventToDelete] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filterLocation, setFilterLocation] = useState('All Locations');
+    const [searchDate, setSearchDate] = useState('');
+    const eventsPerPage = 10;
 
     const createEvent = async (eventData) => {
         try {
-            const headers = {
-                'Content-Type': 'application/json',
-                ...(await getAuthHeader()),
-            };
-    
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify(eventData)
-            });
-    
-            if(!response.ok) throw new Error('Failed to create event');
+            const headers = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
+            const response = await fetch(API_URL, { method: 'POST', headers, body: JSON.stringify(eventData) });
+            if (!response.ok) throw new Error('Failed to create event');
             const result = await response.json();
-            console.log('Event created:', result);
             return result;
         } catch (err) {
             console.error('Error creating event:', err);
             throw err;
         }
     };
+
+    const deleteEvent = async (eventID) => {
+        console.log("Deleting event ID:", eventID);
+        try {
+            const headers = { ...(await getAuthHeader()) };
+            const response = await fetch(API_URL, {
+                method: 'DELETE',
+                headers,
+                body: `{\"eventID\": \"${eventID}\"}`
+            });
+            if (!response.ok) throw new Error('Failed to delete event');
+            console.log("Event deleted successfully");
+
+            console.log("Deleting rsvps for eventID:", eventID);
+            const response2 = await fetch(USER_EVENT_API_URL, {
+                method: 'DELETE',
+                headers,
+                body: `{\"eventID\": \"${eventID}\"}`
+            });
+            if (!response2.ok && response2.status !== 404) throw new Error('Failed to delete event');
+            if (response2.status == 404) { console.log("No RSVPs found, Event has still been deleted.") }
+            await fetchEvents();
+            setEventToDelete(null); 
+        } catch (err) {
+            console.error('Error deleting event:', err); 
+        }
+    };
     
     const fetchRsvpData = async (eventId) => {
         try {
             const headers = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
-            // Use GET with eventId as a query param
-            const response = await fetch(`${USER_EVENT_API_URL}?eventId=${encodeURIComponent(eventId)}`, {
-                method: 'GET',
-                headers
-            });
+            const response = await fetch(`${USER_EVENT_API_URL}?eventId=${encodeURIComponent(eventId)}`, { method: 'GET', headers });
             if (!response.ok) throw new Error('Failed to fetch RSVP data');
-            const rsvps = await response.json();
-            return rsvps;
+            return await response.json();
         } catch (err) {
             console.error('Error fetching RSVP data:', err);
             return [];
@@ -83,21 +87,11 @@ const EventCreation = () => {
 
     const fetchEvents = async () => {
         try {
-            const headers = {
-                'Content-Type': 'application/json',
-                ...(await getAuthHeader()),
-            };
-
-            const response = await fetch(API_URL, {
-                method: 'GET',
-                headers
-            });
-
+            const headers = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
+            const response = await fetch(API_URL, { method: 'GET', headers });
             if (!response.ok) throw new Error('Failed to fetch events');
             const eventsFromAPI = await response.json();
-            console.log('Fetched events:', eventsFromAPI);
 
-            // format map
             const formatMap = {};
             const now = new Date();
             const futureEvents = eventsFromAPI
@@ -105,290 +99,230 @@ const EventCreation = () => {
                     const [y, m, d] = ev.date.split('-').map(Number);
                     const [hh, mm] = ev.time.split(':').map(Number);
                     const dt = new Date(y, m - 1, d, hh, mm);
-                    const composite = `${ev.location}-${ev.date}-${ev.time}`;
-                    formatMap[ev.eventID] = composite;
+                    formatMap[ev.eventID] = `${ev.location}-${ev.date}-${ev.time}`;
                     return { ...ev, when: dt.getTime() };
                 })
-                .filter(ev => ev.when >= now.getTime());
+                .filter(ev => ev.when >= now.getTime())
+                .sort((a, b) => a.when - b.when);
 
             setEvents(futureEvents);
             setFormatMap(formatMap);
 
-            // Fetch RSVP data for each event
-            const rsvpPromises = futureEvents.map(async (event) => {
-                const eventId = event.eventID;
-                console.log('Processing event:', eventId);
-                const rsvps = await fetchRsvpData(eventId);
-                return [eventId, rsvps];
-            });
-
-            const rsvpResults = await Promise.all(rsvpPromises);
-            console.log('All RSVP results:', rsvpResults);
+            const rsvpResults = await Promise.all(
+                futureEvents.map(async (event) => [event.eventID, await fetchRsvpData(event.eventID)])
+            );
             const rsvpMap = Object.fromEntries(rsvpResults);
-            console.log('RSVP map:', rsvpMap);
             setRsvpData(rsvpMap);
 
-            // After fetching all RSVPs for all events:
-            const allUserIDs = Array.from(new Set(
-                Object.values(rsvpMap).flat().map(rsvp => rsvp.userID)
-            ));
-
+            const allUserIDs = Array.from(new Set(Object.values(rsvpMap).flat().map(r => r.userID)));
             if (allUserIDs.length > 0) {
-                const lookupHeaders = {
-                    'Content-Type': 'application/json',
-                    ...(await getAuthHeader())
-                };
-                const lookupResp = await fetch('https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/get-user-names', {
+                const nameResp = await fetch('https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/get-user-names', {
                     method: 'POST',
-                    headers: lookupHeaders,
+                    headers: { 'Content-Type': 'application/json', ...(await getAuthHeader()) },
                     body: JSON.stringify({ userIDs: allUserIDs })
                 });
-
-                if (!lookupResp.ok) {
-                    console.error('Name lookup failed:', lookupResp.status, await lookupResp.text());
-                } else {
-                    const userInfos = await lookupResp.json();
-                    console.log('UserInfos:', userInfos);
-                    if (Array.isArray(userInfos)) {
-                        const idToName = {};
-                        userInfos.forEach(u => { idToName[u.userID] = u.name; });
-                        setUserNames(idToName);
-                    } else {
-                        console.error('Expected array from name lookup but got:', userInfos);
-                    }
+                if (nameResp.ok) {
+                    const userInfos = await nameResp.json();
+                    const idToName = {};
+                    userInfos.forEach(u => idToName[u.userID] = u.name);
+                    setUserNames(idToName);
                 }
             }
-        } catch (error) {
-            console.error('Error fetching events:', error);
+        } catch (err) {
+            console.error('Error fetching events:', err);
         }
     };
 
-    const fetchAllRsvps = async () => {
-        const response = await fetch(USER_EVENT_API_URL, { method: 'GET', headers });
-        const all = await response.json();
-        setAllRsvps(all);
-    };
-
-    //updates eventData variable (the event youre making)
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
-        if (name === "location") {
-            let defaultTime = "";
-            if (value === "Folsom") { defaultTime = "09:30"; } 
-            else if (value === "San Quentin") { defaultTime = "11:45"; }
-            
-            setEventData(prev => ({
-                ...prev,
-                location: value,
-                time: defaultTime  // Set time when location changes
-            }));
+        if (name === 'location') {
+            let defaultTime = value === 'Folsom' ? '09:30' : value === 'San Quentin' ? '11:45' : '';
+            setEventData(prev => ({ ...prev, location: value, time: defaultTime }));
         } else {
-            setEventData(prev => ({
-                ...prev,
-                [name]: value
-            }));
+            setEventData(prev => ({ ...prev, [name]: value }));
         }
-    
-        //setEventData({ ...eventData, [e.target.name]: e.target.value})
-    }
-
-    //##currently just updates the event list (replace with send data to DynamoDB)
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            await createEvent(eventData);
-            //console.log('Event created!', result);
-            await fetchEvents();
-            setEventData({ location: "", date: "", time: ""})
-        } catch (error) {
-            console.error('Failed to create event:', error);
-        }
-        //([...events, eventData]);
-        //setEventData({ title: "", location: "", date: "", time:""});
     };
 
-    //table sorting
-    const handleSort = (key) => {
-        if (sortBy === key) {
-            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await createEvent(eventData);
+            await fetchEvents();
+            setEventData({ location: '', date: '', time: '' });
+        } catch (err) {
+            console.error('Failed to create event:', err);
         }
-        else {
-            setSortBy(key);
-            setSortOrder("asc");
-        }
-    }
+    };
 
     const handleAdminRemoveRsvp = async (userID, eventId) => {
         try {
-            const headers = {
-                'Content-Type': 'application/json',
-                ...(await getAuthHeader())
-            };
+            const headers = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
             const response = await fetch(USER_EVENT_API_URL, {
                 method: 'DELETE',
                 headers,
                 body: JSON.stringify({ userID, eventId })
             });
-            if (!response.ok) {
-                console.error('Failed to remove RSVP:', response.status, await response.text());
-            } else {
-                // Refresh events and RSVPs
+            if (response.ok) {
                 await fetchEvents();
+                const updatedRsvps = await fetchRsvpData(eventId);
+                setRsvpData(prev => ({ ...prev, [eventId]: updatedRsvps }));
             }
         } catch (err) {
             console.error('Error removing RSVP:', err);
         }
     };
 
-    useEffect(() => {
-        fetchEvents();
-    }, []);
+    useEffect(() => { fetchEvents(); }, []);
 
-    //sort logic
-    const sortedEvents = [...events].sort((a,b) => {
-        if (!sortBy) return 0;
-        let comparison = 0;
-
-        if (sortBy === "date") comparison = new Date(a.date) - new Date(b.date);
-        else if (sortBy === "location") comparison = a.location.localeCompare(b.location);
-        return sortOrder === "asc" ? comparison : -comparison;
-    });
-
-    const now = new Date();
-    const filteredEvents = sortedEvents.filter(event => {
-        const [year, month, day] = event.date.split('-');
-        const [hour, minute] = event.time.split(':');
-        const eventDateTime = new Date(
-            Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute)
-        );
-        return eventDateTime >= now;
-    });
-
-    const getArrow = (key) => {
-        return sortBy === key ? (sortOrder === "asc" ? "⬆" : "⬇") : "↕";
-    };
-    
     function formatDate(dateString) {
         const [year, month, day] = dateString.split('-');
         const date = new Date(Number(year), Number(month) - 1, Number(day));
-        var monthNames = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
         ];
-        return (monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
+        return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
     }
+
+    const filteredEvents = events.filter(event => {
+        const matchesLocation = filterLocation === 'All Locations' || event.location === filterLocation;
+        const formattedDate = formatDate(event.date).toLowerCase();
+        const searchLower = searchDate.trim().toLowerCase();
+        const matchesDate = !searchLower || formattedDate.includes(searchLower);
+        return matchesLocation && matchesDate;
+    });
+
+    const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
+    const paginatedEvents = filteredEvents.slice((currentPage - 1) * eventsPerPage, currentPage * eventsPerPage);
 
     return (
         <div>
+            {/* Admin Event Creation Form */}
             <div className={styles.formContainer}>
-                <h2 className="" >Create a New Event</h2>
-                {/*Create event form*/}
                 <form onSubmit={handleSubmit}>
-                <div> 
-                    <label htmlFor="location">Prison:</label>
-                        <select
-                            name="location"
-                            id="location"
-                            value={eventData.location}
-                            onChange={handleChange}
-                            required
-                            >
+                    <div>
+                        <label htmlFor="location">Prison: </label>
+                        <select name="location" id="location" value={eventData.location} onChange={handleChange} required>
                             <option value="">Select Location</option>
-                            {availableLocation.map((loc, index) => (
-                                <option key={index} value={loc}> {loc} </option>
+                            {availableLocation.slice(1).map((loc, i) => <option key={i} value={loc}>{loc}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="date">Date: </label>
+                        <input type="date" name="date" id="date" value={eventData.date} onChange={handleChange} required />
+                    </div>
+                    <div>
+                        <label htmlFor="time">Time: </label>
+                        <input type="time" name="time" id="time" value={eventData.time} onChange={handleChange} required />
+                    </div>
+                    <div style={{ textAlign: 'center', marginTop: '1em' }}>
+                        <button className={`${styles.buttonStyled} ${styles.selectedButton}`} type="submit">Create Event</button>
+                    </div>
+                </form>
+            </div>
+
+            {/* Admin Event Table with Filters */}
+            <div className={styles.tableContainer}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr', marginBottom: '1em', gap: '0.5em' }}>
+                    <div>
+                        <select
+                            value={filterLocation}
+                            onChange={(e) => { setFilterLocation(e.target.value); setCurrentPage(1); }}
+                            className="px-2 py-1 border rounded w-full"
+                        >
+                            {availableLocation.map((loc, idx) => (
+                                <option key={idx} value={loc}>{loc}</option>
                             ))}
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="date">Date:</label>
-                        <input 
-                            type="date" 
-                            name="date"
-                            id="date"
-                            value={eventData.date}
-                            onChange={handleChange}
-                            required
+                        <input
+                            type="text"
+                            placeholder="Search by date"
+                            value={searchDate}
+                            onChange={(e) => { setSearchDate(e.target.value); setCurrentPage(1); }}
+                            className="px-2 py-1 border rounded w-full"
                         />
                     </div>
-                    <div>
-                    <label htmlFor="time">Time:</label>
-                        <input 
-                            type="time" 
-                            name="time"
-                            id="time"
-                            value={eventData.time}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <button type="submit">Create Event</button>
-                </form>
-            </div>
-            <br></br>
+                </div>
 
-            <div className={styles.tableContainer}>
-                {/*List of existing events*/}
-                <h1>Upcoming Events</h1>
-                {events.length > 0 ? (
-                    <table className={styles.scheduleTable} border="1">
-                        <thead>
-                            <tr>
-                                <th onClick={() => handleSort("location")} style={{ cursor: "pointer" }}>
-                                    Location {getArrow("location")}</th>
-                                <th onClick={() => handleSort("date")} style={{ cursor: "pointer" }}>
-                                    Date {getArrow("date")}</th>
-                                <th>Time</th>
-                                <th>RSVP Count</th>
-                                <th>RSVP List</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredEvents.map((event, index) => {
-                                const eventId = event.eventID;
-                                const rsvps = rsvpData[eventId] || [];
-                                console.log(`Rendering event ${eventId} with RSVPs:`, rsvps);
-                                return (
-                                    <tr key={index}>
-                                        <td>{event.location}</td>
-                                        <td>{formatDate(event.date)}</td>
-                                        <td>{event.time}</td>
-                                        <td>{rsvps.length}</td>
-                                        <td>
-                                            <details>
-                                                <summary>View RSVP List ({rsvps.length})</summary>
-                                                <ul className={styles.rsvpList}>
-                                                    {rsvps.length > 0 ? (
-                                                        rsvps.map((rsvp, i) => (
-                                                            <li key={i} className={styles.rsvpItem}>
-                                                                {userNames[rsvp.userID] || rsvp.userID}
-                                                                <button
-                                                                    style={{ marginLeft: '1em', color: 'red', cursor: 'pointer' }}
-                                                                    onClick={() => handleAdminRemoveRsvp(rsvp.userID, eventId)}
-                                                                    title="Remove RSVP"
-                                                                >
-                                                                    Remove
-                                                                </button>
-                                                            </li>
-                                                        ))
-                                                    ) : (
-                                                        <li>No RSVPs</li>
-                                                    )}
-                                                </ul>
-                                            </details>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                ) : (
-                    <p>No events scheduled yet.</p>
-                )}
+                {paginatedEvents.length > 0 ? (
+                    <>
+                        <table className={styles.scheduleTable} border="1">
+                            <thead>
+                                <tr>
+                                    <th>Location</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>RSVP Count</th>
+                                    <th>RSVP List</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {paginatedEvents.map((event, idx) => {
+                                    const rsvps = rsvpData[event.eventID] || [];
+                                    return (
+                                        <tr key={idx}>
+                                            <td>{event.location}</td>
+                                            <td>{formatDate(event.date)}</td>
+                                            <td>{event.time}</td>
+                                            <td>{rsvps.length}</td>
+                                            <td>
+                                                <details>
+                                                    <summary>View RSVP List ({rsvps.length})</summary>
+                                                    <ul className={styles.rsvpList}>
+                                                        {rsvps.length ? (
+                                                            rsvps.map((r, i) => (
+                                                                <li key={i} className={styles.rsvpItem}>
+                                                                    {userNames[r.userID] || r.userID}
+                                                                    <button style={{ marginLeft: '1em', color: 'red' }} onClick={() => handleAdminRemoveRsvp(r.userID, event.eventID)}>
+                                                                        Remove
+                                                                    </button>
+                                                                </li>
+                                                            ))
+                                                        ) : (
+                                                            <li>No RSVPs</li>
+                                                        )}
+                                                    </ul>
+                                                </details>
+                                            </td>
+                                            <td>
+                                                <button className={styles.cancelButton} onClick={() => setEventToDelete(event.eventID)}>Delete</button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                        <div className="flex justify-center items-center mt-4 gap-2 w-full">
+                            <button onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1} className="bg-sky-700 text-white px-3 py-1 rounded shadow">&larr;</button>
+                            <span className="px-4 py-1">Page {currentPage} of {totalPages}</span>
+                            <button onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages} className="bg-sky-700 text-white px-3 py-1 rounded shadow">&rarr;</button>
+                        </div>
+                    </>
+                ) : <p>No events scheduled yet.</p>}
             </div>
+
+            {eventToDelete && (
+                <div className={styles.confirmationModal}>
+                    <div className={styles.confirmationContent}>
+                        <h3>Are you sure you want to delete this event?</h3>
+                        <div className={styles.confirmationButtons}>
+                            <button className={styles.confirmButton} onClick={() => setEventToDelete(null)}>Cancel</button>
+                            <button
+                                className={styles.cancelButton}
+                                onClick={() => deleteEvent(eventToDelete)}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
-}
+};
 
 export default EventCreation;

@@ -2,26 +2,28 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
 import AdminDashboard from './AdminDashboard';
+import { getSubmittedFormsFromS3 } from '../../../services/getSubmittedFormsFromS3';
 
-jest.mock('../../../services/formsApi', () => ({
+jest.mock('../../../services/getSubmittedFormsFromS3', () => ({
   getSubmittedFormsFromS3: jest.fn().mockResolvedValue([]),
 }));
+
 
 jest.mock('../../../utils/SiteHeader', () => () => <header>Mock SiteHeader</header>);
 
 describe('AdminDashboard', () => {
   test('renders dashboard title', async () => {
-    await act(async () => {
-      render(
-        <MemoryRouter>
-          <AdminDashboard />
-        </MemoryRouter>
-      );
-    });
+    render(
+      <MemoryRouter>
+        <AdminDashboard />
+      </MemoryRouter>
+    );
 
-    expect(screen.getByText(/ADMIN DASHBOARD - VIEW SUBMITTED FORMS/i)).toBeInTheDocument();
+    //expect(await screen.findByText(/ADMIN DASHBOARD - VIEW SUBMITTED FORMS/i)).toBeInTheDocument();
+    expect(await screen.findByText((content) =>
+      content.includes('ADMIN DASHBOARD - VIEW SUBMITTED FORMS')
+    )).toBeInTheDocument();
     expect(screen.getByText(/Upload New Form/i)).toBeInTheDocument();
     expect(screen.getByText(/Mock SiteHeader/i)).toBeInTheDocument();
   });

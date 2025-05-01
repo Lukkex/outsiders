@@ -187,7 +187,7 @@ h1 {
 }
 
 .navigation-buttons button:hover {
-  background-color: #0073e6;
+  background-color: #377a8d;
   color: #fff;
 }
 
@@ -205,12 +205,21 @@ h1 {
 }
 
 .rounded-button.uploaded {
-  background-color: #4CAF50; /* Green background when uploaded */
-  color: white; /* White text on green */
+  background-color: #ff4e4e;
+  color: white;
 }
 
 .rounded-button.uploaded:hover {
-  background-color: #45A049; /* Darker green on hover */
+  background-color: #ce4444;
+}
+
+.rounded-button.green {
+  background-color: #40b85a;
+  color: white;
+}
+
+.rounded-button.green:hover {
+  background-color: #36974b;
 }
 
 .Deletion {

@@ -65,7 +65,7 @@ function ViewPlayers() {
     <SiteContainer content={
       <div>
         <div className="admin-dashboard">
-          <h1 className="dashboard-title text-center mb-6">VIEW PLAYERS</h1>
+          <h1 className="dashboard-title text-center mb-6">VIEW USERS</h1>
 
           <div className="filters mb-4 flex justify-start">
             <input
