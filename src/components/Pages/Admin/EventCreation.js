@@ -62,7 +62,7 @@ const EventCreation = () => {
             const response2 = await fetch(USER_EVENT_API_URL, {
                 method: 'DELETE',
                 headers,
-                body: `{\"eventID\": \"${eventID}\"}`
+                body: `{\"eventID\": \"${eventID}\", \"all\": \"true\"}`
             });
             if (!response2.ok && response2.status !== 404) throw new Error('Failed to delete event');
             if (response2.status == 404) { console.log("No RSVPs found, Event has still been deleted.") }
