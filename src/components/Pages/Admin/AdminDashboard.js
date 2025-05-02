@@ -19,7 +19,6 @@ function capitalizeName(name) {
 const getAuthHeader = async () => {
     const session = await fetchAuthSession();
     const token = session.tokens?.idToken?.toString();
-    alert("here in authHeader");
     return {
         Authorization: token ? `Bearer ${token}` : '',
     };
@@ -34,9 +33,6 @@ function AdminDashboard() {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [uploadMessage, setUploadMessage] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [events, setEvents] = useState([]);
-    const [userEvents, setUserEvents] = useState([]);
-    const [players, setPlayers] = useState([]);
     const [currentEventInfo, setCurrentEventInfo] = useState([]);
     const [eventsForForms, setEventsForForms] = useState([{
         email: '',
@@ -63,6 +59,8 @@ function AdminDashboard() {
         setForms(formatted);
         setFilteredForms(formatted);
     }
+
+    useEffect(() => { fetchForms(); }, []);
 
     const handleSearch = () => {
         const term = searchTerm.trim().toLowerCase();
@@ -128,140 +126,117 @@ function AdminDashboard() {
         }
     };
 
-    useEffect(() => {
-        const fetchAllData = async () => {
-            await Promise.all([
-                fetchForms(),
-                fetchEvents(),
-                fetchUserEvents(),
-                fetchPlayers()
-            ]);
-        };
-    
-        fetchAllData();
-    }, []);
-
-    useEffect(() => {
-        if (players.length > 0 && userEvents.length > 0 && events.length > 0) {
-            const result = [];
-    
-            players.forEach(player => {
-                const locations = [];
-                const nameTimeDay = [];
-                const usersEventIDs = userEvents.filter(event => event.userID === player.username);
-    
-                usersEventIDs.forEach(usEvent => {
-                    const attendedEvent = events.find(event => event.eventID === usEvent.eventId);
-                    if (!attendedEvent) return;
-    
-                    if (!locations.includes(attendedEvent.location)) {
-                        locations.push(attendedEvent.location);
-                    }
-    
-                    nameTimeDay.push(`${attendedEvent.location}: ${attendedEvent.date}, ${attendedEvent.time}`);
-                });
-    
-                result.push({ email: player.email, locations, eventNameTime: nameTimeDay });
-            });
-    
-            setEventsForForms(result);
-        }
-    }, [players, userEvents, events]);
-
-    //where mine starts
-    
-    const fetchUserEvents = async () => {
+     
+    const fetchUserEvents = async (eventId) => {
         try {
             const headers = { 'Content-Type': 'application/json', ...(await getAuthHeader()) };
-            const response = await fetch(USER_EVENT_API_URL, { method: 'GET', headers });
+            const response = await fetch(`${USER_EVENT_API_URL}?eventId=${encodeURIComponent(eventId)}`, { method: 'GET', headers });
             if (!response.ok) throw new Error('Failed to fetch RSVP data');
-            setUserEvents(response);
+            return await response.json();
         } catch (err) {
-            alert("fetch userEvents error");
             console.error('Error fetching RSVP data:', err);
             return [];
         }
     };
     
+
     const fetchEvents = async () => {
-        try {
-            const headers = {
-                'Content-Type': 'application/json',
-                ...(await getAuthHeader()),
-            };
-            
-    
-            const response = await fetch(API_URL, {
-                method: 'GET',
-                headers
+        const headers = {
+            'Content-Type': 'application/json',
+            ...(await getAuthHeader()),
+        };
+        
+
+        const response = await fetch(API_URL, {
+            method: 'GET',
+            headers
+        });
+
+        if(!response.ok) throw new Error('Failed to fetch events');
+        const data = await response.json();
+        //console.log("Fetched events:", data);
+        //alert("All known Events:\n" + data.map(item => item.eventID).join('\n'));
+        
+        const now = new Date();
+        const filteredEvents = data
+        .map(ev => {
+            const [y, m, d] = ev.date.split('-').map(Number);
+            const [hh, mm] = ev.time.split(':').map(Number);
+            const dt = new Date(y, m - 1, d, hh, mm);
+            return { ...ev, when: dt.getTime() };
+        })
+        .filter(ev => ev.when >= now.getTime())
+        .sort((a, b) => a.when - b.when);
+
+        const userEvents = await Promise.all(
+            filteredEvents.map(async (event) => [event.eventID, await fetchUserEvents(event.eventID)])
+        );
+        console.log('Users for event:', userEvents);
+
+        const allUserEvents = Object.fromEntries(userEvents);
+        console.log('AllUsers for event:', allUserEvents);
+
+        const allUserIDs = Array.from(new Set(Object.values(allUserEvents).flat().map(r => r.userID)));
+        console.log('All users ids:', allUserIDs);
+        if (allUserIDs.length > 0) {
+            const users = await fetch('https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/get-user-names', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...(await getAuthHeader()) },
+                body: JSON.stringify({ userIDs: allUserIDs })
             });
-    
-            if(!response.ok) throw new Error('Failed to fetch events');
-            const data = await response.json();
-            console.log("Fetched events:", data);
-            setEvents(data);
-        }catch (error) {
-            console.error('Error fetching events:', error);
-        }
-    }
-    
-    const fetchPlayers = async () => {
-        try {
-            const users = await fetchAllUsers();
-            setPlayers(users);
-        } catch (error) {
-            alert("fetch players error");
-            console.error("Fetch Players Error:", error);
-        }
-    }
-    
-                                        
-    //Now have arrays of all the events, the people, and the rsvps
-    
-    
-    //sorts through the events, userEvents, and users to form EventsForForms
-    function findPlayersEvents(){
-        if (players.length > 0) {
-            players.forEach(player => {
-                const locations = [];
-                const nameTimeDay = [];
-                const usersEventIDs = userEvents.filter(event => event.userID === player.username);
-    
-                if (usersEventIDs.length > 0) {
-                    usersEventIDs.forEach(usEvent => {
-                        const attendedEvent = events.find(event => event.eventID === usEvent.eventId);
-                        if (attendedEvent.location === "")
-                            alert("No location found found for this user.");
-                        if(!locations.includes(attendedEvent.location))
-                            locations.push(attendedEvent.location);
-                        nameTimeDay.push('<b>' + attendedEvent.location + '</b>' + ': ' + attendedEvent.date + ', ' + attendedEvent.time); //(ex: Folsom: 2025-06-10, 13:35)
+            if (users.ok) {
+                const userInfo = await users.json();
+                
+                const userEmails = {};
+                const result = [];
+                userInfo.forEach(user => {
+                    const locations = new Set();
+                    const eventNameTime = [];
+
+                    // Check all events to see if user attended
+                    Object.entries(allUserEvents).forEach(([eventID, attendees]) => {
+                        if (attendees.some(att => att.userID === user.userID)) {
+                            const attendedEvent = data.find(ev => ev.eventID === eventID);
+                            if (!attendedEvent) return;
+
+                            // Add location and formatted name/time
+                            locations.add(attendedEvent.location);
+                            eventNameTime.push({
+                                location: attendedEvent.location,
+                                date: attendedEvent.date,
+                                time: attendedEvent.time
+                                });
+                        }
                     });
-                }
-    
-                setEventsForForms(prevState => [
-                    ...prevState,
-                    { email: player.email, locations: locations, eventNameTime: nameTimeDay }
-                ]);
-    
-            });
+
+                    if (eventNameTime.length > 0) {
+                        result.push({
+                            email: user.email,
+                            locations: Array.from(locations),
+                            eventNameTime
+                        });
+                    }
+                });
+
+                
+                setEventsForForms(result);
+            }
         }
     }
 
+    useEffect(() => { fetchEvents(); }, []);
+
+
+
     function setUserEventNameTime(email)
     {
-        alert("Looking for email: " + email);
-        alert("All known userEvents:\n" + userEvents.map(item => item.email).join('\n'));
+        console.log(eventsForForms);
         const currentUser = eventsForForms.find(item => item.email === email);
 
         if (!currentUser) {
             console.warn("User not found in eventsForForms for email:", email);
             alert("No event info found for this user.");
-            return;
-        }
-    
-        if (!currentUser.eventNameTime) {
-            console.warn("User found but eventNameTime is missing:", currentUser);
-            alert("Event info is not ready yet.");
+            setEventsModalOpen(false);
             return;
         }
 
@@ -315,7 +290,7 @@ function AdminDashboard() {
                         <thead>
                             <tr>
                                 <th style={{ width: '15%' }}>FORM CODE</th>
-                                <th style={{ width: '20%' }}>EVENT</th>
+                                <th style={{ width: '20%', textAlign: 'center'  }}>EVENTS</th>
                                 <th style={{ width: '10%', paddingLeft: '30px' }}>FIRST</th>
                                 <th style={{ width: '10%' }}>LAST</th>
                                 <th style={{ width: '25%' }}>EMAIL</th>
@@ -339,19 +314,32 @@ function AdminDashboard() {
                                             </a>
                                         </td>
                                         <td>
-                                        {form.email  && events.length > 0 && players.length > 0 && userEvents.length > 0 ? (
+                                        <div className="flex justify-center items-center h-full w-full">
+                                        {(() => {
+                                            const user = eventsForForms.find(e => e.email === form.email);
+                                            if (!user || !user.locations || user.locations.length === 0) {
+                                                return <span className="text-gray-500">No Events</span>;
+                                            }
+
+                                            return (
                                             <button
                                                 onClick={() => {
                                                 setEventsModalOpen(true);
                                                 setUserEventNameTime(form.email);
                                                 }}
-                                                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                                                className="text-blue-700 bg-white-200 hover:text-white hover:bg-blue-500 text-sm px-4 py-2 rounded"
                                             >
-                                                {form.email}
+                                                {user.locations.map((location, index) => (
+                                                <span key={index}style={{ fontSize: '1.0rem' }}>
+                                                    {location}
+                                                    {index < user.locations.length - 1 && ','}
+                                                    {index < user.locations.length - 1 && <br />} {/* Adds a line break between locations */}
+                                                </span>
+                                                ))}
                                             </button>
-                                            ) : (
-                                            '-'
-                                            )}
+                                            );
+                                        })()}
+                                        </div>
                                         </td>
                                         <td style={{ paddingLeft: '30px' }}>{form.firstName || '-'}</td>
                                         <td>{form.lastName || '-'}</td>
@@ -427,16 +415,28 @@ function AdminDashboard() {
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                         <div className="bg-white p-6 rounded-lg w-1/2 relative">
                             <button onClick={() => setEventsModalOpen(false)} className="absolute top-2 right-2 text-lg">✖</button>
-                            <h2 className="text-xl font-bold mb-4">RSVPd Events:</h2>
-                            <ul>
-                                {currentEventInfo.map((event, index) => (
-                                <li key={index}>{event}</li>
-                                ))}
-                            </ul>                   
+                            <h2 className="text-xl font-bold mb-4">RSVPs:</h2>
+                            <table className="min-w-full table-auto border-collapse border border-gray-300">
+                                <thead className="bg-sky-100">
+                                    <tr>
+                                        <th className="border border-gray-300 px-4 py-2 text-center">Location</th>
+                                        <th className="border border-gray-300 px-4 py-2 text-center">Date</th>
+                                        <th className="border border-gray-300 px-4 py-2 text-center">Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentEventInfo.map((event, index) => (
+                                        <tr key={index}>
+                                            <td className="border border-gray-300 px-4 py-2 text-center">{event.location}</td>
+                                            <td className="border border-gray-300 px-4 py-2 text-center">{event.date}</td>
+                                            <td className="border border-gray-300 px-4 py-2 text-center">{event.time}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 )}
-
             </div>
         } />
     );

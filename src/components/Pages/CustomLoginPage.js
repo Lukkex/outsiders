@@ -22,8 +22,7 @@ const CustomLoginPage = () => {
   const navigate = useNavigate();
   const { refreshUserData } = useUser();
   const { userInfo, loading } = useUser();
-  const isAdmin = userInfo?.role.includes("admin") ? true : false;
-  
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -48,12 +47,15 @@ const CustomLoginPage = () => {
 
       if (!step || step === 'DONE') {
         console.log('Login successful!');
-        await refreshUserData(); // Refresh user data after successful loginz
+        await refreshUserData();
+        const stored = localStorage.getItem('userInfo');
+        const updatedUser = stored ? JSON.parse(stored) : null;
         
-        if(isAdmin)
-          navigate('/admindashboard')
-        else
+        if (updatedUser?.role?.includes("admin")) {
+          navigate('/admindashboard');
+        } else {
           navigate('/');
+        }
       } else {
         console.log('Next step:', step);
         setUser(output);
@@ -89,7 +91,15 @@ const CustomLoginPage = () => {
       if (!step || step === 'DONE') {
         console.log('MFA complete!');
         await refreshUserData();
-        navigate('/');
+        const stored = localStorage.getItem('userInfo');
+        const updatedUser = stored ? JSON.parse(stored) : null;
+        
+       if (updatedUser?.role?.includes("admin")) {
+          navigate('/admindashboard');
+        } else {
+          navigate('/');
+        }
+       navigate('/');
       } else {
         console.log('Next step after MFA:', step);
         setUser(output);
