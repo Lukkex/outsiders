@@ -32,13 +32,13 @@ jest.mock('aws-amplify/auth', () => ({
       );
   
       fireEvent.change(screen.getByPlaceholderText(/Enter your first name/i), {
-        target: { value: 'John' },
+        target: { value: 'Team' },
       });
       fireEvent.change(screen.getByPlaceholderText(/Enter your last name/i), {
-        target: { value: 'Doe' },
+        target: { value: 'Outsiders' },
       });
       fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
-        target: { value: 'john@example.com' },
+        target: { value: 'teamoutsiders@example.com' },
       });
       fireEvent.change(screen.getByPlaceholderText(/Enter your password/i), {
         target: { value: 'Password123!' },
@@ -51,7 +51,7 @@ jest.mock('aws-amplify/auth', () => ({
   
       await waitFor(() => {
         expect(mockNavigate).toHaveBeenCalledWith('/confirm-signup', {
-          state: { username: 'john@example.com' },
+          state: { username: 'teamoutsiders@example.com' },
         });
       });
     });
