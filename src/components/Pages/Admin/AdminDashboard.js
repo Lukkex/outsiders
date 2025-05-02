@@ -425,13 +425,30 @@ function AdminDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {currentEventInfo.map((event, index) => (
-                                        <tr key={index}>
-                                            <td className="border border-gray-300 px-4 py-2 text-center">{event.location}</td>
-                                            <td className="border border-gray-300 px-4 py-2 text-center">{event.date}</td>
-                                            <td className="border border-gray-300 px-4 py-2 text-center">{event.time}</td>
-                                        </tr>
-                                    ))}
+                                    {currentEventInfo.map((event, index) => {
+                                        const combinedDateTime = `${event.date}T${event.time}`;
+                                        const dateObject = new Date(combinedDateTime);
+
+                                        const formattedDate = dateObject.toLocaleString('en-US', {
+                                            month: 'numeric',
+                                            day: 'numeric',
+                                            year: 'numeric',
+                                        });
+
+                                        const formattedTime = dateObject.toLocaleString('en-US', {
+                                            hour: 'numeric',
+                                            minute: '2-digit',
+                                            hour12: true,
+                                        });
+
+                                        return (
+                                            <tr key={index}>
+                                                <td className="border border-gray-300 px-4 py-2 text-center">{event.location}</td>
+                                                <td className="border border-gray-300 px-4 py-2 text-center">{formattedDate}</td>
+                                                <td className="border border-gray-300 px-4 py-2 text-center">{formattedTime}</td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>
