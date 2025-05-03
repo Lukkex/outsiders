@@ -153,7 +153,7 @@ function AdminDashboard() {
                                 <th style={{ width: '20%' }}>SUBMISSION DATE</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody  data-testid="search-result">
                             {currentForms.length > 0 ? (
                                 currentForms.map((form, index) => (
                                     <tr key={index}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent,act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import AdminDashboard from './AdminDashboard';
@@ -31,6 +31,126 @@ describe('AdminDashboard', () => {
     expect(screen.getByText(/Upload Files/i)).toBeInTheDocument();
     expect(screen.getByText(/View Users/i)).toBeInTheDocument();
     expect(screen.getByText(/Mock SiteHeader/i)).toBeInTheDocument();
+  });
+
+  test('filters admin forms by form code', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <AdminDashboard />
+        </MemoryRouter>
+      );
+    });
+
+    const input = screen.getByPlaceholderText(/search/i);
+
+    const testSearch = async (value, shouldFindResults) => {
+      fireEvent.change(input, { target: { value } });
+      expect(input.value).toBe(value);
+
+      if (shouldFindResults) {
+        const results = await screen.findAllByTestId('search-result');
+        expect(results.length).toBeGreaterThan(0);
+      } else {
+        //Wait for DOM update, check that no results are found
+        await act(() => Promise.resolve());
+        const results = screen.queryAllByTestId('search-result');
+        expect(results.length).toBe(1);
+      }
+    };
+
+    await testSearch('181', true); //Form Code - Valid
+    await testSearch('CDCA', false); //Form Code - Invalid
+  });
+
+  test('filters admin forms by first name', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <AdminDashboard />
+        </MemoryRouter>
+      );
+    });
+
+    const input = screen.getByPlaceholderText(/search/i);
+
+    const testSearch = async (value, shouldFindResults) => {
+      fireEvent.change(input, { target: { value } });
+      expect(input.value).toBe(value);
+
+      if (shouldFindResults) {
+        const results = await screen.findAllByTestId('search-result');
+        expect(results.length).toBeGreaterThan(0);
+      } else {
+        //Wait for DOM update, check that no results are found
+        await act(() => Promise.resolve());
+        const results = screen.queryAllByTestId('search-result');
+        expect(results.length).toBe(1);
+      }
+    };
+
+    await testSearch('Matt', true); //First Name - Valid
+    await testSearch('Demetrius', false); //First Name - Invalid
+  });
+
+  test('filters admin forms by last name', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <AdminDashboard />
+        </MemoryRouter>
+      );
+    });
+
+    const input = screen.getByPlaceholderText(/search/i);
+
+    const testSearch = async (value, shouldFindResults) => {
+      fireEvent.change(input, { target: { value } });
+      expect(input.value).toBe(value);
+
+      if (shouldFindResults) {
+        const results = await screen.findAllByTestId('search-result');
+        expect(results.length).toBeGreaterThan(0);
+      } else {
+        //Wait for DOM update, check that no results are found
+        await act(() => Promise.resolve());
+        const results = screen.queryAllByTestId('search-result');
+        expect(results.length).toBe(1);
+      }
+    };
+
+    await testSearch('Briseno', true); //Last Name - Valid
+    await testSearch('Smith', false); //Last Name - Invalid
+  });
+
+  test('filters admin forms by email', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <AdminDashboard />
+        </MemoryRouter>
+      );
+    });
+
+    const input = screen.getByPlaceholderText(/search/i);
+
+    const testSearch = async (value, shouldFindResults) => {
+      fireEvent.change(input, { target: { value } });
+      expect(input.value).toBe(value);
+
+      if (shouldFindResults) {
+        const results = await screen.findAllByTestId('search-result');
+        expect(results.length).toBeGreaterThan(0);
+      } else {
+        //Wait for DOM update, check that no results are found
+        await act(() => Promise.resolve());
+        const results = screen.queryAllByTestId('search-result');
+        expect(results.length).toBe(1);
+      }
+    };
+
+    await testSearch('sdEvtEAm', true); //Email - Valid
+    await testSearch('OutsidersDevTeam@outlook.con', false); //Email - Invalid
   });
 
   test('filters forms by user name input', async () => {
