@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import Scheduling from '../../../../src/components/Pages/User/Scheduling';
 import { fetchAuthSession } from '@aws-amplify/auth';
+import '@testing-library/jest-dom';
 
 jest.mock('@aws-amplify/auth');
 
