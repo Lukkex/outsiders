@@ -50,7 +50,7 @@ describe('AdminDashboard', () => {
 
       if (shouldFindResults) {
         const results = await screen.findAllByTestId('search-result');
-        expect(results.length).toBeGreaterThan(0);
+        expect(results.length).toBeGreaterThan(1);
       } else {
         //Wait for DOM update, check that no results are found
         await act(() => Promise.resolve());
