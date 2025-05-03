@@ -33,9 +33,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest --outputFile=tests/testLogs/jest-results.json --json > tests/testLogs/jest-output.txt",
+    "test": "jest",
+    "posttest": "node scripts/generateTestLogs.js",
     "test:clean": "rm -rf tests/testLogs/* && npm test",
-    "test:log": "node scripts/generateTestLogs.js",
+    "test:log": "jest --verbose --runInBand > tests/testLogs/jest-output.txt 2>&1",
     "eject": "react-scripts eject"
   },
   "browserslist": {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import AdminScheduling from './AdminScheduling';
+import AdminScheduling from 'components/Pages/Admin/EventCreation';
 
-jest.mock('../../../context/UserContext', () => ({
+jest.mock('context/UserContext', () => ({
   useUser: jest.fn(() => ({
     userInfo: { email: 'admin@example.com', sub: 'abc123', role: 'admin' },
     loading: false,
@@ -32,7 +32,7 @@ test('filters events by date input', () => {
   expect(input.value).toBe('May 22, 2025');
 });
 
-test('deletes an event from the list and removing users from RSVP', async () => {
+test('deletes an event from the list and removes users from RSVP', async () => {
   fetch
     .mockResolvedValueOnce({
       ok: true,

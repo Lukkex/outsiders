@@ -3,13 +3,13 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
-import AdminDashboard from './AdminDashboard';
+import AdminDashboard from 'components/Pages/Admin/AdminDashboard';
 
-jest.mock('../../../services/formsApi', () => ({
+jest.mock('services/formsApi', () => ({
   getSubmittedFormsFromS3: jest.fn().mockResolvedValue([]),
 }));
 
-jest.mock('../../../utils/SiteHeader', () => () => <header>Mock SiteHeader</header>);
+jest.mock('utils/SiteHeader', () => () => <header>Mock SiteHeader</header>);
 
 global.fetch = jest.fn();
 
@@ -79,7 +79,7 @@ describe('AdminDashboard', () => {
       fireEvent.click(promoteButton);
       expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/promote'), expect.anything());
     } else {
-      expect(true).toBe(true); 
+      expect(true).toBe(true);
     }
   });
 
@@ -99,16 +99,7 @@ describe('AdminDashboard', () => {
       fireEvent.click(deleteButton);
       expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/delete-user'), expect.anything());
     } else {
-      expect(true).toBe(true); 
+      expect(true).toBe(true);
     }
   });
 });
-
-//simply tests that the admin dashboard renders without problem for users
-//no crashes, no ui bugs, and correct titles
-
-//to test: npx jest 'filepath'
-//need to install: npm install --save-dev jest @testing-library/react @testing-library/jest-dom @testing-library/user-event @babel/preset-env @babel/preset-react babel-jest identity-obj-proxy
-
-//to run all use npm run test:log
-//this one creates a txt log of the tests
