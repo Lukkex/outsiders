@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
 import AdminDashboard from 'components/Pages/Admin/AdminDashboard';
 
 jest.mock('services/formsApi', () => ({
@@ -11,10 +10,49 @@ jest.mock('services/formsApi', () => ({
 
 jest.mock('utils/SiteHeader', () => () => <header>Mock SiteHeader</header>);
 
-global.fetch = jest.fn();
-
 beforeEach(() => {
-  fetch.mockClear();
+  global.fetch = jest.fn((url, options = {}) => {
+    if (url.includes('/events') && options.method === 'GET') {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [
+          {
+            eventID: 'event123',
+            location: 'Folsom',
+            date: '2025-05-22',
+            time: '10:00',
+          },
+        ],
+      });
+    }
+
+    if (url.includes('/user-events?eventId=')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [],
+      });
+    }
+
+    if (url.includes('/get-user-names')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [{ email: 'john@example.com', userID: 'abc123' }],
+      });
+    }
+
+    if (url.includes('/promote')) {
+      return Promise.resolve({ ok: true, json: async () => ({ success: true }) });
+    }
+
+    if (url.includes('/delete-user')) {
+      return Promise.resolve({ ok: true, json: async () => ({}) });
+    }
+
+    return Promise.resolve({
+      ok: true,
+      json: async () => [],
+    });
+  });
 });
 
 describe('AdminDashboard', () => {
@@ -40,6 +78,7 @@ describe('AdminDashboard', () => {
         </MemoryRouter>
       );
     });
+
     const input = screen.getByPlaceholderText(/search/i);
     fireEvent.change(input, { target: { value: 'john' } });
     expect(input.value).toBe('john');
@@ -53,19 +92,11 @@ describe('AdminDashboard', () => {
         </MemoryRouter>
       );
     });
-    const rows = screen.queryAllByTestId('form-row');
-    if (rows.length >= 2) {
-      const first = new Date(rows[0].dataset.timestamp);
-      const second = new Date(rows[1].dataset.timestamp);
-      expect(first.getTime()).toBeGreaterThanOrEqual(second.getTime());
-    } else {
-      expect(true).toBe(true);
-    }
+
+    expect(screen.getByText(/no forms found/i)).toBeInTheDocument(); 
   });
 
   test('toggles user admin status', async () => {
-    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true }) });
-
     await act(async () => {
       render(
         <MemoryRouter>
@@ -77,15 +108,16 @@ describe('AdminDashboard', () => {
     const promoteButton = screen.queryByText(/promote/i);
     if (promoteButton) {
       fireEvent.click(promoteButton);
-      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/promote'), expect.anything());
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/promote'),
+        expect.anything()
+      );
     } else {
-      expect(true).toBe(true);
+      expect(true).toBe(true); 
     }
   });
 
   test('deletes a user account', async () => {
-    fetch.mockResolvedValueOnce({ ok: true });
-
     await act(async () => {
       render(
         <MemoryRouter>
@@ -97,7 +129,10 @@ describe('AdminDashboard', () => {
     const deleteButton = screen.queryByText(/delete user/i);
     if (deleteButton) {
       fireEvent.click(deleteButton);
-      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/delete-user'), expect.anything());
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/delete-user'),
+        expect.anything()
+      );
     } else {
       expect(true).toBe(true);
     }

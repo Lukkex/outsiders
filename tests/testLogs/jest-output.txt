@@ -1,17 +1,30 @@
-PASS tests/componentTests/AdminDashboard.test.js
-  AdminDashboard
-    √ renders admin dashboard UI elements (48 ms)
-    √ filters forms by user name input (16 ms)
-    √ sorts forms by most recent first (8 ms)
-    √ toggles user admin status (10 ms)
-    √ deletes a user account (8 ms)
+Test File: CreateEvents.test.js
+  PASSED - Admin can create an event successfully
+  PASSED - renders all core form fields, RSVP count, and RSVP names correctly
 
-PASS tests/componentTests/AdminScheduling.test.js
-  √ filters events by date input (17 ms)
-  √ deletes an event from the list and removes users from RSVP (127 ms)
+Test File: UserAccountUpdateDelete.test.js
+  PASSED - shows error when new and confirm passwords do not match
+  PASSED - shows error when current password is incorrect
+  PASSED - calls getCurrentUser and updatePassword with correct arguments
+  PASSED - cannot login with old password after change
+  PASSED - can login with updated password after change
+  PASSED - calls deleteUser and deletes S3 uploads when confirmed
+  PASSED - cannot login with deleted account
+  PASSED - storage no longer lists removed files after deletion
+  PASSED - does not delete account when confirmation text is incorrect
 
-Test Suites: 2 passed, 2 total
-Tests:       7 passed, 7 total
+Test File: AdminScheduling.test.js
+  PASSED - filters events by date input
+  PASSED - deletes an event from the list and removes users from RSVP
+
+Test File: AdminDashboard.test.js
+  PASSED - renders admin dashboard UI elements
+  PASSED - filters forms by user name input
+  PASSED - sorts forms by most recent first
+  PASSED - toggles user admin status
+  PASSED - deletes a user account
+
+Test Suites: 4 passed, 4 total
+Tests:       18 passed, 18 total
 Snapshots:   0 total
-Time:        4.33 s
-Ran all test suites.
+Time:        12:15:38 AM

@@ -9,16 +9,27 @@ try {
 
   const output = data.testResults
     .map(suite => {
-      const name = path.basename(suite.name);
-      const results = suite.assertionResults
-        .map(test => `  ${test.status.toUpperCase()} - ${test.title}`)
+      const suiteName = path.basename(suite.name);
+      const testResults = suite.assertionResults
+        .map(test => {
+          const status = test.status.toUpperCase(); 
+          return `  ${status} - ${test.title}`;
+        })
         .join('\n');
-      return `Test File: ${name}\n${results}\n`;
+
+      return `Test File: ${suiteName}\n${testResults}\n`;
     })
     .join('\n');
 
-  fs.writeFileSync(outputPath, output);
-  console.log('Test log written to tests/testLogs/jest-output.txt');
+  const summary = `Test Suites: ${data.numPassedTestSuites} passed, ${data.numTotalTestSuites} total\n` +
+                  `Tests:       ${data.numPassedTests} passed, ${data.numTotalTests} total\n` +
+                  `Snapshots:   ${data.snapshot.total} total\n` +
+                  `Time:        ${data.startTime ? new Date(data.startTime).toLocaleTimeString() : ''}`;
+
+  fs.writeFileSync(outputPath, `${output}\n${summary}\n`);
+  console.log('Clean test log written to tests/testLogs/jest-output.txt');
 } catch (err) {
   console.error('Failed to generate test log:', err.message);
 }
+
+//npm run test

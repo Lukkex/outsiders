@@ -1,3 +1,5 @@
+import 'whatwg-fetch'; 
+
 const originalWarn = console.warn;
 const originalError = console.error;
 const originalLog = console.log;

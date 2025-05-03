@@ -32,7 +32,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "jest --json --outputFile=tests/testLogs/jest-results.json --silent",
     "posttest": "node scripts/generateTestLogs.js",
     "test:clean": "rm -rf tests/testLogs/* && npm test",
     "test:log": "jest --verbose --runInBand > tests/testLogs/jest-output.txt 2>&1",

@@ -1,4 +1,3 @@
-//npx jest src/components/Pages/User/UserAccountUpdateDelete.test.js
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
