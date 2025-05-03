@@ -4,7 +4,8 @@ import {checkUserExists,
    getUserList, 
    deleteUser,
    updateUserInfo,
-   getUserByID} from "./awsServices/dynamoDB.js";
+   getUserByID,
+   importFromS3} from "./awsServices/dynamoDB.js";
 
 export const handler = async (event, context) => {
   let body;
@@ -14,6 +15,24 @@ export const handler = async (event, context) => {
   };
 
   try {
+    if(event.Records) {
+      //Search for s3 event notifcation and extract event message details
+      for (const record of event.Records) {
+      const bucket = record.s3.bucket.name;
+      const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
+      const keyParts = key.split('/');
+      console.log(`object created in bucket ${bucket} with key ${key}`);
+      //ex; "key": "uploads/wencaiyang2%40csus.edu/2025_04_14/CDCR+2311+-+Background+Security+Clearance+Application.pdf",
+      const userid = keyParts[1];
+      const filename = keyParts[3];
+      //Stores new object created in bucket
+      await importFromS3(userid, filename, bucket, key);
+
+      }
+      body = { message: "S3 object metadata stored successfully." };
+    }
+     
+
     console.log("Received event:", JSON.stringify(event, null, 2));
     if (event.triggerSource === "PostConfirmation_ConfirmSignUp") {
         return await postSignUpTrigger(event)
