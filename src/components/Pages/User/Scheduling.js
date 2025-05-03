@@ -2,6 +2,8 @@ import '../../Stylesheets/App.css';
 import styles from '../../Stylesheets/Scheduling.module.css';
 import { useState, useEffect } from 'react';
 import { fetchAuthSession } from '@aws-amplify/auth';
+import { list } from 'aws-amplify/storage';
+import { getCurrentUserInfo } from '../../../services/authConfig';
 
 const API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/events';
 const USER_EVENT_API_URL = 'https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/user-events';
@@ -30,13 +32,86 @@ function Scheduling() {
     const [availablePage, setAvailablePage] = useState(1);
     const eventsPerPage = 10;
 
+    //const [hasFolsomForms, setHasFolsomForms] = useState(Array(4).fill(false));
+    //const [hasSanQuentinForms, setHasSanQuentinForms] = useState(Array(3).fill(false));
+
+    const checkAllTrue = (arr) => arr.every(element => element === true);
+
+    /*
+    const updateFolsomForms = (index, value) => {
+        setHasFolsomForms(prev => {
+          const updated = [...prev];
+          updated[index] = value;
+          return updated;
+        });
+    };
+
+    const updateSanQuentinForms = (index, value) => {
+        setHasSanQuentinForms(prev => {
+          const updated = [...prev];
+          updated[index] = value;
+          return updated;
+        });
+    };
+    */
+
     const fetchEvents = async () => {
         try {
+            console.log("------------------------------");
             const headers = await getAuthHeader();
             const response = await fetch(API_URL, { method: 'GET', headers });
             if (!response.ok) throw new Error('Failed to fetch events');
             const data = await response.json();
-            setEvents(data);
+            console.log(data);
+            
+            const currentUser = await getCurrentUserInfo();
+            const userFiles = await list({
+                path: `uploads/${currentUser.email}`
+            });
+            console.log(userFiles);
+
+            let shownData = data;
+            if (userFiles.items.length !== 0) {
+                const hasFolsomForms = Array(4).fill(false);
+                const hasSanQuentinForms= Array(3).fill(false);
+
+                for (let i=userFiles.items.length - 1; i >= 0; i--) {
+                    if (true) {
+                        if (userFiles.items[i].path.indexOf("CDCR_2301_A") > -1){
+                            hasFolsomForms[0] = true;
+                            hasSanQuentinForms[0] = true;
+                        }
+                        else if (userFiles.items[i].path.indexOf("CDCR_2301_B") > -1){
+                            hasFolsomForms[1] = true;
+                        }
+                        else if (userFiles.items[i].path.indexOf("CDCR_2311") > -1){
+                            hasFolsomForms[2] = true;
+                            hasSanQuentinForms[1] = true;
+                        }
+                        else if (userFiles.items[i].path.indexOf("CDCR_PREA") > -1){
+                            hasFolsomForms[3] = true;
+                        }
+                        else if (userFiles.items[i].path.indexOf("CDCR_181") > -1){
+                            hasSanQuentinForms[2] = true;
+                        }
+                    }
+                }
+
+                if (!checkAllTrue(hasFolsomForms)) {
+                    shownData = shownData.filter(item => item.location !== "Folsom");
+                }
+
+                if (!checkAllTrue(hasSanQuentinForms)) {
+                    shownData = shownData.filter(item => item.location !== "San Quentin");
+                }
+                
+            } else {
+                shownData = [];
+            }
+            
+            console.log(shownData);
+
+            setEvents(shownData);
             setLoading(false);
         } catch (error) {
             setError('Failed to load events. Please try again later.');
@@ -61,8 +136,11 @@ function Scheduling() {
     };
 
     useEffect(() => {
-        fetchEvents();
-        fetchUserEvents();
+        const callFetch = async () => {
+            await fetchEvents();
+            await fetchUserEvents();
+        }
+        callFetch();
     }, []);
 
     function formatDate(dateString) {
@@ -168,8 +246,11 @@ function Scheduling() {
                                 <td><button onClick={handleConfirmSelection} className={styles.unenrollButton}>Cancel RSVP</button></td>
                             </tr>
                         ))}
-                        {rsvpEvents.length === 0 && (
+                        {rsvpEvents.length === 0 && !loading && (
                             <tr><td colSpan="4" style={{ textAlign: 'center' }}>You haven't RSVP'd to any events yet.</td></tr>
+                        )}
+                        {loading && (
+                            <tr><td colSpan="4" style={{ textAlign: 'center' }}>Loading...</td></tr>
                         )}
                     </tbody>
                 </table>
@@ -232,6 +313,12 @@ function Scheduling() {
                                 </tr>
                             );
                         })}
+                        {availableEvents.length === 0 && !loading && (
+                            <tr><td colSpan="4" style={{ textAlign: 'center' }}>There are no current events that you are eligible for.</td></tr>
+                        )}
+                        {loading && (
+                            <tr><td colSpan="4" style={{ textAlign: 'center' }}>Loading...</td></tr>
+                        )}
                     </tbody>
                 </table>
                 {totalAvailablePages > 1 && (
