@@ -349,6 +349,8 @@ function Registration() {
         if (value === "Folsom State Prison" && selectedPrisons.includes(value)) {
             setNeedsSpecialForm(null);
         }
+
+        console.log(availableForms);
     };
 
     const handleNext = () => {
@@ -405,6 +407,10 @@ function Registration() {
     // If "Yes" is not selected for the special form and Folsom is selected, remove it
     if (!(isFolsomSelected && needsSpecialForm === true)) {
         availableForms = availableForms.filter((form) => !form.requiresYes);
+        console.log(availableForms);
+    }
+    else {
+        console.log(availableForms);
     }
 
     const handleFileChange = (formId, event) => {
@@ -514,13 +520,15 @@ function Registration() {
                                 <br></br>
                                 {prisons.map((prison, index) => (
                                     <div key={index} className="checkbox-container">
-                                        <input
+                                        <label>
+                                            <input
                                             type="checkbox"
                                             value={prison}
                                             onChange={handlePrisonChange}
                                             checked={selectedPrisons.includes(prison)}
-                                        />
-                                        <label>{" " + prison}</label>
+                                            />
+                                            {" " + prison}
+                                        </label>
                                     </div>
                                 ))}
                             </div>
