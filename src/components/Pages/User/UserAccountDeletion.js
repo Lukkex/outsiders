@@ -62,8 +62,8 @@ function UserAccountDeletion() {
     return (
         <SiteContainer content = {
             <div className="UserDeletion">
-                <div class="main-container text-white text-center xl:text-4xl lg:text-3xl md:text-2xl sm:text-1xl xs:textl">
-                    <div class="max-w-[80vw] gray-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-gray-900 bg-gray-600">
+                <div className="main-container text-white text-center xl:text-4xl lg:text-3xl md:text-2xl sm:text-1xl xs:textl">
+                    <div className="max-w-[80vw] gray-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-gray-900 bg-gray-600">
                         <p>Are you sure you want to delete your account?</p>
                         <p>All information associated with your account (including forms) will be removed.</p>
                     </div>
@@ -81,14 +81,14 @@ function UserAccountDeletion() {
                     />
                     <br/>
                     <br/>
-                    <div class="flex space-x-20 max-w-[80vw]">
+                    <div className="flex space-x-20 max-w-[80vw]">
                       <FadeInSection duration={7500}>
-                        <div class="gray-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-red-900 bg-red-600">
+                        <div className="gray-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-red-900 bg-red-600">
                           <Link onClick={handleDeleteUser}>Confirm</Link>
                         </div>
                       </FadeInSection>
                       <br/>
-                      <div class="gray-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-gray-900 bg-cyan-600">
+                      <div className="gray-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-gray-900 bg-cyan-600">
                           <Link to="/settings"><u>Cancel</u></Link>
                       </div>
                     </div>

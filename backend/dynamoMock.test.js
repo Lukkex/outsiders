@@ -1,6 +1,6 @@
 const { mockClient } = require ('aws-sdk-client-mock');
 const { GetItemCommand, PutItemCommand, ScanCommand, UpdateItemCommand, DeleteItemCommand } = require ('@aws-sdk/client-dynamodb');
-const { dynamoDB } = require ('./awsConfig');
+const { dynamoDB } = require ('./awsConfig.js');
 const dbservice = require ("./awsServices/dynamoDB.js");
 
 const mock = mockClient(dynamoDB);
@@ -9,6 +9,8 @@ beforeEach (() => {
     mock.reset();
 });
 
+
+//Mocks
 test("checkUserExist, if exists return ture", async () => {
     mock.on(GetItemCommand).resolves({
         Item: {userID: {S: '123' } }
@@ -18,11 +20,9 @@ test("checkUserExist, if exists return ture", async () => {
 });
 
 test("checkUserExist, if not exists return false", async () => {
-    mock.on(GetItemCommand).resolves({
-        Item: {userID: {S: '123' } }
-    });
+    mock.on(GetItemCommand).resolves({});
     const exists = await dbservice.checkUserExists({S: '123'});
-    expect(exists).toBe(true);
+    expect(exists).toBe(false);
 });
 
 test("getUserList return list of users", async () => {
@@ -40,3 +40,15 @@ test("getUserList return empty if none", async () => {
     const result = await dbservice.getUserList();
     expect(result).toEqual([]);
 });
+
+test("addUserToTable", async () => {
+    const userID = { S: "555" };
+    const firstName = { S: "aaa" };
+    const lastName = { S: "bbb" };
+    const email = { S: "example@gmail.com" };
+    const response = { $metadata: { httpStatusCode: 200 } };
+    mock.on(PutItemCommand).resolves(response);
+    const result = await dbservice.addUserToTable(userID,firstName,lastName,email);
+    expect(result).toEqual(response);
+})
+

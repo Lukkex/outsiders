@@ -1,30 +1,24 @@
-const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-//create logs directory if it doesn't exist
-const logsDir = path.resolve(__dirname, '../tests/testLogs');
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
+const inputPath = path.join(__dirname, '..', 'tests', 'testLogs', 'jest-results.json');
+const outputPath = path.join(__dirname, '..', 'tests', 'testLogs', 'jest-output.txt');
+
+try {
+  const data = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
+
+  const output = data.testResults
+    .map(suite => {
+      const name = path.basename(suite.name);
+      const results = suite.assertionResults
+        .map(test => `  ${test.status.toUpperCase()} - ${test.title}`)
+        .join('\n');
+      return `Test File: ${name}\n${results}\n`;
+    })
+    .join('\n');
+
+  fs.writeFileSync(outputPath, output);
+  console.log('Test log written to tests/testLogs/jest-output.txt');
+} catch (err) {
+  console.error('Failed to generate test log:', err.message);
 }
-
-//get current date/time for filename
-const now = new Date();
-const pad = (n) => n.toString().padStart(2, '0');
-const timestamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
-const logFileName = `jest-results-${timestamp}.txt`;
-const logFilePath = path.join(logsDir, logFileName);
-
-//run Jest and write output to file
-const jestCommand = `npx jest > "${logFilePath}" 2>&1`;
-
-console.log(`Running tests and saving output to: ${logFilePath}`);
-
-exec(jestCommand, (error, stdout, stderr) => {
-  if (error) {
-    console.error(`Test run failed. Check the log at ${logFilePath}`);
-    return;
-  }
-
-  console.log(`Test log saved to: ${logFilePath}`);
-});
