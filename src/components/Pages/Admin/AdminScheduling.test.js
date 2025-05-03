@@ -32,7 +32,7 @@ test('filters events by date input', () => {
   expect(input.value).toBe('May 22, 2025');
 });
 
-test('deletes an event from the list', async () => {
+test('deletes an event from the list and removing users from RSVP', async () => {
   fetch
     .mockResolvedValueOnce({
       ok: true,
@@ -47,13 +47,13 @@ test('deletes an event from the list', async () => {
     }) 
     .mockResolvedValueOnce({
       ok: true,
-      json: async () => [],
-    }) 
+      json: async () => [], 
+    })
     .mockResolvedValueOnce({ ok: true }) 
     .mockResolvedValueOnce({
       ok: true,
-      json: async () => [],
-    }); 
+      json: async () => [], 
+    });
 
   render(
     <MemoryRouter>
