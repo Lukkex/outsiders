@@ -320,6 +320,7 @@ function Registration() {
                 }).result;
     
                 console.log(`File uploaded: ${filename}`);
+                console.log(result);
                 return result;
                 
             });
