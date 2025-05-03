@@ -74,9 +74,5 @@
   ],
   "authTriggerConnections": [
     "{\"triggerType\":\"PostConfirmation\",\"lambdaFunctionName\":\"outsiders782de14cPostConfirmation\"}"
-  ],
-  "adminQueryGroup": "Admins",
-  "parentStack": {
-    "Ref": "AWS::StackId"
-  }
+  ]
 }

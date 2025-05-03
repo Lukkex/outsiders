@@ -5,18 +5,16 @@ import SiteFooter from "./SiteFooter";
 
 function SiteContainer({content}) {
     return (
-        <div class = "site-container w-[100%]">
-            <div className = "flex flex-col min-h-screen">
-                <header className="w-[100%]">
-                    <SiteHeader/>
-                </header>
-                <main className = "flex-1">
-                    {content}
-                </main>
-                <footer className = "w-[100%]">
-                    <SiteFooter/>
-                </footer>
-            </div>
+        <div className="site-container flex flex-col min-h-screen">
+            <header className="w-full">
+                <SiteHeader />
+            </header>
+            <main className="flex-1 pb-[80px]">
+                {content}
+            </main>
+            <footer className="w-full">
+                <SiteFooter />
+            </footer>
         </div>
     );
 }

@@ -53,7 +53,7 @@ h1 {
   border: 1px solid rgb(116, 116, 116); 
   height: 80px; /* Fallback in case browser support fails */
   height: 8vh; /* Auto adjusts height of buttons based on browser-view height */
-  width: 25vw;
+  width: 24.8vw;
   min-height: 80px;
   display: flex;
   justify-content: center;
@@ -77,9 +77,15 @@ h1 {
 /** SITE FOOTER **/
 .site-footer {
   width: 100%;
-  height: 80px; /* Fallback in case browser support fails */
-  height: 2vh; /* Auto adjusts height of buttons based on browser-view height */
+  height: 60px; 
   min-height: 50px;
+  background-color:#4896ac;
+  z-index: 10;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .site-footer p {
@@ -88,9 +94,10 @@ h1 {
 }
 
 .site-container {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
-
 /** DROPDOWN MENU **/
 .dropdown {
   position: relative;
@@ -174,7 +181,6 @@ h1 {
 }
 
 .navigation-buttons button {
-  margin: 10px;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -196,6 +202,15 @@ h1 {
   font-size: 1rem;
   margin-top: 10px;
   transition: 0.3s ease-in-out;
+}
+
+.rounded-button.uploaded {
+  background-color: #4CAF50; /* Green background when uploaded */
+  color: white; /* White text on green */
+}
+
+.rounded-button.uploaded:hover {
+  background-color: #45A049; /* Darker green on hover */
 }
 
 .Deletion {
@@ -250,8 +265,10 @@ h1 {
   .site-footer {
     width: 100%;
     height: 80px; /* Fallback in case browser support fails */
-    height: 10vh; /* Auto adjusts height of buttons based on browser-view height */
     min-height: 40px;
+    background-color:#4896ac;
+    z-index: 10;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;

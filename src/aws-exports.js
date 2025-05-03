@@ -8,8 +8,8 @@ const awsmobile = {
     "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
     "aws_cloud_logic_custom": [
         {
-            "name": "AdminQueries",
-            "endpoint": "https://v1fc17k44j.execute-api.us-west-1.amazonaws.com/dev",
+            "name": "userdataapi",
+            "endpoint": "https://f1z25x3dj5.execute-api.us-west-1.amazonaws.com/dev",
             "region": "us-west-1"
         }
     ],
@@ -39,7 +39,14 @@ const awsmobile = {
         "EMAIL"
     ],
     "aws_user_files_s3_bucket": "outsidersc28d06dc80124b6897e22ab7da83523e37233-dev",
-    "aws_user_files_s3_bucket_region": "us-west-1"
+    "aws_user_files_s3_bucket_region": "us-west-1",
+    "aws_dynamodb_all_tables_region": "us-west-1",
+    "aws_dynamodb_table_schemas": [
+        {
+            "tableName": "eventsTable-dev",
+            "region": "us-west-1"
+        }
+    ]
 };
 
 
