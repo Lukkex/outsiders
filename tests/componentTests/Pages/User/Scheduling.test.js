@@ -1,86 +1,89 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import Scheduling from '../../../../src/components/Pages/User/Scheduling'; //might throw error
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import Scheduling from '../../../../src/components/Pages/User/Scheduling';
+import { fetchAuthSession } from '@aws-amplify/auth';
 
-test('two plus two', () => {
-    const value = 2 + 2;
-    expect(value).toBeGreaterThan(3);
-    expect(value).toBeGreaterThanOrEqual(3.5);
-    expect(value).toBeLessThan(5);
-    expect(value).toBeLessThanOrEqual(4.5);
-});
+jest.mock('@aws-amplify/auth');
 
+// Mock upcoming events
+const mockEvents = [
+  {
+    eventID: '1',
+    location: 'Folsom',
+    date: '2030-05-10',
+    time: '10:00',
+  },
+  {
+    eventID: '2',
+    location: 'San Quentin',
+    date: '2030-06-12',
+    time: '12:00',
+  },
+];
 
-/*
-test('renders scheduling page with correct elements', () => {
-    render(<Scheduling />);
-
-    // Check if the heading is present
-  expect(screen.getByText('Please Complete Registration to Continue.')).toBeInTheDocument();
-
-  // Check for the debug toggle button
-  expect(screen.getByText(/\[debug\] Toggle Registration/i)).toBeInTheDocument();
-});
-
-// Test: Show and Hide Scheduling Table
-test('toggles scheduling form visibility', () => {
-    render(<Scheduling />);
-    
-    // Before clicking, schedule table should NOT be visible
-    expect(screen.queryByText('Select Available Dates')).not.toBeInTheDocument();
-  
-    // Click toggle button
-    fireEvent.click(screen.getByText(/\[debug\] Toggle Registration/i));
-  
-    // After clicking, schedule table should be visible
-    expect(screen.getByText('Select Available Dates')).toBeInTheDocument();
+beforeEach(() => {
+  fetchAuthSession.mockResolvedValue({
+    tokens: {
+      idToken: {
+        toString: () => 'mock-token',
+        payload: { sub: 'mock-user' },
+      },
+    },
   });
 
-  // Test: Selecting Meeting Dates
-test('allows users to select and deselect meeting dates', () => {
-  render(<Scheduling />);
-  fireEvent.click(screen.getByText(/\[debug\] Toggle Registration/i)); // Show the table
+  global.fetch = jest.fn((url) => {
+    if (url.includes('user-events')) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve([]),
+      });
+    }
 
-  // Find the first checkbox and click it
-  const checkboxes = screen.getAllByRole('checkbox');
-  fireEvent.click(checkboxes[0]);
-
-  // Check if the checkbox is selected
-  expect(checkboxes[0]).toBeChecked();
-
-  // Click it again to deselect
-  fireEvent.click(checkboxes[0]);
-
-  // Check if the checkbox is unchecked
-  expect(checkboxes[0]).not.toBeChecked();
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve(mockEvents),
+    });
+  });
 });
 
-// Test: Show "Please select at least one date" when no selection is made
-test('shows error message when trying to save with no selection', () => {
-  render(<Scheduling />);
-  fireEvent.click(screen.getByText(/\[debug\] Toggle Registration/i)); // Show the table
-
-  // Click save without selecting anything
-  fireEvent.click(screen.getByText('Confirm Selection'));
-
-  // Check if error message appears
-  expect(screen.getByText('Please select at least one date')).toBeInTheDocument();
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
-// Test: Show "Dates saved!" when selection is made
-test('shows success message when dates are selected and saved', () => {
-  render(<Scheduling />);
-  fireEvent.click(screen.getByText(/\[debug\] Toggle Registration/i)); // Show the table
+describe('Scheduling - Location Filtering', () => {
+  it('filters events by selected location', async () => {
+    render(<Scheduling />);
 
-  // Select first checkbox
-  const checkboxes = screen.getAllByRole('checkbox');
-  fireEvent.click(checkboxes[0]);
+    await screen.findByText('Available Events');
 
-  // Click save button
-  fireEvent.click(screen.getByText('Confirm Selection'));
+    // Select Folsom from the dropdown
+    fireEvent.change(screen.getByRole('combobox'), {
+      target: { value: 'Folsom' },
+    });
 
-  // Check if success message appears
-  expect(screen.getByText('Dates saved!')).toBeInTheDocument();
+    await waitFor(() => {
+      const rows = screen.getAllByRole('row');
+      expect(rows.some(row => row.textContent.includes('Folsom'))).toBe(true);
+      expect(rows.some(row => row.textContent.includes('San Quentin'))).toBe(false);
+    });
+  });
 });
 
-*/
+describe('Scheduling - RSVP number count', () => {
+  it('increments RSVP confirmation count when events are selected', async () => {
+    render(<Scheduling />);
+    await screen.findByText('Available Events');
+
+    // Wait for buttons to appear
+    const rsvpButtons = await screen.findAllByRole('button', { name: 'RSVP' });
+    expect(rsvpButtons.length).toBeGreaterThan(0);
+
+    // Click the first RSVP button
+    fireEvent.click(rsvpButtons[0]);
+
+    // Check if the Confirm RSVPs button appears with correct count
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Confirm RSVPs \(1\)/i })).toBeInTheDocument();
+    });
+  });
+});
