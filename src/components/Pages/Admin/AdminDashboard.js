@@ -171,13 +171,10 @@ function AdminDashboard() {
         const userEvents = await Promise.all(
             filteredEvents.map(async (event) => [event.eventID, await fetchUserEvents(event.eventID)])
         );
-        console.log('Users for event:', userEvents);
 
         const allUserEvents = Object.fromEntries(userEvents);
-        console.log('AllUsers for event:', allUserEvents);
 
         const allUserIDs = Array.from(new Set(Object.values(allUserEvents).flat().map(r => r.userID)));
-        console.log('All users ids:', allUserIDs);
         if (allUserIDs.length > 0) {
             const users = await fetch('https://1emayg1gl7.execute-api.us-west-1.amazonaws.com/dev/get-user-names', {
                 method: 'POST',
@@ -187,7 +184,6 @@ function AdminDashboard() {
             if (users.ok) {
                 const userInfo = await users.json();
                 
-                const userEmails = {};
                 const result = [];
                 userInfo.forEach(user => {
                     const locations = new Set();
@@ -217,7 +213,6 @@ function AdminDashboard() {
                         });
                     }
                 });
-
                 
                 setEventsForForms(result);
             }
@@ -230,7 +225,6 @@ function AdminDashboard() {
 
     function setUserEventNameTime(email)
     {
-        console.log(eventsForForms);
         const currentUser = eventsForForms.find(item => item.email === email);
 
         if (!currentUser) {
