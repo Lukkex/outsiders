@@ -13,11 +13,11 @@ const CustomSignUpConfirmation = () => {
   const [username, setUsername] = useState(prefilledUsername);
   const [confirmationCode, setConfirmationCode] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [success, setSuccess] = useState(''); 
 
   useEffect(() => {
     // If prefilled username exists, set it
-    if (prefilledUsername) {
+    if (prefilledUsername) { 
       setUsername(prefilledUsername);
     }
   }, [prefilledUsername]);
