@@ -74,6 +74,7 @@ function UserAccountDeletion() {
                       className="border-[2px] max-w-[80vw] rounded-md border-gray-500 p-6 text-black"
                       type="text"
                       id="confirmationInput"
+                      data-testid="confirmationInput"
                       value={confirmationText}
                       onChange={handleInputChange}
                       placeholder='Type "I am sure" here'
