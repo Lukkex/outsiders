@@ -9,6 +9,7 @@ import SiteContainer from '../../../utils/SiteContainer.js';
 import EventCreation from './EventCreation';
 import Scheduling from '../User/Scheduling'; 
 import styles from '../../Stylesheets/Scheduling.module.css';
+import React from 'react';
 
 const AdminScheduling = () => {
     const [activeSection, setActiveSection] = useState('event');
