@@ -1,3 +1,4 @@
+import React from 'react';
 import '../../Stylesheets/App.css';
 import styles from '../../Stylesheets/Scheduling.module.css';
 import { useState, useEffect } from 'react';
