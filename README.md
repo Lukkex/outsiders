@@ -5,35 +5,50 @@
 The Outsiders are a volunteer soccer program that competes against the inmate teams in various prisons across California. The goal of this project is to create a secure and user-friendly web platform for managing the soccer volunteer program at Folsom Prison. The platform will allow administrators to upload and manage required forms for volunteers, schedule meeting times, and facilitate the exchange of sensitive player information securely with the state. Volunteers will be able to sign up, submit forms, and view their schedules with ease, while administrators will be able to manage users, teams, and events.
 </p>
 
+# Our Project
+
+<p align="center">
+Our project creates a welcome space for players and coaches to unite and organize these prison sports meets. The website covers event creation, announcement, and signup, as well as registration— and storage of player authorization forms, all under the umbrella of user authentication and secure databases. This environment is built to facilitate this process and relieve the burden of organization from the backs of local coaches.
+</p>
+
 # Team Tech Deck
 
   <table align="center">
     <tr>
       <th>Devs</th>
+      <th>Contact Info</th>
     </tr>
     <tr>
       <td>William Lorence</td>
+      <td>williamlorence@csus.edu</td>
     </tr>
     <tr>
       <td>Hunter Brown</td>
+      <td>hbrown4@csus.edu</td>
     </tr>
     <tr>
       <td>Connor Yep</td>
+      <td>connoryep@csus.edu</td>
     </tr>
     <tr>
       <td>Christian Young</td>
+      <td>christianyoung@csus.edu</td>
     </tr>
     <tr>
       <td>Shawnee Porkat</td>
+      <td>sporkat@csus.edu</td>
     </tr>
     <tr>
       <td>Wencai Ma</td>
+      <td>wencaiyang2@csus.edu</td>
     </tr>
     <tr>
       <td>Trenton Suddaby</td>
+      <td>trentonsuddaby@csus.edu</td>
     </tr>
     <tr>
       <td>Qasim Ali</td>
+      <td>qali@csus.edu</td>
     </tr>
   </table>
 
@@ -41,81 +56,81 @@ The Outsiders are a volunteer soccer program that competes against the inmate te
 
 ## Home Page
 
-![image](https://github.com/user-attachments/assets/86e113e3-558d-435a-a5d6-ee187af1d5be)
-
-## Registration
-
-![image](https://github.com/user-attachments/assets/b75159e8-fe68-4a9b-babc-d4717dfd27ee)
-
-
-Selecting Forms             |  Submission
-:-------------------------:|:-------------------------:
-![](https://github.com/user-attachments/assets/4a80d855-7976-4171-bc38-21aafd81c083) | ![](https://github.com/user-attachments/assets/20258ed9-94d0-41a6-aa46-b5de28ae5a82)
-
+![image](/public/images/Home.png)
+This is where players land after logging in, this page provides a friendly welcome atmosphere, and helps direct players to the next steps in using the app.
 
 ## Log In
 
-![image](https://github.com/user-attachments/assets/62933b77-5fad-4b91-9dda-696739ff7b83)
+![image](/public/images/Sign%20In.png)
+Players login to their account here. If they forgot their password, they can fix that here.
 
 ## Account Creation
 
-![image](https://github.com/user-attachments/assets/39b44282-d6e7-41f8-96a8-667edf78528a)
+![image](/public/images/Sign%20Up.png)
+If users don't have an account, they create one on this page. Additionally, there is functionality to add two factor authentication. and email verification upon creation.
+
+## Registration
+
+Selecting Forms             |  Submission
+:-------------------------:|:-------------------------:
+![](/public/images/Forms.png) | ![](/public/images/Forms%202.png)
+Players need to use this page first, where they submit all their required forms and select which prisons they will play at.
+
+## Scheduling
+
+![image](/public/images/Scheduling.png)
+Users navigate to scheduling to RSVP for events set by coaches.
 
 ## Settings
 
-![image](https://github.com/user-attachments/assets/a76d9d05-43c6-43b3-9ff6-b168f1a91526)
+![image](/public/images/Settings.png)
+An important page for account management, allowing users to view their information, reset password, seek help with the app, or delete their account and all information.
 
 # Database ERD
-![image](https://github.com/user-attachments/assets/25e154e2-7d1d-4569-a09c-66bb9f217b88)
-
-# Testing
-Placeholder...
-
-# Deployment
-Placeholder...
-
-# Developer Instructions
-Placeholder...
-
-# Timeline
-
-<table align="center">
-  <tr>
-    <th>Sprint #</th>
-    <th>Task</th>
-    <th>Date</th>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td>Finish back-end set up</td>
-    <td>21 Jan - 4 Feb 2025</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>Implement admin-side functionality</td>
-    <td>5 Feb - 18 Feb 2025</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>Implement APIs</td>
-    <td>19 Feb - 5 Mar 2025</td>
-  </tr>
-  <tr>
-    <td>8</td>
-    <td>Flesh out the UI and backend</td>
-    <td>6 Mar - 19 Mar 2025</td>
-  </tr>
-    <tr>
-    <td>10</td>
-    <td>Thorough testing, add anything else necessary</td>
-    <td>20 Mar - 4 Apr 2025</td>
-  </tr>
-</table>
-
+![image](/public/images/ERD.png)
+The simple setup for the database, nice and compact!
 
 # Setting up the Outsiders App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Setup
+
+Dependencies:
+<ul>
+  <li>Npm v10.8.2</li>
+  <li>Node v20.18.0</li>
+  <li>Jest v27.5.1</li>
+  <li>Git v2.48.1.windows.1</li>
+</ul>
+
+<ul>
+  <li>Install all the above dependencies.</li>
+  <li>Navigate to a local directory in your IDE terminal (Bash, Powershell, Terminal, VSCode, etc) where you wish to clone the remote repository. Run ‘git clone https://github.com/Lukkex/outsiders’ in the command line to clone the remote repository.</li>
+  <li>This will populate your local directory with all the working code and test files for running tests.</li>
+  <li>Now run ‘npm install’ to install required dependencies</li>
+  <li>Some important dependencies to check for are the following (in package.json):</li>
+    <ul>
+      <li>jest-dom:  version 6.6.3</li>
+      <li>Babel-jest: version 29.7.0</li>
+      <li>Jest : version 27.5.1</li>
+      <li>Jest-json-reporter: 1.2.2</li>
+      <li>Node.js: version 20.18.0</li>
+      <li>React: version 18.3.1</li>
+      <li>Aws-amplify: version 6.13.4</li>
+      <li>Aws-cli: version 0.0.2</li>
+    </ul>
+  <li>
+    The app is now installed and setup!
+  </li>
+</ul>
+
+# Deployment
+Placeholder...
+
+# Testing
+
+Running tests is as simple as running the command <b>npx jest (test file location)</b>. The command can also simply be run as <b>npx jest</b> to run all test files. Tests output in the console.
 
 ## Available Scripts
 
