@@ -46,7 +46,7 @@ function ChangePassword() {
     <SiteContainer content={
       <div>
         <div className="settings-container">
-          <h1 className="settings-title">Settings</h1>
+          <h1 className="settings-title">Change Password</h1>
           <div className="settings-form-container">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
