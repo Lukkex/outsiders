@@ -11,13 +11,15 @@ async function checkUserExists(userID) {
     const params = {
         TableName: "userTable",
         Key: {
-            userID 
+            userID: {S: userID}
         }
     };
     
     try {
-        const command = new GetItemCommand(params);
+        const command = new GetItemCommand(params)
+        console.log("Sending command with params:", params);;
         const data = await dynamoDB.send(command);
+        console.log("Raw response from DynamoDB:", data);
         if(data.Item) {
             return true 
         }
@@ -32,10 +34,10 @@ async function addUserToTable(userID, firstName, lastName, email) {
     const params = {
         TableName: "userTable",
         Item: { 
-            userID,
-            firstName,
-            lastName,
-            email,
+            userID: {S: userID},
+            firstName: {S: firstName},
+            lastName: {S: lastName},
+            email: {S: email},
         }
     };
 
@@ -53,7 +55,7 @@ async function getUserByID(userID) {
     const params = {
         TableName: "userTable",
         Key: {
-            userID
+            userID: {S: userID}
         }
     };
 
@@ -147,5 +149,23 @@ async function deleteUser(userID) {
     }
 }
 
-module.exports = { checkUserExists, addUserToTable, getUserList, deleteUser, updateUserInfo, getUserByID};
+async function importFromS3(userid, filename, bucket, key) {
+    const params = {
+        TableName: "UserUploads",
+        id: {S: userid},
+        formName: {S: filename},
+        bucketName: {S: bucket},
+        objectKey: {S: key}
+    };
 
+    try {
+        const command = new PutItemCommand(params);
+        await dynamoDB.send(command);
+        console.log(`Object ${key} stored successfully.`);
+    } catch (error) {
+        console.error("Error storing object.", error);
+        throw error;
+    }
+}
+
+module.exports = { checkUserExists, addUserToTable, getUserList, deleteUser, updateUserInfo, getUserByID, importFromS3};
