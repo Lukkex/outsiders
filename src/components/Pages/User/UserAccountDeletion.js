@@ -89,7 +89,7 @@ function UserAccountDeletion() {
                       </FadeInSection>
                       <br/>
                       <div className="gray-gradient border border-gray-200 p-8 rounded-3xl shadow-lg shadow-gray-900 bg-cyan-600">
-                          <Link to="/settings"><u>Cancel</u></Link>
+                          <Link to="/settings">Cancel</Link>
                       </div>
                     </div>
                 </div>
