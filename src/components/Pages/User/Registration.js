@@ -716,7 +716,7 @@ function Registration() {
                                     <p className='font-semibold'>Notice:</p>
                                     <p>By signing below, you agree to the terms listed on these forms. Your signature will be applied to every form upon upload.</p>
                                     <div className='flex flex-col items-center justify-center'>
-                                        <t className="font-semibold">Signature</t>
+                                        <p className="font-semibold">Signature</p>
                                         <SignaturePad ref={sigCanvas} penColor='Black' backgroundColor='rgba(255, 255, 255, 1)'
                                         canvasProps={{width: 340, height: 120, className: 'sigCanvas border-2 border-black rounded-md'}}
                                         />

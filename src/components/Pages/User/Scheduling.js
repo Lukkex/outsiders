@@ -31,29 +31,8 @@ function Scheduling() {
     const [rsvpPage, setRsvpPage] = useState(1);
     const [availablePage, setAvailablePage] = useState(1);
     const eventsPerPage = 10;
-
-    //const [hasFolsomForms, setHasFolsomForms] = useState(Array(4).fill(false));
-    //const [hasSanQuentinForms, setHasSanQuentinForms] = useState(Array(3).fill(false));
-
+    
     const checkAllTrue = (arr) => arr.every(element => element === true);
-
-    /*
-    const updateFolsomForms = (index, value) => {
-        setHasFolsomForms(prev => {
-          const updated = [...prev];
-          updated[index] = value;
-          return updated;
-        });
-    };
-
-    const updateSanQuentinForms = (index, value) => {
-        setHasSanQuentinForms(prev => {
-          const updated = [...prev];
-          updated[index] = value;
-          return updated;
-        });
-    };
-    */
 
     const fetchEvents = async () => {
         try {
@@ -76,7 +55,7 @@ function Scheduling() {
                 const hasSanQuentinForms= Array(3).fill(false);
 
                 for (let i=userFiles.items.length - 1; i >= 0; i--) {
-                    if (true) {
+                    if (true /*substitute with checking object date if required*/) {
                         if (userFiles.items[i].path.indexOf("CDCR_2301_A") > -1){
                             hasFolsomForms[0] = true;
                             hasSanQuentinForms[0] = true;
