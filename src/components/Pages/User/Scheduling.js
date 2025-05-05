@@ -36,7 +36,7 @@ function Scheduling() {
 
     const fetchEvents = async () => {
         try {
-            console.log("------------------------------");
+            //console.log("------------------------------");
             const headers = await getAuthHeader();
             const response = await fetch(API_URL, { method: 'GET', headers });
             if (!response.ok) throw new Error('Failed to fetch events');
