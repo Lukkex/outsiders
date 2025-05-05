@@ -126,7 +126,7 @@ Dependencies:
 </ul>
 
 # Deployment
-Placeholder...
+The application is deployed via AWS Amplify, which handles automatic linking with GitHub. Whenever a commit is pushed to the main branch on the Git repository, Amplify will begin the process of deploying the changes involved in that commit. However, Amplify is limited to 1000 free build minutes per month. While this limit is difficult to truly reach for this application (it never came close during its development), it is still recommended that changes to the main are grouped together to save build minutes. If possible, first commit small changes over time to a separate branch before merging that branch into the main branch.
 
 # Testing
 
