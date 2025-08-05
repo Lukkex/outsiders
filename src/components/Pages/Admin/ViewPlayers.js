@@ -8,6 +8,7 @@ import {
 } from "../../../services/authConfig";
 import "../../Stylesheets/AdminDashboard.css";
 import SiteContainer from "../../../utils/SiteContainer.js";
+import { list, remove } from 'aws-amplify/storage';
 
 function ViewPlayers() {
   const [players, setPlayers] = useState([]);
@@ -43,6 +44,29 @@ function ViewPlayers() {
   const currentPlayers = filteredPlayers.slice(indexOfFirstPlayer, indexOfLastPlayer);
   const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
 
+  const deleteUserUploads = async (email) => {
+    try {
+      const files = await list({
+        path: `uploads/${email}/`
+        // Alternatively, path: ({identityId}) => `album/${identityId}/photos/`
+      });
+      console.log(files);
+      if (files.items.length == 0) {
+        console.log('No associated files found. Proceeding with account deletion');
+        return;
+      }
+      for (let i = 0; i < files.items.length; i++) {
+        const result = await remove({ 
+          path: files.items[i].path
+          // Alternatively, path: ({identityId}) => `album/${identityId}/1.jpg`
+        });
+        console.log(result);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleModalConfirm = async () => {
     if (!modal.player) return;
     setLoading(true);
@@ -53,6 +77,8 @@ function ViewPlayers() {
       ));
     } else if (modal.type === "delete") {
       await deleteUser(modal.player.username);
+      console.log(modal.player.email)
+      await deleteUserUploads(modal.player.email);
       setPlayers(players.filter(p => p.username !== modal.player.username));
     }
     setLoading(false);

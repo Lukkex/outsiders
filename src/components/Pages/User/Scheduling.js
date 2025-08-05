@@ -43,20 +43,21 @@ function Scheduling() {
             if (!response.ok) throw new Error('Failed to fetch events');
             const data = await response.json();
             console.log(data);
+            let shownData = data;
             
+            /*
             const currentUser = await getCurrentUserInfo();
             const userFiles = await list({
                 path: `uploads/${currentUser.email}`
             });
             console.log(userFiles);
 
-            let shownData = data;
             if (userFiles.items.length !== 0) {
                 const hasFolsomForms = Array(4).fill(false);
                 const hasSanQuentinForms= Array(3).fill(false);
 
                 for (let i=userFiles.items.length - 1; i >= 0; i--) {
-                    if (true /*substitute with checking object date if required*/) {
+                    if (true) {
                         if (userFiles.items[i].path.indexOf("CDCR_2301_A") > -1){
                             hasFolsomForms[0] = true;
                             hasSanQuentinForms[0] = true;
@@ -90,6 +91,7 @@ function Scheduling() {
             }
             
             console.log(shownData);
+            */
 
             setEvents(shownData);
             setLoading(false);
